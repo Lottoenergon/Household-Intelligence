@@ -2,6 +2,7 @@
 app.py
 Linear Design System ("Midnight Precision Instrument") Implementation.
 Greater Jakarta (Jabodetabek) Rental Housing & Market Intelligence Engine.
+Frontend UI/UX: Precision-engineered dark theme, zero visual clutter, strict token compliance.
 """
 
 import os
@@ -10,54 +11,32 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 
+# 1. Page Configuration
 st.set_page_config(
-    page_title="Household Intelligence | Linear Precision",
+    page_title="Household Intelligence • PropTech Telemetry",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# -------------------------------------------------------------
-# LINEAR DESIGN SYSTEM STYLESHEET (DESIGN.md)
-# -------------------------------------------------------------
+# 2. Linear Design System Stylesheet (Targeted, Non-Destructive CSS)
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
-    /* Global Substrate & Typography */
-    html, body, [class*="css"], .stApp {
-        background-color: #08090a !important;
-        color: #d0d6e0 !important;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
-        -webkit-font-smoothing: antialiased;
+    /* Typography Defaults */
+    html, body, .stApp {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
-
-    /* Headings with Linear Tight Tracking & Subtle Weight */
-    h1, h2, h3, h4, h5, h6 {
-        color: #ffffff !important;
-        font-weight: 500 !important;
+    
+    /* Display Headings */
+    h1, h2, h3 {
         letter-spacing: -0.022em !important;
+        font-weight: 500 !important;
     }
-    h1 { font-size: 32px !important; line-height: 1.15 !important; }
-    h2 { font-size: 24px !important; line-height: 1.25 !important; }
-    h3 { font-size: 18px !important; line-height: 1.3 !important; }
-    p, span, label { letter-spacing: -0.011em !important; }
-
-    /* Code & Monospaced Metadata */
-    code, .mono-text {
-        font-family: 'JetBrains Mono', 'Berkeley Mono', ui-monospace, monospace !important;
-        font-size: 12px !important;
-        letter-spacing: -0.013em !important;
-    }
-
-    /* Sidebar Surface */
-    [data-testid="stSidebar"] {
-        background-color: #08090a !important;
-        border-right: 1px solid #23252a !important;
-    }
-
-    /* Linear Metric Card Surface (Carbon #0f1011 + Hairline Graphite #23252a) */
-    .linear-metric-card {
+    
+    /* Metric Cards - Linear Carbon Surface with Hairline Graphite Border */
+    div[data-testid="stMetric"] {
         background-color: #0f1011;
         border: 1px solid #23252a;
         box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
@@ -65,82 +44,95 @@ st.markdown("""
         padding: 16px 20px;
         transition: border-color 0.2s ease;
     }
-    .linear-metric-card:hover {
+    div[data-testid="stMetric"]:hover {
         border-color: #383b3f;
     }
-    .linear-metric-label {
-        font-size: 11px;
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: #8a8f98;
-        margin-bottom: 6px;
+    div[data-testid="stMetricLabel"] {
+        color: #8a8f98 !important;
+        font-size: 11px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.06em !important;
+        font-weight: 500 !important;
     }
-    .linear-metric-value {
-        font-size: 26px;
-        font-weight: 500;
-        letter-spacing: -0.022em;
-        color: #ffffff;
-        font-family: 'Inter', sans-serif;
-    }
-    .linear-metric-delta {
-        font-size: 12px;
-        color: #e4f222;
-        font-family: 'JetBrains Mono', monospace;
-        margin-top: 4px;
+    div[data-testid="stMetricValue"] {
+        color: #ffffff !important;
+        font-weight: 500 !important;
+        font-size: 26px !important;
+        letter-spacing: -0.02em !important;
     }
 
-    /* Linear Deal Card (Precision-Machined Container) */
-    .linear-deal-card {
+    /* Tab Navigation (Linear Style) */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+        border-bottom: 1px solid #23252a;
+        padding-bottom: 4px;
+    }
+    .stTabs [data-baseweb="tab"] {
+        background-color: transparent !important;
+        border: none !important;
+        color: #8a8f98 !important;
+        font-size: 13px !important;
+        font-weight: 400 !important;
+        padding: 8px 16px !important;
+        border-radius: 6px 6px 0 0 !important;
+        letter-spacing: -0.01em !important;
+    }
+    .stTabs [aria-selected="true"] {
+        color: #ffffff !important;
+        border-bottom: 2px solid #e4f222 !important;
+        font-weight: 500 !important;
+    }
+
+    /* Deal Card Custom Component */
+    .deal-card {
         background-color: #0f1011;
         border: 1px solid #23252a;
         box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
         border-radius: 12px;
         padding: 20px 24px;
-        margin-bottom: 12px;
+        margin-bottom: 14px;
         transition: border-color 0.2s ease, background-color 0.2s ease;
     }
-    .linear-deal-card:hover {
+    .deal-card:hover {
         border-color: #383b3f;
-        background-color: #121315;
+        background-color: #121316;
     }
-
-    /* Badges & Status Tags */
-    .badge-acid {
-        background: rgba(228, 242, 34, 0.08);
+    
+    /* Badges */
+    .badge-deep-value {
+        background: rgba(228, 242, 34, 0.1);
         color: #e4f222;
-        border: 1px solid rgba(228, 242, 34, 0.25);
+        border: 1px solid rgba(228, 242, 34, 0.3);
         border-radius: 4px;
-        padding: 2px 8px;
+        padding: 3px 8px;
         font-size: 11px;
         font-weight: 500;
-        letter-spacing: 0.02em;
         font-family: 'JetBrains Mono', monospace;
+        letter-spacing: 0.02em;
     }
-    .badge-iris {
-        background: rgba(99, 102, 241, 0.08);
-        color: #818cf8;
-        border: 1px solid rgba(99, 102, 241, 0.25);
+    .badge-good-deal {
+        background: rgba(99, 102, 241, 0.1);
+        color: #a5b4fc;
+        border: 1px solid rgba(99, 102, 241, 0.3);
         border-radius: 4px;
-        padding: 2px 8px;
+        padding: 3px 8px;
         font-size: 11px;
         font-weight: 500;
-        letter-spacing: 0.02em;
         font-family: 'JetBrains Mono', monospace;
+        letter-spacing: 0.02em;
     }
-    .badge-neutral {
+    .badge-mono {
         background: rgba(255, 255, 255, 0.05);
         color: #8a8f98;
         border: 1px solid #23252a;
         border-radius: 4px;
-        padding: 2px 8px;
+        padding: 3px 8px;
         font-size: 11px;
-        font-weight: 400;
         font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Acid Lime Primary Action Button (#e4f222) */
-    .btn-acid-lime {
+    /* Primary Action Button (Acid Lime #e4f222) */
+    .btn-action-lime {
         background-color: #e4f222 !important;
         color: #08090a !important;
         border-radius: 6px !important;
@@ -155,51 +147,53 @@ st.markdown("""
         border: none !important;
         transition: opacity 0.15s ease;
     }
-    .btn-acid-lime:hover {
-        opacity: 0.92;
+    .btn-action-lime:hover {
+        opacity: 0.90;
         color: #08090a !important;
+        text-decoration: none !important;
     }
 
-    /* Tab Customization */
-    button[data-baseweb="tab"] {
-        background-color: transparent !important;
-        color: #8a8f98 !important;
-        font-weight: 400 !important;
-        font-size: 13px !important;
-        border-bottom: 2px solid transparent !important;
-        padding: 10px 16px !important;
-        letter-spacing: -0.011em !important;
+    /* Calculator Results Box */
+    .calc-card {
+        background-color: #0f1011;
+        border: 1px solid #23252a;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
     }
-    button[data-baseweb="tab"][aria-selected="true"] {
-        color: #ffffff !important;
-        border-bottom-color: #e4f222 !important;
-        font-weight: 500 !important;
+    .calc-label {
+        font-size: 11px;
+        color: #8a8f98;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-weight: 500;
+        margin-bottom: 6px;
     }
-
-    /* Horizontal Hairline Divider */
-    hr {
-        border-color: #23252a !important;
-        margin: 24px 0 !important;
+    .calc-value-lime {
+        font-size: 28px;
+        font-weight: 500;
+        color: #e4f222;
+        letter-spacing: -0.02em;
+        font-family: 'Inter', sans-serif;
     }
-
-    /* Streamlit Input / Widget Theming */
-    div[data-baseweb="select"] > div {
-        background-color: #0f1011 !important;
-        border: 1px solid #23252a !important;
-        border-radius: 6px !important;
-        color: #d0d6e0 !important;
+    .calc-value-white {
+        font-size: 22px;
+        font-weight: 500;
+        color: #ffffff;
+        letter-spacing: -0.01em;
     }
-    .stSlider [data-baseweb="slider"] {
-        color: #e4f222 !important;
-    }
-    .stCheckbox label {
-        color: #d0d6e0 !important;
-        font-size: 13px !important;
+    .calc-subtext {
+        font-size: 11px;
+        color: #62666d;
+        font-family: 'JetBrains Mono', monospace;
+        margin-top: 4px;
     }
 </style>
 """, unsafe_allow_html=True)
 
 
+# 3. Data Loading
 @st.cache_data
 def load_evaluated_data():
     base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -211,35 +205,38 @@ def load_evaluated_data():
 df_all = load_evaluated_data()
 
 # -------------------------------------------------------------
-# SIDEBAR CONTROLS (Linear Minimal Form)
+# SIDEBAR CONTROLS
 # -------------------------------------------------------------
 st.sidebar.markdown("""
-<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
-    <div style="width: 10px; height: 10px; background-color: #e4f222; border-radius: 2px;"></div>
-    <span style="font-size: 15px; font-weight: 500; color: #ffffff; letter-spacing: -0.01em;">HOUSEHOLD INTELLIGENCE</span>
+<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding-top: 8px;">
+    <div style="width: 8px; height: 8px; background-color: #e4f222; border-radius: 2px;"></div>
+    <span style="font-size: 13px; font-weight: 500; color: #ffffff; letter-spacing: -0.01em;">HOUSEHOLD INTELLIGENCE</span>
 </div>
-<div style="font-size: 12px; color: #8a8f98; margin-bottom: 24px;">Greater Jakarta Rental Telemetry</div>
+<div style="font-size: 11px; color: #8a8f98; font-family: 'JetBrains Mono', monospace; margin-bottom: 24px;">
+    JABODETABEK TELEMETRY • V2.0
+</div>
 """, unsafe_allow_html=True)
 
 all_cities = sorted(df_all["target_city"].unique())
-selected_cities = st.sidebar.multiselect("Region / City", all_cities, default=all_cities)
+selected_cities = st.sidebar.multiselect("Metropolitan Region", all_cities, default=all_cities)
 
 all_layouts = sorted(df_all["layout_category"].unique())
 selected_layouts = st.sidebar.multiselect("Unit Layout", all_layouts, default=all_layouts)
 
 price_range = st.sidebar.slider(
-    "Monthly Rent Budget (IDR)",
+    "Monthly Rent Filter (IDR)",
     min_value=1_000_000,
     max_value=60_000_000,
-    value=(1_000_000, 35_000_000),
+    value=(1_000_000, 40_000_000),
     step=500_000,
     format="Rp %d"
 )
 
-only_furnished = st.sidebar.checkbox("Full Furnished Only", value=False)
-only_deals = st.sidebar.checkbox("⚡ Show Only Undervalued Deals", value=False)
+st.sidebar.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
+only_furnished = st.sidebar.checkbox("Full Furnished Units Only", value=False)
+only_deals = st.sidebar.checkbox("Show Only Statistical Bargains (Z ≤ -0.75)", value=False)
 
-# Filter dataset
+# Filtering logic
 filtered_df = df_all[
     (df_all["target_city"].isin(selected_cities)) &
     (df_all["layout_category"].isin(selected_layouts)) &
@@ -253,171 +250,146 @@ if only_deals:
     filtered_df = filtered_df[filtered_df["deal_score_z"] <= -0.75]
 
 # -------------------------------------------------------------
-# HEADER & COMMAND BAR
+# COMMAND HEADER & METRIC STRIP
 # -------------------------------------------------------------
 st.markdown("""
-<div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; padding-top: 8px;">
     <div>
-        <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8a8f98; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;">
-            PROPTECH RADAR • PILLAR 2
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8a8f98; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;">
+            PROPTECH RADAR // PILLAR 2
         </div>
-        <h1 style="margin: 0;">Jabodetabek Rental Housing Intelligence</h1>
+        <h1 style="margin: 0; font-size: 28px; color: #ffffff;">Greater Jakarta Rental Intelligence</h1>
+        <div style="font-size: 13px; color: #8a8f98; margin-top: 4px;">
+            Automated market ingestion, geospatial distance decay modeling, and Hedonic deal radar across 10 regions.
+        </div>
     </div>
-    <div style="text-align: right;">
-        <span class="badge-neutral">STABLE PIPELINE • 787 UNITS AUDITED</span>
+    <div style="text-align: right; padding-top: 8px;">
+        <span class="badge-mono">787 AUDITED UNITS</span>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-# Metric Grid (Precision 5-Column Ribbon)
+# 5 Native Columns with Linear styling
 col1, col2, col3, col4, col5 = st.columns(5)
 with col1:
-    st.markdown(f"""
-    <div class="linear-metric-card">
-        <div class="linear-metric-label">Monitored Inventory</div>
-        <div class="linear-metric-value">{len(filtered_df):,}</div>
-        <div class="linear-metric-delta">10 CITIES AUDITED</div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.metric(label="Active Listings", value=f"{len(filtered_df):,}", delta="10 Regions")
 
 with col2:
     med_rent = filtered_df["price_monthly_idr"].median() if len(filtered_df) > 0 else 0
-    st.markdown(f"""
-    <div class="linear-metric-card">
-        <div class="linear-metric-label">Median Rent / Mo</div>
-        <div class="linear-metric-value">Rp {med_rent/1e6:,.1f}M</div>
-        <div class="linear-metric-delta" style="color: #d0d6e0;">IDR / MONTH</div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.metric(label="Median Rent / Mo", value=f"Rp {med_rent/1e6:,.1f}M", delta="Standardized")
 
 with col3:
     med_m2 = filtered_df["price_per_m2_idr"].median() if len(filtered_df) > 0 else 0
-    st.markdown(f"""
-    <div class="linear-metric-card">
-        <div class="linear-metric-label">Median Price / m²</div>
-        <div class="linear-metric-value">Rp {med_m2:,.0f}</div>
-        <div class="linear-metric-delta" style="color: #8a8f98;">AREA EFFICIENCY</div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.metric(label="Median Price / m²", value=f"Rp {med_m2:,.0f}", delta="Area Yield")
 
 with col4:
     pct_ff = (filtered_df["is_full_furnished"].mean() * 100) if len(filtered_df) > 0 else 0
-    st.markdown(f"""
-    <div class="linear-metric-card">
-        <div class="linear-metric-label">Furnished Share</div>
-        <div class="linear-metric-value">{pct_ff:.1f}%</div>
-        <div class="linear-metric-delta" style="color: #6366f1;">+26.8% PREMIUM</div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.metric(label="Furnished Share", value=f"{pct_ff:.1f}%", delta="+26.8% Premium")
 
 with col5:
     deals_count = (filtered_df["deal_score_z"] <= -0.75).sum() if len(filtered_df) > 0 else 0
-    st.markdown(f"""
-    <div class="linear-metric-card">
-        <div class="linear-metric-label">Bargains Detected</div>
-        <div class="linear-metric-value" style="color: #e4f222;">{deals_count} Units</div>
-        <div class="linear-metric-delta">Z ≤ -0.75 DEALS</div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.metric(label="Bargains Detected", value=f"{deals_count} Units", delta="Z ≤ -0.75")
 
-st.markdown("<hr>", unsafe_allow_html=True)
+st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
 
 # -------------------------------------------------------------
-# MAIN TABS (Linear Minimal Tabs)
+# MAIN VIEW TABS
 # -------------------------------------------------------------
 tab1, tab2, tab3, tab4 = st.tabs([
     "01 // Market Map & Benchmarks",
     "02 // Deal Hunter Radar",
-    "03 // Hedonic Rent Simulator",
-    "04 // Distance Decay Analytics"
+    "03 // Hedonic Valuation Simulator",
+    "04 // Spatial Distance Decay"
 ])
 
 # -------------------------------------------------------------
-# TAB 1: OVERVIEW & MAP
+# TAB 1: OVERVIEW & BENCHMARKS
 # -------------------------------------------------------------
 with tab1:
-    c1, c2 = st.columns([1.3, 1])
+    c1, c2 = st.columns([1.25, 1])
     with c1:
         st.markdown("""
-        <div style="font-size: 13px; font-weight: 500; color: #ffffff; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
-            <span>GEOSPATIAL INVENTORY DISTRIBUTION</span>
-            <span class="badge-neutral">WGS84</span>
+        <div style="font-size: 12px; font-weight: 500; color: #8a8f98; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;">
+            Geospatial Inventory Coordinates
         </div>
         """, unsafe_allow_html=True)
-        map_df = filtered_df[["latitude", "longitude", "price_per_m2_idr", "target_city"]].dropna()
-        if len(map_df) > 0:
-            st.map(map_df, latitude="latitude", longitude="longitude", size=18, color="#e4f222")
+        
+        map_data = filtered_df[["latitude", "longitude", "target_city", "price_per_m2_idr"]].dropna()
+        if len(map_data) > 0:
+            st.map(map_data, latitude="latitude", longitude="longitude", size=20, color="#e4f222")
         else:
-            st.info("No listings match filter parameters.")
+            st.info("No listings found matching current filters.")
 
     with c2:
         st.markdown("""
-        <div style="font-size: 13px; font-weight: 500; color: #ffffff; margin-bottom: 12px;">
-            MEDIAN PRICE PER M² BY METRO REGION
+        <div style="font-size: 12px; font-weight: 500; color: #8a8f98; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;">
+            Median Price / m² by Region
         </div>
         """, unsafe_allow_html=True)
-        city_bench = filtered_df.groupby("target_city")["price_per_m2_idr"].median().sort_values(ascending=False).reset_index()
-        city_bench.columns = ["City", "Median Price / m² (IDR)"]
+        
+        city_summary = filtered_df.groupby("target_city")["price_per_m2_idr"].median().sort_values(ascending=False).reset_index()
+        city_summary.columns = ["Region", "Median Price / m²"]
         st.dataframe(
-            city_bench.style.format({"Median Price / m² (IDR)": "Rp {:,.0f}"}),
+            city_summary.style.format({"Median Price / m²": "Rp {:,.0f}"}),
             use_container_width=True,
             hide_index=True
         )
 
         st.markdown("""
-        <div style="font-size: 13px; font-weight: 500; color: #ffffff; margin-top: 18px; margin-bottom: 10px;">
-            INVENTORY BY LAYOUT CATEGORY
+        <div style="font-size: 12px; font-weight: 500; color: #8a8f98; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 20px; margin-bottom: 10px;">
+            Layout Inventory Distribution
         </div>
         """, unsafe_allow_html=True)
-        layout_counts = filtered_df["layout_category"].value_counts().reset_index()
-        layout_counts.columns = ["Layout", "Units Count"]
-        st.bar_chart(layout_counts.set_index("Layout"), color="#23252a")
+        layout_series = filtered_df["layout_category"].value_counts().reset_index()
+        layout_series.columns = ["Layout", "Units"]
+        st.bar_chart(layout_series.set_index("Layout"), color="#02b8cc")
 
 # -------------------------------------------------------------
-# TAB 2: DEAL HUNTER RADAR (Undervalued Listing Screener)
+# TAB 2: DEAL HUNTER RADAR
 # -------------------------------------------------------------
 with tab2:
     st.markdown("""
     <div style="margin-bottom: 16px;">
-        <h2 style="margin: 0 0 6px 0;">Algorithmic Deal Hunter Radar</h2>
-        <div style="color: #8a8f98; font-size: 13px;">
-            Listings with statistically significant negative residuals from our Econometric Hedonic Model.
-            Actual asking rent is substantially below fair market valuation.
+        <h3 style="margin: 0 0 4px 0; color: #ffffff;">Algorithmic Deal Hunter Radar</h3>
+        <div style="font-size: 13px; color: #8a8f98;">
+            Listings identified with statistically significant negative price residuals from our Hedonic GBDT Model.
+            Actual asking rent is substantially below predicted market equilibrium based on size, location, and amenities.
         </div>
     </div>
     """, unsafe_allow_html=True)
 
-    deals_df = filtered_df[filtered_df["deal_score_z"] <= -0.75].sort_values("deal_score_z").reset_index(drop=True)
+    deals_pool = filtered_df[filtered_df["deal_score_z"] <= -0.75].sort_values("deal_score_z").reset_index(drop=True)
 
-    if len(deals_df) == 0:
-        st.info("No undervalued listings match current filters. Adjust price slider or include more regions in the sidebar.")
+    if len(deals_pool) == 0:
+        st.info("No undervalued deals match the current filter selection. Broaden your price range or include additional cities in the sidebar.")
     else:
-        for idx, row in deals_df.head(15).iterrows():
-            badge_html = (
-                f'<span class="badge-acid">DEEP VALUE (-{row["discount_pct"]:.1f}%)</span>'
-                if row["deal_score_z"] <= -1.5 else
-                f'<span class="badge-iris">GOOD DEAL (-{row["discount_pct"]:.1f}%)</span>'
+        for idx, row in deals_pool.head(15).iterrows():
+            is_deep = row["deal_score_z"] <= -1.5
+            badge_markup = (
+                f'<span class="badge-deep-value">DEEP VALUE (-{row["discount_pct"]:.1f}%)</span>'
+                if is_deep else
+                f'<span class="badge-good-deal">GOOD DEAL (-{row["discount_pct"]:.1f}%)</span>'
             )
             raw_url = str(row['url']).strip()
             clean_url = raw_url if raw_url.startswith("http") else f"https://www.rumah123.com{raw_url}"
 
             st.markdown(f"""
-            <div class="linear-deal-card">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                    <div style="max-width: 75%;">
-                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8a8f98; margin-bottom: 2px;">
-                            {row['listing_id']} • {row['target_city'].upper()} ({row['subdistrict']})
+            <div class="deal-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                    <div style="max-width: 78%;">
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8a8f98; margin-bottom: 4px;">
+                            {row['listing_id']} &nbsp;•&nbsp; {row['target_city'].upper()} ({row['subdistrict']})
                         </div>
-                        <h3 style="margin: 0; font-size: 17px; color: #ffffff;">{row['title']}</h3>
+                        <h4 style="margin: 0; font-size: 16px; color: #ffffff; font-weight: 500;">{row['title']}</h4>
                     </div>
-                    <div>{badge_html}</div>
+                    <div>{badge_markup}</div>
                 </div>
                 
-                <div style="color: #8a8f98; font-size: 12px; margin-bottom: 16px;">
+                <div style="font-size: 12px; color: #8a8f98; margin-bottom: 16px;">
                     📐 {row['floor_size_m2']:.0f} m² &nbsp;•&nbsp; 
                     🛏️ {row['layout_category']} &nbsp;•&nbsp; 
                     🚆 {row['distance_to_transit_km']:.1f} km to {row['nearest_transit_hub']} &nbsp;•&nbsp;
-                    🏛️ {row['distance_to_cbd_km']:.1f} km to Sudirman CBD
+                    🏛️ {row['distance_to_cbd_km']:.1f} km to Sudirman Core
                 </div>
 
                 <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #23252a; padding-top: 14px;">
@@ -438,7 +410,7 @@ with tab2:
                         </div>
                     </div>
                     <div>
-                        <a href="{clean_url}" target="_blank" class="btn-acid-lime">
+                        <a href="{clean_url}" target="_blank" class="btn-action-lime">
                             View Listing ↗
                         </a>
                     </div>
@@ -452,9 +424,9 @@ with tab2:
 with tab3:
     st.markdown("""
     <div style="margin-bottom: 20px;">
-        <h2 style="margin: 0 0 6px 0;">Hedonic Rent Valuation Simulator</h2>
-        <div style="color: #8a8f98; font-size: 13px;">
-            Simulate the market equilibrium rent of any apartment configuration in Jabodetabek based on our trained 5-fold cross-validated Gradient Boosting regression engine.
+        <h3 style="margin: 0 0 4px 0; color: #ffffff;">Hedonic Rent Valuation Simulator</h3>
+        <div style="font-size: 13px; color: #8a8f98;">
+            Simulate the market equilibrium rent of any apartment unit in Jabodetabek based on our trained 5-fold cross-validated Gradient Boosting regression model.
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -470,7 +442,7 @@ with tab3:
         calc_dist_cbd = st.slider("Distance to Sudirman Core CBD (km)", min_value=1.0, max_value=50.0, value=8.0, step=0.5)
         calc_dist_transit = st.slider("Distance to Nearest KRL / MRT Hub (km)", min_value=0.2, max_value=15.0, value=1.5, step=0.1)
         
-        st.markdown("<div style='font-size: 12px; color: #8a8f98; margin-bottom: 8px;'>FACILITIES & AMENITY BUNDLE</div>", unsafe_allow_html=True)
+        st.markdown("<div style='font-size: 11px; color: #8a8f98; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px;'>FACILITIES & AMENITIES</div>", unsafe_allow_html=True)
         fc1, fc2 = st.columns(2)
         with fc1:
             calc_ff = st.checkbox("Full Furnished Interior", value=True)
@@ -492,42 +464,42 @@ with tab3:
     est_rent = calc_size * city_base_m2 * furnish_mult * ac_mult * pool_mult * dist_cbd_decay * dist_transit_bonus
     est_rent = round(est_rent / 50_000) * 50_000
 
-    st.markdown("<hr>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
     res_c1, res_c2, res_c3 = st.columns(3)
     with res_c1:
         st.markdown(f"""
-        <div class="linear-metric-card">
-            <div class="linear-metric-label">Estimated Fair Rent</div>
-            <div class="linear-metric-value" style="color: #e4f222;">Rp {est_rent:,.0f}</div>
-            <div class="linear-metric-delta">EQUILIBRIUM / MO</div>
+        <div class="calc-card">
+            <div class="calc-label">Fair Market Equilibrium</div>
+            <div class="calc-value-lime">Rp {est_rent:,.0f}</div>
+            <div class="calc-subtext">IDR / MONTH</div>
         </div>
         """, unsafe_allow_html=True)
     with res_c2:
         st.markdown(f"""
-        <div class="linear-metric-card">
-            <div class="linear-metric-label">Confidence Band (±10%)</div>
-            <div class="linear-metric-value" style="font-size: 20px;">Rp {est_rent*0.9:,.0f} - {est_rent*1.1/1e6:,.1f}M</div>
-            <div class="linear-metric-delta" style="color: #8a8f98;">PREDICTED INTERVAL</div>
+        <div class="calc-card">
+            <div class="calc-label">Predicted Interval (±10%)</div>
+            <div class="calc-value-white">Rp {est_rent*0.9:,.0f} - {est_rent*1.1/1e6:,.1f}M</div>
+            <div class="calc-subtext">CONFIDENCE BAND</div>
         </div>
         """, unsafe_allow_html=True)
     with res_c3:
         st.markdown(f"""
-        <div class="linear-metric-card">
-            <div class="linear-metric-label">Implicit Rate per m²</div>
-            <div class="linear-metric-value">Rp {est_rent/calc_size:,.0f}</div>
-            <div class="linear-metric-delta" style="color: #d0d6e0;">IDR / M² / MONTH</div>
+        <div class="calc-card">
+            <div class="calc-label">Implicit Rate per m²</div>
+            <div class="calc-value-white">Rp {est_rent/calc_size:,.0f}</div>
+            <div class="calc-subtext">IDR / M² / MONTH</div>
         </div>
         """, unsafe_allow_html=True)
 
 # -------------------------------------------------------------
-# TAB 4: DISTANCE DECAY & URBAN ECONOMICS
+# TAB 4: SPATIAL DISTANCE DECAY
 # -------------------------------------------------------------
 with tab4:
     st.markdown("""
     <div style="margin-bottom: 20px;">
-        <h2 style="margin: 0 0 6px 0;">Spatial Gradient & Transit Accessibility</h2>
-        <div style="color: #8a8f98; font-size: 13px;">
-            Urban economic evidence: evaluating the exponential decay of rent per square meter as geographic distance from Sudirman Core CBD increases.
+        <h3 style="margin: 0 0 4px 0; color: #ffffff;">Spatial Gradient & Distance Decay</h3>
+        <div style="font-size: 13px; color: #8a8f98;">
+            Urban economic evidence: evaluating the exponential decay of rental rates per square meter as geographic distance from Sudirman Core CBD increases.
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -535,8 +507,8 @@ with tab4:
     sc1, sc2 = st.columns(2)
     with sc1:
         st.markdown("""
-        <div style="font-size: 13px; font-weight: 500; color: #ffffff; margin-bottom: 10px;">
-            RENT PER M² VS DISTANCE TO SUDIRMAN CBD (KM)
+        <div style="font-size: 12px; font-weight: 500; color: #8a8f98; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px;">
+            Price / m² vs Distance to Sudirman CBD (km)
         </div>
         """, unsafe_allow_html=True)
         scatter_data = filtered_df[["distance_to_cbd_km", "price_per_m2_idr"]].dropna()
@@ -545,8 +517,8 @@ with tab4:
 
     with sc2:
         st.markdown("""
-        <div style="font-size: 13px; font-weight: 500; color: #ffffff; margin-bottom: 10px;">
-            URBAN ZONE METRIC COMPARISON
+        <div style="font-size: 12px; font-weight: 500; color: #8a8f98; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px;">
+            Urban Zone Summary Metrics
         </div>
         """, unsafe_allow_html=True)
         transit_agg = filtered_df.groupby("urban_zone")["price_per_m2_idr"].agg(["count", "median", "mean"]).reset_index()
@@ -561,10 +533,10 @@ with tab4:
             hide_index=True
         )
 
-st.markdown("<hr>", unsafe_allow_html=True)
+st.markdown("<div style='height: 32px;'></div>", unsafe_allow_html=True)
 st.markdown("""
-<div style="display: flex; justify-content: space-between; align-items: center; color: #62666d; font-size: 12px; font-family: 'JetBrains Mono', monospace;">
-    <div>HOUSEHOLD INTELLIGENCE • PILLAR 2 DESIGN SYSTEM</div>
+<div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #23252a; padding-top: 16px; color: #62666d; font-size: 11px; font-family: 'JetBrains Mono', monospace;">
+    <div>HOUSEHOLD INTELLIGENCE • LINEAR DESIGN SYSTEM</div>
     <div>AFIATTA ILHAN SALEH • PROJECT TO WIN</div>
 </div>
 """, unsafe_allow_html=True)
