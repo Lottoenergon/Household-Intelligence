@@ -5,8 +5,9 @@ ENV/
 __pycache__/
 *.py[cod]
 
-# Streamlit Local Cache
-.streamlit/
+# Streamlit Local Configuration
+.streamlit/*
+!.streamlit/config.toml
 
 # OS Specific
 Thumbs.db
