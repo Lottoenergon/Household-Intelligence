@@ -1,45 +1,45 @@
-# LinkedIn Caption (Casual & Storytelling Edition)
-## Proyek Portofolio: Household Intelligence — Jabodetabek Rental Engine
+# LinkedIn Caption (Casual Storytelling Edition - English)
+## Portfolio Project: Household Intelligence — Greater Jakarta PropTech Engine
 
 ---
 
-Halo teman-teman di LinkedIn! 👋
+Hey everyone on LinkedIn! 👋
 
-Beberapa bulan terakhir ini saya memutuskan buat nyemplung dan belajar lebih dalam tentang dunia data analytics. 
+Over the past few months, I decided to take a deliberate step forward and dive deeper into the world of data analytics.
 
-Jujur, dorongan awalnya sederhana banget: berangkat dari keseharian saya sendiri sebagai seorang **Quality Control (QC)** di industri manufaktur. Tiap hari kerjaan saya nggak jauh-jauh dari ngeliatin angka, ngitung persentase reject barang masuk dan keluar, sampai mantau stabilitas proses produksi. 
+The initial spark came straight from my daily job as a **Quality Control (QC) Specialist** in manufacturing. Day in and day out, I work with operational numbers: tracking reject rates for incoming raw materials and finished products, evaluating defect trends, and keeping process variance under control.
 
-Nah, dari pengalaman di lapangan plus ilmu baru yang saya dapet pas ikut bootcamp data analytics kemarin, ada satu hal yang makin saya sadari: di era yang serba digital dan serba AI kayak sekarang, melek data itu bukan lagi sekadar skill tambahan, tapi udah jadi **skillset mandatory** banget. 
+Combining that frontline manufacturing experience with what I learned during an intensive data analytics bootcamp, one realization became crystal clear: in today's fast-moving digital and AI-driven era, data fluency isn't just a nice-to-have skill—it has become a **mandatory skillset**.
 
-Supaya ilmu yang dipelajari gak cuma ngendap di kepala atau mentok di dataset latihan yang serba rapi, saya memberanikan diri bikin proyek kecil-kecilan: **menganalisa sebaran harga sewa apartemen di Jabodetabek**. 
+To test myself and apply these concepts on noisy, unstructured real-world data (instead of sanitized tutorial CSVs), I decided to build a hands-on project from scratch: **analyzing apartment rental prices across 10 regions in Greater Jakarta (Jabodetabek)**.
 
-Untuk ngumpulin datanya, saya coba scraping listing yang bertebaran di website properti publik (tentunya dengan bantuan tools dan sedikit sentuhan AI biar prosesnya lebih efisien).
+I extracted public classified listings across major portals, leveraging automated workflows and AI tools to streamline the ingestion process.
 
-Dari data mentah itu, muncul rasa penasaran:
-> *"Bisa gak sih kita menerjemahkan harga sewa yang beda-beda tipis tapi lokasinya mencar ke mana-mana ini jadi satu formula objektif penentuan harga wajar sebuah properti?"*
+Looking at that raw data, a simple question came up:
+> *"Can we untangle the wild price differences across fragmented listings and formulate an objective, data-driven fair market valuation for any apartment?"*
 
-Ternyata pas saya ulik dan riset literatur, jawabannya ada! Namanya **Hedonic Pricing Model**. Intinya model ini memecah harga properti jadi gabungan nilai dari berbagai atribut: mulai dari luas ruangan, jarak ke pusat kota (CBD), jarak ke stasiun MRT/KRL, sampai kelengkapan fasilitas dan perabot (*furnishing*).
+As it turns out, urban economists solved this theoretical question decades ago with the **Hedonic Pricing Model** (Rosen, 1974). The core idea is that property price isn't just a single random tag—it's a composite bundle of characteristics: floor area, distance to Central Business Districts (CBD), proximity to MRT/commuter rail transit, and furnishing/amenity levels.
 
-Dari formula itu, akhirnya saya coba rancang pipeline data lengkapnya:
-1. **Cleaning data mentah:** nyaring iklan jual yang nyasar ke sewa, normalisasi harga, dan ekstrak fasilitas pakai NLP sederhana.
-2. **Database rapi:** bikin struktur Star Schema (SQL) biar gampang ditarik ke dashboard analitik.
-3. **Machine Learning & Deal Radar:** ngitung estimasi harga wajar pasaran dan ngedeteksi unit yang "salah harga" alias jauh lebih murah dari pasarannya (bargain deals).
-4. **Bikin web app mandiri:** saya kemas jadi web interaktif yang saya beri nama **Household Intelligence** (menggunakan FastAPI di backend dan tampilan modern Linear theme).
-
----
-
-### 🙏 Butuh Banget Feedback & Masukan Teman-Teman!
-
-Namanya juga proyek belajar dan bikinan pemula, saya sadar banget proyek kecil-kecilan ini **masih banyak banget kekurangan, kesalahan, dan butuh banyak perbaikan**. Misalnya dari penamaan wilayah yang masih sering rancu dari pihak broker, ataupun variabel penentu harga yang masih bisa diperdalam lagi.
-
-Makanya, saya sangat mengharapkan masukan, kritik santai, maupun saran dari teman-teman, para senior, dan rekan-rekan praktisi data:
-* Menurut teman-teman, apa aja variabel penting lain yang harusnya dimasukin buat nentuin harga sewa apartemen di Jabodetabek?
-* Kira-kira dari sisi pipeline data atau analisa machine learning-nya, bagian mana yang paling perlu saya poles lagi?
-
-Bagi teman-teman yang mau intip kode, struktur database SQL, atau sekadar coba jalanin aplikasinya secara lokal, semuanya sudah saya taruh rapi dan transparan di GitHub:
-🔗 **Link GitHub:** https://github.com/Lottoenergon/Household-Intelligence
-
-Setiap feedback dari kalian bakal berharga banget buat proses belajar saya ke depan. Terima kasih banyak ya! Yuk ngobrol santai di kolom komentar. 🙏🚀
+From that theoretical foundation, I designed and built an end-to-end platform called **Household Intelligence**:
+1. **Data Cleaning & Sanity Checks:** Purged multi-billion purchase ads erroneously tagged under rentals, normalized rates to monthly IDR standards, and extracted furnishing tiers with regex NLP.
+2. **Relational Data Warehouse:** Built a Kimball Star Schema in SQLite (fact table + 3 dimensions + 6 production analytical SQL views) designed for BI tools.
+3. **Econometric Valuation & Deal Hunter:** Trained a non-linear Gradient Boosting Regressor (5-Fold Cross Validation R² = 0.835, MAPE = 13.7%) and used standardized residual Z-scores to spot 39 genuinely undervalued "Bargain Deals" (15%–32% discount).
+4. **Modern Web Platform:** Deployed a high-performance **FastAPI backend** (<10ms) paired with an interactive Single Page Application styled after the sleek **Linear Design System**.
 
 ---
-#DataAnalytics #BelajarData #QualityControl #CareerTransition #PropTech #Python #MachineLearning #SQL #FastAPI #LearningInPublic #OpenToFeedback
+
+### 🙏 Seeking Your Constructive Feedback!
+
+As someone actively learning, experimenting, and transitioning deeper into **Data Analytics**, I know this project is an early milestone. There are plenty of real-world edge cases to polish—especially handling ambiguous broker district titles, multi-broker deduplication, and expanding spatial variables.
+
+I would love to get your thoughts, advice, and constructive critique:
+* *What additional features would you prioritize when modeling metropolitan apartment rentals?*
+* *From a data engineering or ML perspective, what areas should I refine to bring this closer to production enterprise standards?*
+
+Everything is open-source and transparently documented on GitHub (clean pipeline, SQL Star Schema, batch launchers):  
+🔗 **GitHub Repository:** https://github.com/Lottoenergon/Household-Intelligence
+
+Every piece of feedback means a lot for my learning journey. Thank you so much, and let's connect in the comments! 🙏🚀
+
+---
+#DataAnalytics #LearningInPublic #QualityControl #CareerTransition #PropTech #Python #MachineLearning #SQL #FastAPI #DataScience #Mentorship #OpenToFeedback

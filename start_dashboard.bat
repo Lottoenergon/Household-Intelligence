@@ -3,20 +3,20 @@ title Jabodetabek Rental Intelligence Dashboard
 cd /d "%~dp0"
 
 echo ===================================================
-echo Membuka Jabodetabek Rental Intelligence Dashboard...
+echo Opening Jabodetabek Rental Intelligence Dashboard...
 echo ===================================================
 echo.
 
 if not exist ".venv\Scripts\python.exe" (
-    echo [ERROR] Virtual environment (.venv) belum ada.
-    echo Silakan install dependencies terlebih dahulu.
+    echo [ERROR] Virtual environment (.venv) not found.
+    echo Please install dependencies first.
     pause
     exit /b 1
 )
 
-echo Menjalankan aplikasi Streamlit...
-echo Buka browser di http://localhost:8501 jika tidak terbuka otomatis.
-echo Tekan Ctrl+C di jendela ini jika ingin menutup aplikasi.
+echo Starting Streamlit application...
+echo Open browser at http://localhost:8501 if it does not launch automatically.
+echo Press Ctrl+C in this terminal window to terminate the application.
 echo.
 
 ".venv\Scripts\python.exe" -m streamlit run app.py
