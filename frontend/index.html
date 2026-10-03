@@ -513,6 +513,39 @@
             margin-top: 16px;
         }
 
+        
+        /* LEAFLET CUSTOM DARK STYLING */
+        .leaflet-container {
+            background-color: #08090a !important;
+            font-family: var(--font-ui) !important;
+        }
+        .leaflet-tile {
+            filter: brightness(0.95) contrast(1.05);
+        }
+        .leaflet-popup-content-wrapper {
+            background: #0f1011 !important;
+            border: 1px solid #23252a !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8) !important;
+            border-radius: 8px !important;
+            color: #d0d6e0 !important;
+            padding: 4px 6px !important;
+        }
+        .leaflet-popup-tip {
+            background: #0f1011 !important;
+            border: 1px solid #23252a !important;
+        }
+        .leaflet-popup-content {
+            margin: 10px 12px !important;
+            line-height: 1.4 !important;
+        }
+        .leaflet-container a.leaflet-popup-close-button {
+            color: #8a8f98 !important;
+            padding: 6px 8px 0 0 !important;
+        }
+        .leaflet-container a.leaflet-popup-close-button:hover {
+            color: #ffffff !important;
+        }
+
         /* Custom Leaflet Dark Marker */
         .deal-marker {
             width: 12px;
@@ -951,7 +984,9 @@
                 maxZoom: 19
             }).addTo(mapInstance);
 
-            mapMarkersLayer = L.layerGroup().addTo(mapInstance);
+                        mapMarkersLayer = L.layerGroup().addTo(mapInstance);
+            setTimeout(() => { mapInstance.invalidateSize(); }, 250);
+            window.addEventListener('resize', () => { mapInstance.invalidateSize(); });
         }
 
         // Fetch Global Telemetry
@@ -1033,45 +1068,64 @@
             renderDealCards(filtered);
         }
 
-        // Render Leaflet Markers
+                // Render Leaflet Markers with CircleMarker (zero white boxes, smooth rendering)
         function renderMapMarkers(listings) {
             mapMarkersLayer.clearLayers();
+            const validLatLngs = [];
             
-            listings.slice(0, 300).forEach(item => {
+            listings.forEach(item => {
+                // Strict coordinate validation for Jabodetabek
                 if (!item.latitude || !item.longitude) return;
+                const lat = parseFloat(item.latitude);
+                const lon = parseFloat(item.longitude);
+                if (lat < -6.8 || lat > -5.9 || lon < 106.3 || lon > 107.3) return;
 
                 const isDeal = item.deal_score_z <= -0.75;
-                const markerHtml = isDeal 
-                    ? '<div class="deal-marker"></div>'
-                    : '<div class="standard-marker"></div>';
+                const isDeep = item.deal_score_z <= -1.5;
 
-                const icon = L.divIcon({
-                    className: 'custom-pin',
-                    html: markerHtml,
-                    iconSize: [12, 12],
-                    iconAnchor: [6, 6]
+                // High-precision CircleMarker
+                const marker = L.circleMarker([lat, lon], {
+                    radius: isDeep ? 6 : (isDeal ? 5 : 3.5),
+                    fillColor: isDeep ? "#e4f222" : (isDeal ? "#818cf8" : "#02b8cc"),
+                    color: "#08090a",
+                    weight: 1.2,
+                    opacity: 1,
+                    fillOpacity: isDeal ? 0.95 : 0.75
                 });
 
-                const marker = L.marker([item.latitude, item.longitude], { icon: icon });
-                
+                validLatLngs.push([lat, lon]);
+
+                const cleanUrl = item.url.startsWith("http") ? item.url : `https://www.rumah123.com${item.url}`;
                 const savingsHtml = isDeal 
-                    ? `<div style="color: #e4f222; font-weight: 500; margin-top: 4px;">⚡ Net Savings: -Rp ${Math.abs(item.residual_idr).toLocaleString()}/mo</div>`
-                    : '';
+                    ? `<div style="color: #e4f222; font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-top: 4px; font-weight: 500;">⚡ Net Savings: -Rp ${Math.abs(item.residual_idr).toLocaleString()}/mo (-${item.discount_pct}%)</div>`
+                    : "";
 
                 marker.bindPopup(`
-                    <div style="font-family: 'Inter', sans-serif; font-size: 12px; color: #161718; min-width: 180px;">
-                        <div style="font-weight: 600; font-size: 13px; margin-bottom: 2px;">${item.title}</div>
-                        <div style="color: #62666d; margin-bottom: 6px;">${item.target_city} • ${item.layout_category} (${item.floor_size_m2} m²)</div>
-                        <div style="font-weight: 600; font-size: 14px;">Rp ${item.price_monthly_idr.toLocaleString()} / mo</div>
-                        ${savingsHtml}
-                        <div style="margin-top: 8px;">
-                            <a href="${item.url}" target="_blank" style="color: #02b8cc; text-decoration: none; font-weight: 500;">View Listing ↗</a>
+                    <div style="min-width: 220px; font-family: 'Inter', sans-serif;">
+                        <div class="mono" style="font-size: 10px; color: #8a8f98; text-transform: uppercase;">${item.listing_id} • ${item.target_city}</div>
+                        <div style="font-size: 13px; font-weight: 500; color: #ffffff; margin: 3px 0 6px 0;">${item.title}</div>
+                        <div style="font-size: 11px; color: #8a8f98; margin-bottom: 8px;">
+                            📐 ${item.floor_size_m2} m² • 🛏️ ${item.layout_category} • 🚆 ${parseFloat(item.distance_to_transit_km).toFixed(1)} km
                         </div>
+                        <div style="border-top: 1px solid #23252a; padding-top: 6px; display: flex; justify-content: space-between; align-items: flex-end;">
+                            <div>
+                                <div style="font-size: 10px; color: #8a8f98;">ASKING RENT</div>
+                                <div class="mono" style="font-size: 14px; color: #ffffff; font-weight: 500;">Rp ${item.price_monthly_idr.toLocaleString()}</div>
+                            </div>
+                            <a href="${cleanUrl}" target="_blank" style="background: #e4f222; color: #08090a; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 500; text-decoration: none;">View ↗</a>
+                        </div>
+                        ${savingsHtml}
                     </div>
                 `);
 
                 mapMarkersLayer.addLayer(marker);
             });
+
+            // Smooth auto-fit bounds
+            if (validLatLngs.length > 0 && mapInstance) {
+                const bounds = L.latLngBounds(validLatLngs);
+                mapInstance.fitBounds(bounds.pad(0.08), { maxZoom: 13, animate: true });
+            }
         }
 
         // Render Deal Cards in Tab 2
