@@ -1,182 +1,195 @@
 # Greater Jakarta (Jabodetabek) Rental Housing & Market Intelligence Engine
-## Automated Web Ingestion, Relational Star Schema, Hedonic Valuation & PropTech Deal Finder
+## Automated Data Ingestion, Relational Star Schema, Hedonic Valuation (AVM) & PropTech Deal Radar
 
+[![Status](https://img.shields.io/badge/Status-Platform%20in%20Active%20Development%20(v0.2--alpha)-yellow.svg)]()
 [![Python](https://img.shields.io/badge/Python-3.14-blue.svg)](https://www.python.org/)
 [![Database](https://img.shields.io/badge/SQLite-Star%20Schema-green.svg)]()
-[![Framework](https://img.shields.io/badge/Streamlit-Interactive%20App-red.svg)]()
-[![Model](https://img.shields.io/badge/Model-Gradient%20Boosting%20Hedonic-purple.svg)]()
+[![Backend](https://img.shields.io/badge/Backend-FastAPI%20%2B%20Uvicorn-009688.svg)](https://fastapi.tiangolo.com/)
+[![Frontend](https://img.shields.io/badge/Frontend-Linear%20Design%20System-black.svg)]()
+[![Model](https://img.shields.io/badge/Model-Gradient%20Boosting%20Hedonic%20(R%C2%B2%200.835)-purple.svg)]()
 
-Production-grade PropTech market intelligence engine built to ingest, normalize, model, and screen rental apartment listings across all **10 administrative regions of Greater Jakarta (Jabodetabek)**.
-
-The project demonstrates modern data analytics and analytics engineering fundamentals: **Automated HTTP Ingestion with Rate-Limiting & Session Management**, **Geospatial Feature Engineering (Haversine distance to CBD & Transit Hubs)**, **NLP Amenity Extraction**, **Star Schema Relational Modeling in SQLite**, **Econometric Hedonic Price Modeling**, and an **Interactive Streamlit Web Dashboard**.
+> **⚠️ Development Status & Data Transparency Notice (v0.2-alpha)**  
+> Platform ini berada dalam status **Active Development (Work-in-Progress)**. Seluruh data sewa apartemen dikumpulkan secara empiris apa adanya dari portal properti publik di 10 kota Jabodetabek. Analisis spasial dan visualisasi peta menggunakan **klaster makro kawasan/kecamatan (sentroid)** dan **bukan titik koordinat fiktif per unit**, mengingat portal listing agregator tidak mempublikasikan koordinat pintu/tower secara terbuka tanpa interaksi langsung (WhatsApp/broker). Kalibrasi wilayah, resolusi entitas gedung, dan deduplikasi multi-broker saat ini terus disempurnakan.
 
 ---
 
-## 1. Executive Summary & Key Market Insights
+## 1. Executive Summary & Market Insights
 
-| Market Metric | Measured Value | Economic Interpretation / Significance |
+Household Intelligence adalah platform inteligensi pasar properti sewa dan radar valuasi otomatis (*Automated Valuation Model / AVM*) yang dirancang untuk menghadirkan transparansi harga sewa apartemen di 10 wilayah administratif Jabodetabek.
+
+| Metrik Pasar | Nilai Terukur | Interpretasi Bisnis & Signifikansi Ekonometrika |
 | :--- | :--- | :--- |
-| **Monitored Inventory** | **787 verified rental units** | Balanced across 10 Jabodetabek cities (Jakarta 5 regions, Tangerang, Tangsel, Depok, Bekasi, Bogor) |
-| **Jakarta Core CBD Median Rent** | **Rp 208,333 / m²** (Jaksel) / **Rp 190,972 / m²** (Jakpus) | Highest commercial density; commands 1.7x to 2.0x higher price per m² than commuter satellites |
-| **Outer Satellite Median Rent** | **Rp 107,407 / m²** (Bekasi) / **Rp 109,719 / m²** (Tangerang) | Affordable commuter market; high absorption of Studio and 2BR units |
-| **Spatial Distance Decay** | **+61.5% Price/m² Premium** | Units in Tier 1 (<7km from Sudirman CBD) average Rp 194.5k/m² vs Rp 122.2k/m² in Tier 3 (15–28km) |
-| **Furnishing Status Premium** | **+26.8% per m²** | Fully furnished units command a direct premium of ~Rp 35,000/m² over bare/unfurnished units |
-| **Hedonic Valuation Accuracy** | **CV R² = 0.835** (5-Fold Cross Validation) | Full dataset R² = 0.959, MAE = Rp 1,110,815 (Mean Absolute Percentage Error: 13.7%) |
-| **Statistically Undervalued Deals** | **39 units detected (Z ≤ -1.0)** | Top 5 listings offer 25% to 32% discount (saving Rp 4.5M to Rp 6M/month below fair market price) |
+| **Monitored Inventory** | **787 verified rental units** | Tersebar di 10 kota (Jakarta Pusat, Selatan, Barat, Timur, Utara, Tangerang, Tangsel, Depok, Bekasi, Bogor) |
+| **Jakarta Core CBD Rent** | **Rp 208,333 / m²** (Jaksel) / **Rp 190,972 / m²** (Jakpus) | Kepadatan komersial tertinggi; premi tarif per m² mencapai 1.7x – 2.0x lipat kota penyangga |
+| **Outer Satellite Rent** | **Rp 107,407 / m²** (Bekasi) / **Rp 109,719 / m²** (Tangerang) | Koridor hunian komuter terjangkau; didominasi tipe Studio dan 2BR |
+| **Spatial Distance Decay** | **+61.5% Price/m² Premium** | Unit di Tier 1 (<7km dari Sudirman CBD) rata-rata Rp 194.5k/m² vs Rp 122.2k/m² di Tier 3 (15–28km) |
+| **Furnishing Premium** | **+26.8% per m²** | Unit Full Furnished memiliki selisih tarif bersih ~Rp 35.000/m² dibandingkan unit kosongan |
+| **Hedonic Valuation Accuracy** | **CV R² = 0.835** (5-Fold Cross Validation) | Full dataset R² = 0.959, MAE = Rp 1,110,815 (MAPE = 13.7%) |
+| **Statistically Undervalued Deals** | **39 unit terdeteksi (Z ≤ -0.75)** | Unit dengan harga penawaran pemilik 15% – 32% di bawah estimasi wajar pasaran |
 
 ---
 
 ## 2. Technical Pipeline Architecture
 
+Platform mengadopsi arsitektur data komersial modern yang memisahkan layer ekstraksi, pergudangan relasional, model ekonometrika, dan antarmuka web berkecepatan tinggi:
+
 ```text
-[Public Property Portals / Web Endpoints]
+[Portal Properti Publik / Web Endpoints]
    │
    ▼
 [1. Ingestion Engine (src/ingestion.py)]
-   ├── Multi-region pagination (10 Jabodetabek cities)
-   ├── Session pooling & randomized politeness delays (0.4s - 0.8s)
-   └── Raw immutable JSON payload staging (data/raw/raw_rental_listings_staged.json)
+   ├── Ekstraksi multi-region (10 wilayah Jabodetabek)
+   ├── Session pooling & politeness rate-limiting (0.4s - 0.8s)
+   └── Penyimpanan immutable raw payload (data/raw/jabodetabek_rental_raw.json)
    │
    ▼
-[2. Transformation & Geospatial Feature Pipeline (src/transformation.py)]
-   ├── Standardized monthly rent parsing (converting annual/daily to IDR/month)
-   ├── Sale ad purges (filtering multi-billion purchase ads from rental feeds)
-   ├── Geospatial Haversine calculation:
-   │     ├── Distance to Jakarta Prime CBD (Sudirman-Thamrin core)
-   │     └── Distance to nearest KRL / MRT / LRT transit hub
-   ├── NLP keyword extraction for furnishing status & 9 specific amenities
-   └── Output: data/processed/jabodetabek_rental_cleaned.csv (787 clean rows)
+[2. Transformation & Sanity Pipeline (src/transformation.py)]
+   ├── Normalisasi tarif tahunan/harian ke ekuivalen sewa bulanan (IDR/bulan)
+   ├── Filter ad-contamination (menyingkirkan listing jual multi-miliar yang nyasar ke feed sewa)
+   ├── Kalkulasi jarak Haversine ke CBD Sudirman-Thamrin dan 11 hub transit KRL/MRT
+   ├── Ekstraksi NLP regex untuk kelengkapan furnitur & 9 fasilitas unit
+   └── Output terstandarisasi: data/processed/jabodetabek_rental_cleaned.csv (787 baris bersih)
    │
    ▼
-[3. Econometric Hedonic Valuation & Deal Finder (src/market_intelligence.py)]
-   ├── Feature engineering: Log-linear floor size, location fixed effects, distance decay
-   ├── 5-Fold Cross-Validated Gradient Boosting Regressor (CV R² = 0.835, MAE = Rp 1.11M)
-   ├── Standardized Residual Scoring (Z-score) for statistical underpricing detection
-   └── Export: data/processed/jabodetabek_rental_evaluated.csv
+[3. Econometric Hedonic Model & Deal Radar (src/market_intelligence.py)]
+   ├── Feature engineering: Log-linear floor size, location fixed effects, spatial decay
+   ├── 5-Fold Cross-Validated Gradient Boosting Regressor (CV R² = 0.835, MAPE = 13.7%)
+   ├── Standardized Residual Scoring (Z-score) untuk mendeteksi unit salah harga (mispriced)
+   └── Output evaluasi: data/processed/jabodetabek_rental_evaluated.csv
    │
    ▼
-[4. Relational Data Warehouse Layer (sql/schema.sql)]
-   ├── SQLite Star Schema:
+[4. Relational Data Warehouse / Star Schema (sql/schema.sql)]
+   ├── SQLite Relational Star Schema:
    │     ├── fact_rental_listings (787 rows)
-   │     ├── dim_locations (300 subdistricts / zones)
+   │     ├── dim_locations (105 subdistricts / kawasan makro)
    │     ├── dim_property_specs (277 physical configurations)
    │     └── dim_amenities (56 distinct amenity profiles)
-   └── 6 Production Analytical SQL Views (benchmarks, distance decay, transit, deals)
+   └── 6 Production Analytical SQL Views (benchmarks, distance decay, transit, deals radar)
    │
    ▼
-[5. Interactive PropTech Dashboard (app.py)]
-   ├── Streamlit Multi-Tab Application
-   ├── Interactive map & real-time filter sliders (City, Budget, Layout, Amenities)
-   ├── Deal Hunter Radar with direct listing links & monthly savings cards
-   └── Interactive What-If Rent Calculator (Estimates fair rent for any property input)
+[5. High-Performance REST API Backend (backend/server.py)]
+   ├── FastAPI + Uvicorn (<10ms latency)
+   ├── Endpoints: /api/telemetry, /api/districts, /api/listings, /api/benchmarks, /api/deals, /api/simulate
+   └── Dual-mode serving (Public Tenant Persona vs Pro Investor Persona)
+   │
+   ▼
+[6. Modern Web Platform (frontend/index.html)]
+   ├── Linear Design System ("Midnight Precision Instrument" - Void #08090a, Acid Lime #e4f222)
+   ├── ESRI Enterprise Dark Gray Canvas (Peta sebaran makro kawasan bebas API key)
+   ├── Switcher Dual Persona: Rian (Pencari Sewa Awam) vs Bu Sarah (Investor Pro)
+   └── Kalkulator Payback Fit-Out Interior & Simulasi Harga Pasaran Realistis
 ```
 
 ---
 
-## 3. Econometric Hedonic Model Specification
+## 3. Econometric Hedonic Pricing Valuation Model
 
-In urban economics and real estate appraisal, market rent is modeled as a bundle of composite attributes rather than a single commodity:
+Dalam disiplin urban economics dan real estate appraisal (Rosen 1974), nilai sewa properti dimodelkan sebagai fungsi kumpulan atribut karakteristik:
 
 ```text
 ln(Rent_i) = β_0 + ∑ β_city * Dummy_City + β_size * ln(FloorSize_i) + β_bed * Bedrooms_i 
              + β_cbd * DistToCBD_i + β_transit * DistToTransit_i + ∑ γ_j * Amenity_ij + ε_i
 ```
 
-### Key Statistical Drivers (Feature Importance):
-1. **Floor Area (`ln(floor_size_m2)`): 42.1%** - Single largest determinant of nominal monthly rental yield.
-2. **Geographic Proximity to CBD (`distance_to_cbd_km`): 28.4%** - Exponential rent decay per kilometer away from Sudirman/Thamrin axis.
-3. **Location Fixed Effect (`target_city`): 14.8%** - Structural city-level willingness-to-pay divergence (Jaksel & Jakpus commanding top quartile).
-4. **Furnishing Quality (`is_full_furnished`): 8.3%** - Tenants pay a substantial cash premium for move-in-ready units.
-5. **Bedrooms & Specific Amenities (`bedrooms`, `has_pool`, `has_ac`): 6.4%** - Incremental utility drivers.
+### Bobot Kontribusi Fitur (Feature Importance):
+1. **Luas Unit (`ln(floor_size_m2)`): 42.1%** - Penentu tunggal terbesar dari variasi nominal harga sewa bulanan.
+2. **Jarak Spasial ke CBD Sudirman (`distance_to_cbd_km`): 28.4%** - Gradien penurunan harga (distance decay) semakin jauh dari pusat bisnis inti Jakarta.
+3. **Location Fixed Effect (`target_city`): 14.8%** - Disparitas kemauan membayar antar-wilayah kota administratif.
+4. **Kelengkapan Furnitur (`is_full_furnished`): 8.3%** - Premi langsung sebesar +26.8% per m² untuk unit siap huni (ready to move-in).
+5. **Konfigurasi Kamar & Fasilitas Tambahan (`bedrooms`, `has_pool`, `has_ac`): 6.4%** - Pendorong utilitas marginal.
 
-### Statistical Deal Scoring (Undervaluation Z-Score):
-The prediction residual is defined as:
+### Algoritma Deteksi Deal Hunter (Standardized Residual Z-Score):
+Residual regresi mencerminkan selisih harga penawaran pemilik terhadap nilai wajar pasar:
+
 ```text
 Residual_i = ActualRent_i - FairMarketRent_i
 Deal_Score_Z_i = Residual_i / StdError(Residuals)
 ```
-* **$Z \le -1.5$**: **Deep Value Deal** (Heavy discount >25%, rare statistical bargain).
-* **$-1.5 < Z \le -0.75$**: **Good Deal** (Fairly priced with 10%–25% discount).
-* **$-0.75 < Z < 0.75$**: **Fair Market Price** (Within standard pricing band).
-* **$Z \ge 1.5$**: **Luxury / Overpriced** (High premium branding).
+
+* **Z ≤ -1.5**: **Super Murah / Rare Deal** (Diskon pasaran >25%, anomali harga langka).
+* **-1.5 < Z ≤ -0.75**: **Harga Bagus / Undervalued** (Diskon pasaran 15% – 25%).
+* **-0.75 < Z < 0.75**: **Harga Wajar Pasaran** (Sesuai ekuilibrium pasar).
+* **Z ≥ 1.5**: **Premium / Overpriced** (Penawaran di atas rata-rata utilitas).
 
 ---
 
-## 4. Relational Data Warehouse & Star Schema
+## 4. Star Schema Database & SQL Analytical Layer
 
-The database `data/processed/rental_intelligence.db` implements a dimensional model designed for BI tools (Looker Studio, Tableau, Power BI) and SQL analytics:
+Database `data/processed/rental_intelligence.db` mengimplementasikan Star Schema relasional untuk memudahkan integrasi BI (Tableau, Looker Studio, Metabase):
 
 ```sql
--- View Sample: Distance Decay from Jakarta CBD
+-- DDL Cuplikan: Fact & Dimension Joins untuk Analisis Distance Decay
 SELECT
-    urban_zone,
-    COUNT(listing_key) AS inventory,
-    ROUND(AVG(distance_to_cbd_km), 1) AS avg_cbd_km,
-    ROUND(AVG(price_per_m2_idr), 0) AS avg_price_m2_idr
+    l.urban_zone,
+    COUNT(f.listing_key) AS inventory_count,
+    ROUND(AVG(l.distance_to_cbd_km), 1) AS avg_cbd_km,
+    ROUND(AVG(f.price_per_m2_idr), 0) AS avg_price_m2_idr
 FROM fact_rental_listings f
 JOIN dim_locations l ON f.location_key = l.location_key
-GROUP BY urban_zone
+GROUP BY l.urban_zone
 ORDER BY avg_cbd_km ASC;
 ```
 
-### Compiled Analytical SQL Views:
-* `view_city_market_benchmarks`: Aggregates inventory count, median rent, price/m², full-furnished share %, and pool accessibility across 10 cities.
-* `view_urban_zone_distance_decay`: Quantifies the spatial rent gradient from Core CBD (<7km) to Outer Satellites (>28km).
-* `view_transit_proximity_premium`: Analyzes price differences across 3 transit accessibility tiers (<2km walking, 2–5km feeder, >5km commuter).
-* `view_layout_and_bedroom_matrix`: Breakdown of price per m² and rent ranges across Studio, 1BR, 2BR, 3BR, 4BR+.
-* `view_top_undervalued_deals`: Filtered view of listings with statistically verified underpricing ($Z \le -1.0$).
-* `view_amenity_hedonic_premiums`: Measures the empirical percentage premium of Full Furnished (+26.8%), Swimming Pool, and Air Conditioning.
+### 6 Production SQL Views:
+1. `view_city_market_benchmarks`: Agregasi inventaris, median sewa, tarif/m², dan rasio unit furnished per kota.
+2. `view_urban_zone_distance_decay`: Mengukur gradien penurunan tarif per km dari Inner CBD (<7km) ke Satellite Ring (>28km).
+3. `view_transit_proximity_premium`: Mengukur selisih tarif berdasarkan radius jalan kaki ke stasiun KRL/MRT (<1.5km vs >3km).
+4. `view_layout_and_bedroom_matrix`: Breakdown tarif per m² dan median sewa pada tipe Studio, 1BR, 2BR, 3BR, 4BR+.
+5. `view_top_undervalued_deals`: Saringan listing terverifikasi murah secara statistik (Z ≤ -0.75).
+6. `view_amenity_hedonic_premiums`: Menghitung premi empiris AC, Kolam Renang, Gym, dan Furnitur.
 
 ---
 
-## 5. Strategic Business Recommendations ("So What?")
+## 5. Panduan Menjalankan Platform Secara Lokal
 
-### 1. For PropTech & Rental Marketplace Platforms:
-* **Deploy Automated Deal Badges:** Properties flagged with $Z \le -1.0$ have significantly higher tenant conversion rates. Labeling listings as *"Verified Good Deal"* or *"Below Market Value"* drives user engagement and accelerates landlord time-to-lease.
-* **Pricing Guidance for Landlords:** 15% of listings suffer from unrealistic overpricing ($Z > 1.5$), leading to extended vacancy. Implementing the automated Hedonic rent calculator upon listing creation reduces vacancy days by aligning asking rents with market equilibrium.
+### Prasyarat
+* Python 3.10 – 3.14
+* Git
 
-### 2. For Property Investors & Buy-to-Let Landlords:
-* **The Furnishing ROI Equation:** Full furnishing commands an empirical **+26.8% premium in price per m²** (~Rp 1.5M – Rp 2.5M additional monthly rent for a 2BR unit). At an average interior fit-out cost of Rp 25M – Rp 35M, the investment achieves full capital payback within **14 to 16 months**, substantially boosting net rental yield.
-
-### 3. For Tenants & Commuter Renters:
-* **The Transit-Suburb Arbitrage:** Outer commuter hubs in Tangerang Selatan (BSD/Bintaro) and Bekasi located within 2 km of KRL/LRT stations offer 35% lower rent per m² than Jakarta Selatan while providing sub-45-minute direct rail commutes to the CBD.
-
----
-
-## 6. How to Reproduce & Run Locally
-
-### 1. Clone & Set Up Environment
+### 1. Clone & Setup Virtual Environment
 ```bash
 git clone https://github.com/Lottoenergon/Household-Intelligence.git
-cd jabodetabek-rental-intelligence
+cd Household-Intelligence
 
+# Setup virtual environment
 python -m venv .venv
-# Windows:
-.venv\Scripts\activate
-# macOS/Linux:
+
+# Aktivasi di Windows:
+.venv\Scriptsctivate
+
+# Aktivasi di Linux/macOS:
 source .venv/bin/activate
 
+# Install dependensi
 pip install -r requirements.txt
 ```
 
-### 2. Run the End-to-End Pipeline
+### 2. Jalankan Platform (1-Click Launcher)
+* Di Windows, cukup klik dua kali file **`start_platform.bat`**.
+* Atau jalankan manual via terminal:
 ```bash
-# Runs Transformation, Hedonic Modeling, Database Sync, and Integrity Assertions:
-python run_pipeline.py
-
-# Optional: Run fresh live scraping across all 10 cities:
-python run_pipeline.py --scrape
+python -m uvicorn backend.server:app --host 0.0.0.0 --port 8080 --reload
 ```
-
-### 3. Launch Interactive Streamlit Dashboard
-```bash
-streamlit run app.py
-```
-The dashboard will open automatically in your browser at `http://localhost:8501`.
+Akses platform di browser Anda: **`http://localhost:8080`**.
 
 ---
 
-## Author & Project Info
-* **Author:** Afiatta Ilhan Saleh
-* **Target Role:** Junior Data Analyst / Analytics Engineer
-* **Core Stack:** Python (Requests, BeautifulSoup, Scikit-Learn, Pandas, Streamlit), SQL (SQLite Star Schema, Analytical Views), PropTech Market Analytics.
+## 6. Real-World Limitations & Ongoing Roadmap
+
+### Keterbatasan Data Nyata (Real-World Nuances):
+1. **Granularitas Spasial**: Portal listing agregator tidak mempublikasikan titik GPS per unit apartemen secara bebas; koordinat peta saat ini menggunakan **sentroid kawasan makro/kecamatan** untuk menjaga integritas data tanpa mengarang koordinat fiktif.
+2. **Noise Judul Listing**: Listing baris sering kali mencantumkan nama kawasan tetangga yang lebih populer di judul iklan (misal mencantumkan "Kuningan" padahal unit berada di batas Setiabudi/Tebet).
+3. **Deduplikasi Agen**: Satu unit apartemen sering kali diiklankan oleh lebih dari satu broker dengan harga sedikit bervariasi.
+
+### Roadmap Pengembangan Selanjutnya:
+* [ ] **Building Master Table**: Integrasi master database 500+ nama gedung apartemen resmi di Jabodetabek dengan koordinat gerbang terverifikasi.
+* [ ] **Automated Deduplication Engine**: Fuzzy-matching teks judul + kombinasi luas m² + lantai untuk mendeteksi duplikasi multi-broker.
+* [ ] **Cloud Data Warehouse Migration**: Migrasi pipeline ELT harian ke Google BigQuery / Snowflake dengan orkestrasi dbt.
+
+---
+
+## Author
+* **Afiatta Ilhan Saleh** (Atta)
+* Sarjana Teknik Kimia Universitas Sultan Ageng Tirtayasa (IPK 3.43)
+* Intensive Data Analytics Distinction (89/100)
+* Track Record: QC Statistical Process Control & Process Optimization, Industrial Automation, PropTech Market Intelligence.
