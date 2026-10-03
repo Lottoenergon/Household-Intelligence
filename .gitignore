@@ -1,0 +1,17 @@
+# Python & Virtual Environments
+.venv/
+venv/
+ENV/
+__pycache__/
+*.py[cod]
+
+# Streamlit Local Cache
+.streamlit/
+
+# OS Specific
+Thumbs.db
+.DS_Store
+
+# Temporary Database Journals
+*.db-journal
+*.db-wal
