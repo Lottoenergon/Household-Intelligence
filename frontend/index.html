@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Household Intelligence • PropTech Market Intelligence & Deal Radar</title>
+    <title>Household Intelligence • Panduan Sewa & Radar Apartemen Jabodetabek</title>
     
     <!-- Google Fonts: Inter Variable & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -71,103 +71,126 @@
         }
 
         /* ---------------------------------------------------------
-           TOP COMMAND BAR & NAVIGATION
+           NAVBAR / TOPBAR
         --------------------------------------------------------- */
         .topbar {
-            height: 60px;
-            background-color: var(--color-void);
+            background-color: rgba(8, 9, 10, 0.92);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--color-graphite);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: 58px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 28px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .brand-container {
             display: flex;
             align-items: center;
             gap: 12px;
+            cursor: pointer;
         }
 
         .brand-glyph {
-            width: 10px;
-            height: 10px;
-            background-color: var(--color-acid-lime);
-            border-radius: 2px;
-            box-shadow: 0 0 10px rgba(228, 242, 34, 0.4);
+            width: 18px;
+            height: 18px;
+            background: linear-gradient(135deg, var(--color-acid-lime), #8aff00);
+            border-radius: 4px;
+            box-shadow: 0 0 12px rgba(228, 242, 34, 0.4);
         }
 
         .brand-title {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 500;
             color: var(--color-paper);
-            letter-spacing: -0.01em;
+            letter-spacing: -0.02em;
         }
 
-        .persona-selector {
+        .user-auth-area {
             display: flex;
-            background-color: var(--color-carbon);
-            border: 1px solid var(--color-graphite);
-            border-radius: 9999px;
-            padding: 2px;
-            gap: 2px;
-        }
-
-        .persona-btn {
-            background: transparent;
-            border: none;
-            color: var(--color-fog);
-            padding: 5px 14px;
-            border-radius: 9999px;
-            font-size: 12px;
-            font-weight: 400;
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
-
-        .persona-btn.active {
-            background-color: var(--color-obsidian);
-            color: var(--color-paper);
-            border: 1px solid var(--color-smoke);
-        }
-
-        .persona-btn:hover:not(.active) {
-            color: var(--color-mist);
+            align-items: center;
+            gap: 14px;
         }
 
         .status-pill {
-            display: flex;
-            align-items: center;
-            gap: 8px;
             background-color: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--color-graphite);
             border-radius: 9999px;
             padding: 4px 12px;
-            font-size: 11px;
+            font-size: 12px;
             color: var(--color-fog);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .status-dot {
             width: 6px;
             height: 6px;
-            background-color: var(--color-pulse-green);
             border-radius: 50%;
+            background-color: var(--color-pulse-green);
+            box-shadow: 0 0 8px rgba(39, 166, 68, 0.8);
+        }
+
+        .btn-nav-login {
+            background-color: var(--color-paper);
+            color: var(--color-void);
+            border: none;
+            border-radius: 9999px;
+            padding: 6px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .btn-nav-login:hover {
+            background-color: var(--color-mist);
+            transform: translateY(-1px);
+        }
+
+        .user-profile-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--color-obsidian);
+            border: 1px solid var(--color-smoke);
+            border-radius: 9999px;
+            padding: 4px 14px;
+            font-size: 12px;
+            color: var(--color-acid-lime);
+        }
+
+        .btn-logout {
+            background: transparent;
+            border: none;
+            color: var(--color-fog);
+            font-size: 12px;
+            cursor: pointer;
+            margin-left: 6px;
+            text-decoration: underline;
+        }
+
+        .btn-logout:hover {
+            color: var(--color-paper);
         }
 
         /* ---------------------------------------------------------
-           APP LAYOUT CONTAINER
+           LAYOUT CONTAINER
         --------------------------------------------------------- */
         .app-container {
-            max-width: 1360px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 24px 28px 60px 28px;
         }
 
         /* ---------------------------------------------------------
-           EXECUTIVE METRIC RIBBON (5 CARDS)
+           METRIC TELEMETRY RIBBON
         --------------------------------------------------------- */
         .metric-ribbon {
             display: grid;
@@ -181,8 +204,7 @@
             border: 1px solid var(--color-graphite);
             border-radius: 12px;
             padding: 16px 20px;
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
-            transition: border-color 0.2s ease;
+            transition: border-color 0.15s ease;
         }
 
         .metric-card:hover {
@@ -190,25 +212,28 @@
         }
 
         .metric-label {
-            font-size: 11px;
-            font-weight: 500;
+            font-size: 12px;
             color: var(--color-fog);
             text-transform: uppercase;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.04em;
             margin-bottom: 6px;
         }
 
         .metric-value {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 500;
             color: var(--color-paper);
-            letter-spacing: -0.02em;
             font-family: var(--font-mono);
+            letter-spacing: -0.02em;
+        }
+
+        .metric-value.lime {
+            color: var(--color-acid-lime);
         }
 
         .metric-delta {
-            font-size: 11px;
-            color: var(--color-fog);
+            font-size: 12px;
+            color: var(--color-ash);
             margin-top: 4px;
         }
 
@@ -217,56 +242,70 @@
         }
 
         /* ---------------------------------------------------------
-           LINEAR TAB NAVIGATION
+           TABS NAVIGATION
         --------------------------------------------------------- */
         .tab-bar {
             display: flex;
             gap: 8px;
             border-bottom: 1px solid var(--color-graphite);
             margin-bottom: 24px;
+            padding-bottom: 4px;
         }
 
         .tab-btn {
             background: transparent;
             border: none;
             color: var(--color-fog);
+            font-family: var(--font-ui);
             font-size: 13px;
-            font-weight: 400;
-            padding: 10px 18px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 6px;
             cursor: pointer;
-            position: relative;
-            transition: color 0.15s ease;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .tab-btn:hover {
-            color: var(--color-mist);
+            color: var(--color-paper);
+            background-color: rgba(255, 255, 255, 0.02);
         }
 
         .tab-btn.active {
             color: var(--color-paper);
-            font-weight: 500;
+            background-color: var(--color-obsidian);
+            box-shadow: inset 0 0 0 1px var(--color-smoke);
         }
 
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background-color: var(--color-acid-lime);
+        .tab-btn.tab-pro {
+            color: var(--color-mist);
+        }
+
+        .tab-btn.tab-pro.active {
+            color: var(--color-acid-lime);
+        }
+
+        .lock-tag {
+            font-size: 10px;
+            background: rgba(228, 242, 34, 0.1);
+            color: var(--color-acid-lime);
+            padding: 1px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(228, 242, 34, 0.2);
         }
 
         /* ---------------------------------------------------------
-           TAB 1: MARKET MAP & BENCHMARKS
+           SPLIT VIEW (MAP + FILTERS)
         --------------------------------------------------------- */
         .split-view {
             display: grid;
-            grid-template-columns: 1.4fr 1fr;
+            grid-template-columns: 1.15fr 0.85fr;
             gap: 20px;
         }
 
-        .map-frame {
+        .map-card {
             background-color: var(--color-carbon);
             border: 1px solid var(--color-graphite);
             border-radius: 12px;
@@ -278,13 +317,7 @@
         #map {
             width: 100%;
             height: 100%;
-            background-color: var(--color-void);
-        }
-
-        .side-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+            background-color: #08090a;
         }
 
         .panel-card {
@@ -292,174 +325,22 @@
             border: 1px solid var(--color-graphite);
             border-radius: 12px;
             padding: 20px;
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
-        }
-
-        .panel-header {
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--color-fog);
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            margin-bottom: 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* Benchmark Data Table */
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 12px;
-        }
-
-        .data-table th {
-            text-align: left;
-            color: var(--color-fog);
-            font-weight: 500;
-            padding: 8px 10px;
-            border-bottom: 1px solid var(--color-graphite);
-            text-transform: uppercase;
-            font-size: 10px;
-            letter-spacing: 0.05em;
-        }
-
-        .data-table td {
-            padding: 8px 10px;
-            border-bottom: 1px solid rgba(35, 37, 42, 0.6);
-            color: var(--color-mist);
-        }
-
-        .data-table tr:hover td {
-            background-color: rgba(255, 255, 255, 0.02);
-            color: var(--color-paper);
-        }
-
-        /* ---------------------------------------------------------
-           FILTERS BAR
-        --------------------------------------------------------- */
-        .filter-row {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 14px;
-            flex-wrap: wrap;
-        }
-
-        .filter-select, .filter-input {
-            background-color: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--color-graphite);
-            color: var(--color-mist);
-            font-family: var(--font-ui);
-            font-size: 13px;
-            border-radius: 6px;
-            padding: 8px 12px;
-            outline: none;
-            transition: border-color 0.15s ease;
-        }
-
-        .filter-select:focus, .filter-input:focus {
-            border-color: var(--color-mist);
-        }
-
-        .filter-chip {
-            background: transparent;
-            border: 1px solid var(--color-graphite);
-            color: var(--color-fog);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
-
-        .filter-chip.active {
-            background-color: var(--color-obsidian);
-            border-color: var(--color-smoke);
-            color: var(--color-paper);
-        }
-
-        /* ---------------------------------------------------------
-           TAB 2: DEAL HUNTER RADAR (CARDS)
-        --------------------------------------------------------- */
-        .deals-header-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             margin-bottom: 20px;
         }
 
-        .deal-card {
-            background-color: var(--color-carbon);
-            border: 1px solid var(--color-graphite);
-            border-radius: 12px;
-            padding: 20px 24px;
-            margin-bottom: 12px;
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
-            transition: all 0.2s ease;
-        }
-
-        .deal-card:hover {
-            border-color: var(--color-smoke);
-            background-color: #121316;
-            transform: translateY(-1px);
-        }
-
-        .badge-acid {
-            background: rgba(228, 242, 34, 0.08);
-            color: var(--color-acid-lime);
-            border: 1px solid rgba(228, 242, 34, 0.3);
-            border-radius: 4px;
-            padding: 3px 8px;
-            font-size: 11px;
+        .panel-header {
+            font-size: 14px;
             font-weight: 500;
-            font-family: var(--font-mono);
-        }
-
-        .badge-iris {
-            background: rgba(99, 102, 241, 0.08);
-            color: #818cf8;
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            border-radius: 4px;
-            padding: 3px 8px;
-            font-size: 11px;
-            font-weight: 500;
-            font-family: var(--font-mono);
-        }
-
-        .btn-action-lime {
-            background-color: var(--color-acid-lime);
-            color: var(--color-void);
-            border-radius: 6px;
-            padding: 8px 16px;
-            font-size: 13px;
-            font-weight: 500;
-            letter-spacing: -0.011em;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            border: none;
-            cursor: pointer;
-            transition: opacity 0.15s ease;
-        }
-
-        .btn-action-lime:hover {
-            opacity: 0.90;
-        }
-
-        /* ---------------------------------------------------------
-           TAB 3: SIMULATOR & BU SARAH INVESTOR TOOL
-        --------------------------------------------------------- */
-        .sim-grid {
-            display: grid;
-            grid-template-columns: 1.1fr 1fr;
-            gap: 24px;
-            margin-bottom: 28px;
-        }
-
-        .form-group {
+            color: var(--color-paper);
             margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 14px;
         }
 
         .form-label {
@@ -467,19 +348,36 @@
             font-size: 12px;
             color: var(--color-fog);
             margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+        }
+
+        .select-input, .text-input {
+            width: 100%;
+            background-color: var(--color-obsidian);
+            border: 1px solid var(--color-graphite);
+            color: var(--color-paper);
+            border-radius: 6px;
+            padding: 9px 12px;
+            font-size: 13px;
+            font-family: var(--font-ui);
+            outline: none;
+            transition: border-color 0.15s ease;
+        }
+
+        .select-input:focus, .text-input:focus {
+            border-color: var(--color-mist);
         }
 
         .range-slider {
             width: 100%;
             accent-color: var(--color-acid-lime);
+            cursor: pointer;
         }
 
-        .checkbox-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
         }
 
         .checkbox-label {
@@ -493,75 +391,229 @@
 
         .checkbox-label input {
             accent-color: var(--color-acid-lime);
+            width: 15px;
+            height: 15px;
+            cursor: pointer;
         }
 
+        /* ---------------------------------------------------------
+           TABLES
+        --------------------------------------------------------- */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .data-table th {
+            text-align: left;
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--color-graphite);
+            color: var(--color-fog);
+            font-weight: 400;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(35, 37, 42, 0.6);
+            color: var(--color-mist);
+        }
+
+        .data-table tr:hover td {
+            background-color: rgba(255, 255, 255, 0.015);
+        }
+
+        /* ---------------------------------------------------------
+           DEAL HUNTER CARDS
+        --------------------------------------------------------- */
+        .deal-card {
+            background-color: var(--color-carbon);
+            border: 1px solid var(--color-graphite);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .deal-card:hover {
+            border-color: var(--color-smoke);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .badge-acid {
+            background-color: rgba(228, 242, 34, 0.12);
+            color: var(--color-acid-lime);
+            border: 1px solid rgba(228, 242, 34, 0.3);
+            border-radius: 4px;
+            padding: 3px 8px;
+            font-size: 11px;
+            font-weight: 500;
+            font-family: var(--font-mono);
+            letter-spacing: 0.02em;
+        }
+
+        .badge-iris {
+            background-color: rgba(99, 102, 241, 0.12);
+            color: var(--color-iris-violet);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 4px;
+            padding: 3px 8px;
+            font-size: 11px;
+            font-weight: 500;
+            font-family: var(--font-mono);
+        }
+
+        .btn-action-lime {
+            background-color: var(--color-acid-lime);
+            color: var(--color-void);
+            border: none;
+            border-radius: 6px;
+            padding: 9px 18px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-action-lime:hover {
+            filter: brightness(1.08);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline-graphite {
+            background: transparent;
+            border: 1px solid var(--color-graphite);
+            color: var(--color-mist);
+            border-radius: 6px;
+            padding: 8px 14px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .btn-outline-graphite:hover {
+            border-color: var(--color-mist);
+            color: var(--color-paper);
+        }
+
+        /* ---------------------------------------------------------
+           SIMULATOR
+        --------------------------------------------------------- */
         .calc-result-box {
-            background-color: var(--color-obsidian);
+            background: linear-gradient(180deg, #111315 0%, #0c0d0e 100%);
             border: 1px solid var(--color-smoke);
             border-radius: 12px;
             padding: 24px;
             text-align: center;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         /* ---------------------------------------------------------
-           TAB 4: SPATIAL DISTANCE DECAY
+           LOCKED PRO / INVESTOR BANNER
         --------------------------------------------------------- */
-        .chart-container {
-            height: 380px;
-            position: relative;
-            margin-top: 16px;
+        .locked-investor-card {
+            background: radial-gradient(circle at 50% 0%, #17191d 0%, #0d0e10 100%);
+            border: 1px dashed var(--color-smoke);
+            border-radius: 14px;
+            padding: 48px 32px;
+            text-align: center;
+            max-width: 720px;
+            margin: 40px auto;
         }
 
-        
-        /* LEAFLET CUSTOM DARK STYLING */
-        .leaflet-container {
-            background-color: #08090a !important;
-            font-family: var(--font-ui) !important;
+        /* ---------------------------------------------------------
+           LOGIN MODAL
+        --------------------------------------------------------- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(8, 9, 10, 0.78);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
         }
-        .leaflet-tile {
-            filter: brightness(0.95) contrast(1.05);
+
+        .modal-overlay.active {
+            display: flex;
         }
+
+        .modal-card {
+            background-color: var(--color-carbon);
+            border: 1px solid var(--color-smoke);
+            border-radius: 14px;
+            width: 100%;
+            max-width: 480px;
+            padding: 28px;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            background: transparent;
+            border: none;
+            color: var(--color-fog);
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: var(--color-paper);
+        }
+
+        .persona-choice-card {
+            background-color: var(--color-obsidian);
+            border: 1px solid var(--color-graphite);
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .persona-choice-card:hover {
+            border-color: var(--color-mist);
+            background-color: #1a1c1e;
+        }
+
+        .persona-choice-card.selected {
+            border-color: var(--color-acid-lime);
+            background-color: rgba(228, 242, 34, 0.04);
+        }
+
+        /* Custom Leaflet Dark Popups */
         .leaflet-popup-content-wrapper {
             background: #0f1011 !important;
             border: 1px solid #23252a !important;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8) !important;
             border-radius: 8px !important;
             color: #d0d6e0 !important;
-            padding: 4px 6px !important;
+            padding: 6px !important;
         }
+
         .leaflet-popup-tip {
             background: #0f1011 !important;
             border: 1px solid #23252a !important;
         }
-        .leaflet-popup-content {
-            margin: 10px 12px !important;
-            line-height: 1.4 !important;
-        }
-        .leaflet-container a.leaflet-popup-close-button {
-            color: #8a8f98 !important;
-            padding: 6px 8px 0 0 !important;
-        }
-        .leaflet-container a.leaflet-popup-close-button:hover {
-            color: #ffffff !important;
-        }
 
-        /* Custom Leaflet Dark Marker */
-        .deal-marker {
-            width: 12px;
-            height: 12px;
-            background-color: var(--color-acid-lime);
-            border: 2px solid var(--color-void);
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(228, 242, 34, 0.8);
-        }
-
-        .standard-marker {
-            width: 8px;
-            height: 8px;
-            background-color: var(--color-signal-teal);
-            border: 1px solid var(--color-void);
-            border-radius: 50%;
+        .leaflet-container {
+            background-color: #08090a !important;
+            font-family: var(--font-ui) !important;
         }
 
         /* Hide tabs utility */
@@ -576,141 +628,149 @@
 </head>
 <body>
 
-    <!-- TOPBAR -->
+    <!-- TOPBAR NAVIGATION -->
     <header class="topbar">
-        <div class="brand-container">
+        <div class="brand-container" onclick="switchTab('tab-map')">
             <div class="brand-glyph"></div>
             <div class="brand-title">HOUSEHOLD INTELLIGENCE</div>
-            <span class="mono" style="font-size: 11px; color: var(--color-ash);">// PROPTECH AVM V1.0</span>
+            <span class="mono" style="font-size: 11px; color: var(--color-ash);">// PANDUAN SEWA & RADAR PROPERTI</span>
         </div>
 
-        <!-- PERSONA SELECTOR LENS -->
-        <div class="persona-selector">
-            <button class="persona-btn active" id="btn-persona-default" onclick="setPersona('default')">All Telemetry</button>
-            <button class="persona-btn" id="btn-persona-rian" onclick="setPersona('rian')">Rian (Commuter Lens)</button>
-            <button class="persona-btn" id="btn-persona-sarah" onclick="setPersona('sarah')">Bu Sarah (Investor Lens)</button>
-        </div>
+        <div class="user-auth-area">
+            <div class="status-pill mono">
+                <div class="status-dot"></div>
+                <span id="topbar-status-text">787 UNIT AKTIF DIPANTAU</span>
+            </div>
 
-        <div class="status-pill mono">
-            <div class="status-dot"></div>
-            <span>787 UNITS AUDITED • JABODETABEK</span>
+            <!-- Login or User Profile Badge -->
+            <div id="auth-container">
+                <button class="btn-nav-login" onclick="openLoginModal()">Masuk / Akses Investor ↗</button>
+            </div>
         </div>
     </header>
 
     <div class="app-container">
 
-        <!-- 5-COLUMN METRIC RIBBON -->
+        <!-- 5-COLUMN METRIC RIBBON (BAHASA MANUSIA) -->
         <div class="metric-ribbon">
             <div class="metric-card">
-                <div class="metric-label">Audited Listings</div>
+                <div class="metric-label">Total Unit Dipantau</div>
                 <div class="metric-value" id="kpi-units">787</div>
-                <div class="metric-delta">10 Administrative Cities</div>
+                <div class="metric-delta">10 Wilayah Jabodetabek</div>
             </div>
             <div class="metric-card">
-                <div class="metric-label">Median Asking Rent</div>
-                <div class="metric-value" id="kpi-rent">Rp 5.0M</div>
-                <div class="metric-delta">Monthly Base Rate</div>
+                <div class="metric-label">Rata-Rata Harga Sewa</div>
+                <div class="metric-value" id="kpi-rent">Rp 5.0 Jt</div>
+                <div class="metric-delta">Median Pasar / Bulan</div>
             </div>
             <div class="metric-card">
-                <div class="metric-label">Median Price / m²</div>
-                <div class="metric-value" id="kpi-m2">Rp 120,000</div>
-                <div class="metric-delta">Effective Yield Basis</div>
+                <div class="metric-label">Tarif Sewa per Meter</div>
+                <div class="metric-value" id="kpi-m2">Rp 120 rb</div>
+                <div class="metric-delta">Biaya Ruang per m²</div>
             </div>
             <div class="metric-card">
-                <div class="metric-label">Furnished Premium</div>
-                <div class="metric-value" id="kpi-furnished">58.7%</div>
-                <div class="metric-delta lime">+26.8% Market Margin</div>
+                <div class="metric-label">Keuntungan Furnished</div>
+                <div class="metric-value lime" id="kpi-furnished">+26.8%</div>
+                <div class="metric-delta">Margin Unit Siap Huni</div>
             </div>
             <div class="metric-card">
-                <div class="metric-label">Bargains Detected</div>
-                <div class="metric-value lime" id="kpi-bargains">39 Units</div>
-                <div class="metric-delta">Residual Z ≤ -0.75</div>
+                <div class="metric-label">Unit Super Murah</div>
+                <div class="metric-value lime" id="kpi-bargains">39 Unit</div>
+                <div class="metric-delta">Di Bawah Harga Pasaran</div>
             </div>
         </div>
 
         <!-- TAB NAVIGATION -->
         <div class="tab-bar">
-            <button class="tab-btn active" onclick="switchTab('tab-map')">01 // Market Map & Benchmarks</button>
-            <button class="tab-btn" onclick="switchTab('tab-deals')">02 // Deal Hunter Radar</button>
-            <button class="tab-btn" onclick="switchTab('tab-simulator')">03 // Hedonic Valuation Simulator</button>
-            <button class="tab-btn" onclick="switchTab('tab-decay')">04 // Spatial Distance Decay</button>
+            <button class="tab-btn active" id="tab-btn-map" onclick="switchTab('tab-map')">01 // Peta & Jelajah Apartemen</button>
+            <button class="tab-btn" id="tab-btn-deals" onclick="switchTab('tab-deals')">02 // Radar Unit Murah (Bargain Deals)</button>
+            <button class="tab-btn" id="tab-btn-simulator" onclick="switchTab('tab-simulator')">03 // Kalkulator Sewa Pintar</button>
+            <button class="tab-btn tab-pro" id="tab-btn-investor" onclick="switchTab('tab-investor')">
+                04 // Portal Investor (Bu Sarah)
+                <span class="lock-tag" id="investor-lock-badge">PRO</span>
+            </button>
         </div>
 
-        <!-- TAB 1: MARKET MAP & BENCHMARKS -->
+        <!-- =========================================================
+             TAB 1: PETA & JELAJAH APARTEMEN
+        ========================================================= -->
         <div id="tab-map" class="tab-content active">
             <div class="split-view">
-                
-                <!-- MAP -->
-                <div class="map-frame">
+                <!-- Map Left -->
+                <div class="map-card">
                     <div id="map"></div>
                 </div>
 
-                <!-- SIDE CONTROLS & BENCHMARK TABLE -->
-                <div class="side-panel">
-                    
-                    <!-- Filter Controls -->
+                <!-- Filters & District Benchmarks Right -->
+                <div>
                     <div class="panel-card">
                         <div class="panel-header">
-                            <span>Search & Region Filter</span>
-                            <span class="mono" id="filter-count" style="color: var(--color-acid-lime);">787 Matches</span>
+                            <span>Saring Pencarian Hunian</span>
+                            <span class="mono" style="font-size: 11px; color: var(--color-fog);" id="count-filtered">774 Unit Ditampilkan</span>
                         </div>
-                        <div class="filter-row">
-                            <select id="filter-city" class="filter-select" onchange="applyFilters()" style="flex: 1;">
-                                <option value="All">All Jabodetabek Regions</option>
-                                <option value="Jakarta Pusat">Jakarta Pusat</option>
+
+                        <div class="form-group">
+                            <label class="form-label">Wilayah Kota</label>
+                            <select id="filter-city" class="select-input" onchange="applyFilters()">
+                                <option value="All">Seluruh Jabodetabek (10 Kota)</option>
                                 <option value="Jakarta Selatan">Jakarta Selatan</option>
+                                <option value="Jakarta Pusat">Jakarta Pusat</option>
                                 <option value="Jakarta Barat">Jakarta Barat</option>
                                 <option value="Jakarta Timur">Jakarta Timur</option>
                                 <option value="Jakarta Utara">Jakarta Utara</option>
-                                <option value="Tangerang">Tangerang</option>
-                                <option value="Tangerang Selatan">Tangerang Selatan</option>
-                                <option value="Depok">Depok</option>
+                                <option value="Tangerang Selatan">Tangerang Selatan (Bintaro, BSD)</option>
+                                <option value="Tangerang">Kota Tangerang</option>
+                                <option value="Depok">Depok (Margonda, dll)</option>
                                 <option value="Bekasi">Bekasi</option>
                                 <option value="Bogor">Bogor</option>
                             </select>
-                            
-                            <select id="filter-layout" class="filter-select" onchange="applyFilters()" style="flex: 1;">
-                                <option value="All">All Layouts</option>
-                                <option value="Studio">Studio</option>
-                                <option value="1 Bedroom">1 Bedroom</option>
-                                <option value="2 Bedrooms">2 Bedrooms</option>
-                                <option value="3+ Bedrooms">3+ Bedrooms</option>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Tipe Kamar (Layout)</label>
+                            <select id="filter-layout" class="select-input" onchange="applyFilters()">
+                                <option value="All">Semua Tipe Kamar</option>
+                                <option value="Studio">Studio (Praktis)</option>
+                                <option value="1BR">1 Kamar Tidur (1BR)</option>
+                                <option value="2BR">2 Kamar Tidur (2BR)</option>
+                                <option value="3BR">3 Kamar Tidur (3BR)</option>
+                                <option value="4BR+">4+ Kamar Tidur</option>
                             </select>
                         </div>
 
-                        <div style="margin-top: 12px;">
-                            <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--color-fog); margin-bottom: 4px;">
-                                <span>MAX BUDGET</span>
-                                <span class="mono" id="budget-label" style="color: var(--color-paper);">Rp 45,000,000 / mo</span>
+                        <div class="form-group">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <label class="form-label">Batas Anggaran Sewa Bulanan</label>
+                                <span class="mono" style="font-size: 12px; color: var(--color-acid-lime);" id="budget-label">Rp 45 Juta / bln</span>
                             </div>
-                            <input type="range" id="filter-budget" min="2000000" max="60000000" step="1000000" value="45000000" class="range-slider" oninput="updateBudgetLabel(this.value); applyFilters();">
+                            <input type="range" id="filter-budget" class="range-slider" min="1500000" max="45000000" step="500000" value="45000000" oninput="updateBudgetLabel(this.value)" onchange="applyFilters()">
                         </div>
 
-                        <div style="display: flex; gap: 16px; margin-top: 14px;">
+                        <div class="checkbox-group">
                             <label class="checkbox-label">
                                 <input type="checkbox" id="filter-deals-only" onchange="applyFilters()">
-                                <span>⚡ Only Undervalued Deals</span>
+                                <span style="color: var(--color-acid-lime); font-weight: 500;">Hanya Tampilkan Unit Super Hemat (Diskon Pasaran)</span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox" id="filter-furnished" onchange="applyFilters()">
-                                <span>Full Furnished</span>
+                                <span>Wajib Lengkap Perabot (Full Furnished)</span>
                             </label>
                         </div>
                     </div>
 
-                    <!-- District Benchmark Table -->
-                    <div class="panel-card" style="flex: 1; overflow-y: auto;">
+                    <!-- Ringkasan Tarif per Kota -->
+                    <div class="panel-card">
                         <div class="panel-header">
-                            <span>District Price Benchmark Matrix</span>
-                            <span class="mono" style="font-size: 11px;">SORT: PRICE / M²</span>
+                            <span>Perbandingan Tarif per Meter Wilayah</span>
+                            <span class="mono" style="font-size: 11px; color: var(--color-fog);">Basis Rp/m²</span>
                         </div>
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>Region</th>
-                                    <th>Median Rp/m²</th>
-                                    <th>Median Rent</th>
-                                    <th>Units</th>
+                                    <th>Wilayah</th>
+                                    <th>Unit Dipantau</th>
+                                    <th>Sewa Bulanan</th>
+                                    <th>Tarif / m²</th>
                                 </tr>
                             </thead>
                             <tbody id="benchmark-tbody">
@@ -718,234 +778,351 @@
                             </tbody>
                         </table>
                     </div>
-
                 </div>
             </div>
         </div>
 
-        <!-- TAB 2: DEAL HUNTER RADAR -->
+        <!-- =========================================================
+             TAB 2: RADAR UNIT MURAH (BARGAIN DEALS)
+        ========================================================= -->
         <div id="tab-deals" class="tab-content">
-            <div class="deals-header-bar">
+            <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
                 <div>
-                    <h2>Algorithmic Deal Hunter Radar</h2>
+                    <h2>Radar Apartemen Salah Harga (Bargain Hunter)</h2>
                     <div style="font-size: 13px; color: var(--color-fog); margin-top: 4px;">
-                        Screening units listed below market equilibrium based on standardized residuals ($Z \le -0.75$).
+                        Daftar unit apartemen yang dipasang pemilik di bawah estimasi harga wajar pasaran. Cocok buat nemuin hunian bagus dengan harga paling miring.
                     </div>
                 </div>
-
                 <div style="display: flex; gap: 8px;">
-                    <button class="filter-chip active" id="deal-tab-all" onclick="filterDealTier('all')">All Deals (39)</button>
-                    <button class="filter-chip" id="deal-tab-deep" onclick="filterDealTier('deep')">Deep Value Deals (14)</button>
-                    <button class="filter-chip" id="deal-tab-good" onclick="filterDealTier('good')">Good Deals (25)</button>
+                    <button class="btn-outline-graphite" onclick="filterDealsTier('all')">Semua Unit Hemat</button>
+                    <button class="btn-outline-graphite" style="border-color: var(--color-acid-lime); color: var(--color-acid-lime);" onclick="filterDealsTier('deep')">🔥 Super Murah (>25% Diskon)</button>
+                    <button class="btn-outline-graphite" onclick="filterDealsTier('good')">✨ Harga Terbaik (15-25%)</button>
                 </div>
             </div>
 
-            <!-- Deal Cards Feed -->
-            <div id="deal-cards-container">
-                <!-- Rendered dynamically via JavaScript -->
+            <div id="deals-list-container">
+                <!-- Dynamically rendered deal cards -->
             </div>
         </div>
 
-        <!-- TAB 3: HEDONIC VALUATION SIMULATOR & BU SARAH INVESTOR TOOL -->
+        <!-- =========================================================
+             TAB 3: KALKULATOR SEWA PINTAR (CEK HARGA WAJAR)
+        ========================================================= -->
         <div id="tab-simulator" class="tab-content">
             <div style="margin-bottom: 20px;">
-                <h2>Hedonic Rent Valuation Simulator</h2>
+                <h2>Kalkulator Estimasi Harga Wajar Sewa</h2>
                 <div style="font-size: 13px; color: var(--color-fog); margin-top: 4px;">
-                    Simulate the market equilibrium rent and calculate landlord fit-out payback ROI.
-                </div>
-            </div>
-
-            <div class="sim-grid">
-                <!-- Inputs Form -->
-                <div class="panel-card">
-                    <div class="panel-header">Property Specifications</div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Metropolitan Region</label>
-                        <select id="sim-city" class="filter-select" style="width: 100%;" onchange="runSimulation()">
-                            <option value="Jakarta Selatan">Jakarta Selatan</option>
-                            <option value="Jakarta Pusat">Jakarta Pusat</option>
-                            <option value="Jakarta Barat">Jakarta Barat</option>
-                            <option value="Jakarta Utara">Jakarta Utara</option>
-                            <option value="Jakarta Timur">Jakarta Timur</option>
-                            <option value="Tangerang Selatan">Tangerang Selatan</option>
-                            <option value="Tangerang">Tangerang</option>
-                            <option value="Depok">Depok</option>
-                            <option value="Bekasi">Bekasi</option>
-                            <option value="Bogor">Bogor</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--color-fog); margin-bottom: 4px;">
-                            <span>USABLE FLOOR SIZE</span>
-                            <span class="mono" id="sim-size-label" style="color: var(--color-paper);">45 m²</span>
-                        </div>
-                        <input type="range" id="sim-size" min="20" max="200" step="1" value="45" class="range-slider" oninput="document.getElementById('sim-size-label').innerText = this.value + ' m²'; runSimulation();">
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;" class="form-group">
-                        <div>
-                            <label class="form-label">Bedrooms</label>
-                            <select id="sim-beds" class="filter-select" style="width: 100%;" onchange="runSimulation()">
-                                <option value="1">1 Bedroom / Studio</option>
-                                <option value="2" selected>2 Bedrooms</option>
-                                <option value="3">3 Bedrooms</option>
-                                <option value="4">4+ Bedrooms</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="form-label">Bathrooms</label>
-                            <select id="sim-baths" class="filter-select" style="width: 100%;" onchange="runSimulation()">
-                                <option value="1" selected>1 Bathroom</option>
-                                <option value="2">2 Bathrooms</option>
-                                <option value="3">3 Bathrooms</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--color-fog); margin-bottom: 4px;">
-                            <span>DISTANCE TO SUDIRMAN CBD</span>
-                            <span class="mono" id="sim-cbd-label" style="color: var(--color-paper);">8.0 km</span>
-                        </div>
-                        <input type="range" id="sim-cbd" min="1.0" max="45.0" step="0.5" value="8.0" class="range-slider" oninput="document.getElementById('sim-cbd-label').innerText = this.value + ' km'; runSimulation();">
-                    </div>
-
-                    <div class="form-group">
-                        <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--color-fog); margin-bottom: 4px;">
-                            <span>DISTANCE TO NEAREST TRANSIT HUB</span>
-                            <span class="mono" id="sim-transit-label" style="color: var(--color-paper);">1.5 km</span>
-                        </div>
-                        <input type="range" id="sim-transit" min="0.2" max="15.0" step="0.1" value="1.5" class="range-slider" oninput="document.getElementById('sim-transit-label').innerText = this.value + ' km'; runSimulation();">
-                    </div>
-
-                    <div class="panel-header" style="margin-top: 20px;">Amenities & Interior Package</div>
-                    <div class="checkbox-grid">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="sim-ff" checked onchange="runSimulation()">
-                            <span>Full Furnished Interior</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="sim-ac" checked onchange="runSimulation()">
-                            <span>AC Inverter Units</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="sim-pool" checked onchange="runSimulation()">
-                            <span>Swimming Pool</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="sim-gym" onchange="runSimulation()">
-                            <span>Fitness Gym</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="sim-balcony" onchange="runSimulation()">
-                            <span>Private Balcony</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="sim-kitchen" checked onchange="runSimulation()">
-                            <span>Modular Kitchen Set</span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Simulation Output & Bu Sarah Tool -->
-                <div>
-                    <div class="calc-result-box">
-                        <div class="metric-label">Estimated Fair Market Rent</div>
-                        <div style="font-size: 36px; font-weight: 500; color: var(--color-acid-lime); letter-spacing: -0.02em;" class="mono" id="sim-output-rent">
-                            Rp 7,850,000
-                        </div>
-                        <div class="mono" style="font-size: 12px; color: var(--color-fog); margin-top: 6px;" id="sim-output-ci">
-                            Confidence Range: Rp 7.0M - Rp 8.6M / month
-                        </div>
-                        <div class="mono" style="font-size: 12px; color: var(--color-ash); margin-top: 2px;" id="sim-output-rate">
-                            Implicit Rate: Rp 174,444 / m²
-                        </div>
-                    </div>
-
-                    <!-- Bu Sarah Investor Fit-Out Tool -->
-                    <div class="panel-card">
-                        <div class="panel-header">
-                            <span>Bu Sarah's Investor Tool • Fit-Out Payback</span>
-                            <span class="badge-acid">+26.8% MARGIN</span>
-                        </div>
-                        
-                        <p style="font-size: 13px; color: var(--color-fog); margin-bottom: 16px;">
-                            Evaluating the ROI of interior fit-out vs unfurnished baseline based on empirical Jabodetabek rental data.
-                        </p>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
-                            <div style="background-color: var(--color-obsidian); padding: 12px; border-radius: 8px; border: 1px solid var(--color-graphite);">
-                                <div class="metric-label">Monthly Extra Cash Flow</div>
-                                <div class="mono" style="font-size: 18px; color: var(--color-paper);" id="roi-monthly">+Rp 1,660,000</div>
-                            </div>
-                            <div style="background-color: var(--color-obsidian); padding: 12px; border-radius: 8px; border: 1px solid var(--color-graphite);">
-                                <div class="metric-label">Annual Extra Revenue</div>
-                                <div class="mono" style="font-size: 18px; color: var(--color-acid-lime);" id="roi-annual">+Rp 19.9M / yr</div>
-                            </div>
-                        </div>
-
-                        <div style="background-color: var(--color-obsidian); padding: 14px; border-radius: 8px; border: 1px solid var(--color-graphite);">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div>
-                                    <div class="metric-label">Estimated Fit-Out Cost</div>
-                                    <div class="mono" style="font-size: 15px; color: var(--color-mist);" id="roi-cost">Rp 54,000,000</div>
-                                </div>
-                                <div style="text-align: right;">
-                                    <div class="metric-label">Break-Even Payback</div>
-                                    <div class="mono" style="font-size: 20px; color: var(--color-paper);" id="roi-payback">2.7 Years</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 4: SPATIAL DISTANCE DECAY -->
-        <div id="tab-decay" class="tab-content">
-            <div style="margin-bottom: 20px;">
-                <h2>Spatial Gradient & Urban Rent Decay Analytics</h2>
-                <div style="font-size: 13px; color: var(--color-fog); margin-top: 4px;">
-                    Empirical validation of the Alonso-Muth-Mills monocentric city model: rental price per square meter decays as distance from Sudirman Core CBD increases.
+                    Cek apakah harga sewa sebuah unit kemahalan atau kemurahan berdasarkan ukuran fisik, letak strategis, dan kelengkapan fasilitas.
                 </div>
             </div>
 
             <div class="split-view">
+                <!-- Input Panel -->
                 <div class="panel-card">
-                    <div class="panel-header">Price / m² vs Distance to Sudirman Core (km)</div>
-                    <div class="chart-container">
-                        <canvas id="decayChart"></canvas>
+                    <div class="panel-header">Atribut & Fasilitas Unit</div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                        <div class="form-group">
+                            <label class="form-label">Wilayah Kota</label>
+                            <select id="sim-city" class="select-input" onchange="runSimulation()">
+                                <option value="Jakarta Selatan">Jakarta Selatan</option>
+                                <option value="Jakarta Pusat">Jakarta Pusat</option>
+                                <option value="Jakarta Barat">Jakarta Barat</option>
+                                <option value="Jakarta Timur">Jakarta Timur</option>
+                                <option value="Jakarta Utara">Jakarta Utara</option>
+                                <option value="Tangerang Selatan">Tangerang Selatan</option>
+                                <option value="Tangerang">Tangerang</option>
+                                <option value="Depok">Depok</option>
+                                <option value="Bekasi">Bekasi</option>
+                                <option value="Bogor">Bogor</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Luas Bangunan (m²)</label>
+                            <input type="number" id="sim-size" class="text-input mono" value="45" min="15" max="300" onchange="runSimulation()">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                        <div class="form-group">
+                            <label class="form-label">Jumlah Kamar Tidur</label>
+                            <select id="sim-beds" class="select-input" onchange="runSimulation()">
+                                <option value="0">Studio (0 BR)</option>
+                                <option value="1">1 Kamar Tidur</option>
+                                <option value="2" selected>2 Kamar Tidur</option>
+                                <option value="3">3 Kamar Tidur</option>
+                                <option value="4">4+ Kamar Tidur</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Jumlah Kamar Mandi</label>
+                            <select id="sim-baths" class="select-input" onchange="runSimulation()">
+                                <option value="1" selected>1 Kamar Mandi</option>
+                                <option value="2">2 Kamar Mandi</option>
+                                <option value="3">3+ Kamar Mandi</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                        <div class="form-group">
+                            <label class="form-label">Jarak ke Sudirman CBD (km)</label>
+                            <input type="number" id="sim-cbd" class="text-input mono" value="8.5" min="0.5" max="60" step="0.5" onchange="runSimulation()">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Jarak ke Stasiun Terdekat (km)</label>
+                            <input type="number" id="sim-transit" class="text-input mono" value="1.2" min="0.1" max="15" step="0.1" onchange="runSimulation()">
+                        </div>
+                    </div>
+
+                    <label class="form-label" style="margin-top: 8px;">Paket Fasilitas Tambahan</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 6px;">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="sim-ff" checked onchange="runSimulation()">
+                            <span style="color: var(--color-acid-lime); font-weight: 500;">Lengkap Perabot (Full Furnished)</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="sim-ac" checked onchange="runSimulation()">
+                            <span>Pendingin Udara (AC)</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="sim-pool" checked onchange="runSimulation()">
+                            <span>Kolam Renang</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="sim-gym" onchange="runSimulation()">
+                            <span>Pusat Kebugaran (Gym)</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="sim-balcony" onchange="runSimulation()">
+                            <span>Balkon Pribadi</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="sim-kitchen" checked onchange="runSimulation()">
+                            <span>Kitchen Set Siap Pakai</span>
+                        </label>
                     </div>
                 </div>
 
-                <div class="panel-card">
-                    <div class="panel-header">Concentric Urban Zone Benchmarks</div>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Concentric Zone</th>
-                                <th>Audited Units</th>
-                                <th>Median Rp/m²</th>
-                                <th>Mean Rp/m²</th>
-                            </tr>
-                        </thead>
-                        <tbody id="zones-tbody">
-                            <!-- Populated dynamically -->
-                        </tbody>
-                    </table>
+                <!-- Simulation Output -->
+                <div>
+                    <div class="calc-result-box">
+                        <div class="metric-label">Estimasi Harga Sewa Wajar</div>
+                        <div style="font-size: 38px; font-weight: 500; color: var(--color-acid-lime); letter-spacing: -0.02em;" class="mono" id="sim-output-rent">
+                            Rp 7,850,000 / bln
+                        </div>
+                        <div class="mono" style="font-size: 13px; color: var(--color-fog); margin-top: 8px;" id="sim-output-ci">
+                            Rentang Toleransi Pasar: Rp 7.0 Jt - Rp 8.6 Jt / bulan
+                        </div>
+                        <div class="mono" style="font-size: 12px; color: var(--color-ash); margin-top: 4px;" id="sim-output-rate">
+                            Tarif Efektif Ruang: Rp 174,444 / m²
+                        </div>
+                    </div>
+
+                    <div class="panel-card">
+                        <div class="panel-header">
+                            <span>Panduan Negosiasi Penyewa</span>
+                            <span class="mono" style="font-size: 11px; color: var(--color-pulse-green);">Rekomendasi</span>
+                        </div>
+                        <p style="font-size: 13px; color: var(--color-fog); line-height: 1.6; margin-bottom: 12px;">
+                            Jika pemilik unit memasang harga <strong>di atas rentang toleransi</strong>, kamu punya ruang negosiasi yang kuat dengan menunjukkan rata-rata sewa per meter di kawasan ini.
+                        </p>
+                        <div style="background-color: var(--color-obsidian); padding: 14px; border-radius: 8px; border: 1px solid var(--color-graphite); font-size: 12px;">
+                            💡 <strong>Tips Komuter:</strong> Unit dengan jarak &lt;1.5 km ke stasiun KRL/MRT biasanya punya nilai sewa 15% lebih stabil dibanding unit yang jauh dari akses transportasi publik.
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- =========================================================
+             TAB 4: PORTAL INVESTOR & ANALITIK PRO (BU SARAH)
+        ========================================================= -->
+        <div id="tab-investor" class="tab-content">
+            <!-- If Locked (Not Logged in as Investor) -->
+            <div id="investor-locked-view" class="locked-investor-card">
+                <div style="font-size: 40px; margin-bottom: 12px;">🏢 🔒</div>
+                <h2 style="font-size: 22px; margin-bottom: 8px;">Portal Eksklusif Investor & Pemilik Properti</h2>
+                <p style="color: var(--color-fog); font-size: 14px; max-width: 520px; margin: 0 auto 24px auto;">
+                    Halaman ini dikhususkan bagi pemilik unit dan investor (Persona Bu Sarah) untuk menghitung potensi keuntungan sewa, masa balik modal renovasi interior, dan analisis data pasar spasial.
+                </p>
+                <div style="display: flex; gap: 12px; justify-content: center;">
+                    <button class="btn-action-lime" onclick="demoLoginInvestor()">
+                        ⚡ Masuk Mode Investor (Demo Bu Sarah)
+                    </button>
+                    <button class="btn-outline-graphite" onclick="switchTab('tab-map')">
+                        Kembali ke Peta
+                    </button>
+                </div>
+            </div>
+
+            <!-- If Unlocked (Logged in as Bu Sarah) -->
+            <div id="investor-unlocked-view" style="display: none;">
+                <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h2>Portal Investor & Analisis Imbal Hasil (Bu Sarah)</h2>
+                        <div style="font-size: 13px; color: var(--color-fog); margin-top: 4px;">
+                            Dasbor evaluasi investasi properti sewa, simulasi payback period interior fit-out, dan pemodelan sebaran spasial.
+                        </div>
+                    </div>
+                    <div class="user-profile-badge">
+                        <span>🏢 Profil Aktif: <strong>Bu Sarah (Investor Pro)</strong></span>
+                        <button class="btn-logout" onclick="logoutInvestor()">Keluar Mode Pro</button>
+                    </div>
+                </div>
+
+                <!-- Investor Section 1: Fit-Out Payback Tool -->
+                <div class="panel-card" style="margin-bottom: 24px;">
+                    <div class="panel-header">
+                        <span>Kalkulator Balik Modal Interior (Interior Fit-Out Payback Analysis)</span>
+                        <span class="badge-acid">+26.8% MARGIN FITTING</span>
+                    </div>
+
+                    <p style="font-size: 13px; color: var(--color-fog); margin-bottom: 16px;">
+                        Hitung apakah renovasi unit menjadi <strong>Full Furnished</strong> sepadan dengan biaya modal yang dikeluarkan dibandingkan dibiarkan kosongan (unfurnished).
+                    </p>
+
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;">
+                        <div style="background-color: var(--color-obsidian); padding: 14px; border-radius: 8px; border: 1px solid var(--color-graphite);">
+                            <div class="metric-label">Tambahan Sewa / Bulan</div>
+                            <div class="mono" style="font-size: 18px; color: var(--color-paper);" id="pro-roi-monthly">+Rp 3,200,000</div>
+                            <div style="font-size: 11px; color: var(--color-ash); margin-top: 4px;">Selisih vs Kosongan</div>
+                        </div>
+
+                        <div style="background-color: var(--color-obsidian); padding: 14px; border-radius: 8px; border: 1px solid var(--color-graphite);">
+                            <div class="metric-label">Tambahan Omset / Tahun</div>
+                            <div class="mono" style="font-size: 18px; color: var(--color-acid-lime);" id="pro-roi-annual">+Rp 38.4 Juta</div>
+                            <div style="font-size: 11px; color: var(--color-ash); margin-top: 4px;">Arus Kas Tambahan</div>
+                        </div>
+
+                        <div style="background-color: var(--color-obsidian); padding: 14px; border-radius: 8px; border: 1px solid var(--color-graphite);">
+                            <div class="metric-label">Estimasi Biaya Interior</div>
+                            <div class="mono" style="font-size: 18px; color: var(--color-mist);" id="pro-roi-cost">Rp 54,000,000</div>
+                            <div style="font-size: 11px; color: var(--color-ash); margin-top: 4px;">Standar Fit-Out 45 m²</div>
+                        </div>
+
+                        <div style="background-color: var(--color-obsidian); padding: 14px; border-radius: 8px; border: 1px solid var(--color-graphite);">
+                            <div class="metric-label">Masa Balik Modal (BEP)</div>
+                            <div class="mono" style="font-size: 18px; color: var(--color-pulse-green);" id="pro-roi-payback">1.4 Tahun (17 Bulan)</div>
+                            <div style="font-size: 11px; color: var(--color-ash); margin-top: 4px;">Break-even Cepat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Investor Section 2: Spatial Rent Gradient & Concentric Urban Rings -->
+                <div class="split-view">
+                    <div class="panel-card">
+                        <div class="panel-header">
+                            <span>Gradien Penurunan Tarif vs Jarak ke Sudirman CBD</span>
+                            <span class="mono" style="font-size: 11px; color: var(--color-fog);">Alonso-Muth-Mills Model</span>
+                        </div>
+                        <div style="height: 340px; position: relative;">
+                            <canvas id="decayChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="panel-card">
+                        <div class="panel-header">
+                            <span>Imbal Hasil per Ring Wilayah Konsentris</span>
+                            <span class="mono" style="font-size: 11px; color: var(--color-fog);">Zonasi Urban</span>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Ring Perkotaan</th>
+                                    <th>Jumlah Unit</th>
+                                    <th>Median Rp/m²</th>
+                                    <th>Rata-rata Rp/m²</th>
+                                </tr>
+                            </thead>
+                            <tbody id="zones-tbody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Investor Section 3: Data Science Model Telemetry -->
+                <div class="panel-card" style="margin-top: 20px;">
+                    <div class="panel-header">
+                        <span>Parameter Evaluasi Algoritma Penilai Sewa (AVM Engine Telemetry)</span>
+                        <span class="mono" style="font-size: 11px; color: var(--color-acid-lime);">Model R² = 95.9%</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; font-size: 12px;">
+                        <div style="background-color: var(--color-obsidian); padding: 12px; border-radius: 6px;">
+                            <div class="metric-label">Uji Validasi Silang (CV)</div>
+                            <div class="mono" style="color: var(--color-paper); font-size: 15px;">83.5% R² Score</div>
+                            <div style="color: var(--color-ash); margin-top: 2px;">5-Fold K-Cross Validation</div>
+                        </div>
+                        <div style="background-color: var(--color-obsidian); padding: 12px; border-radius: 6px;">
+                            <div class="metric-label">Rata-rata Margin Error</div>
+                            <div class="mono" style="color: var(--color-paper); font-size: 15px;">Rp 1.11 Juta</div>
+                            <div style="color: var(--color-ash); margin-top: 2px;">Mean Absolute Error (MAE)</div>
+                        </div>
+                        <div style="background-color: var(--color-obsidian); padding: 12px; border-radius: 6px;">
+                            <div class="metric-label">Persentase Akurasi Pasar</div>
+                            <div class="mono" style="color: var(--color-acid-lime); font-size: 15px;">13.7% MAPE</div>
+                            <div style="color: var(--color-ash); margin-top: 2px;">Toleransi Sangat Presisi</div>
+                        </div>
+                        <div style="background-color: var(--color-obsidian); padding: 12px; border-radius: 6px;">
+                            <div class="metric-label">Faktor Paling Berpengaruh</div>
+                            <div class="mono" style="color: var(--color-paper); font-size: 15px;">Luas Unit (42.1%)</div>
+                            <div style="color: var(--color-ash); margin-top: 2px;">Lalu Jarak Sudirman (28.4%)</div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
         <!-- FOOTER -->
         <footer style="margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--color-graphite); display: flex; justify-content: space-between; font-size: 11px; color: var(--color-ash);" class="mono">
-            <div>HOUSEHOLD INTELLIGENCE // PRD V1.0 PROPTECH MVP</div>
-            <div>AFIATTA ILHAN SALEH • PROJECT TO WIN</div>
+            <div>HOUSEHOLD INTELLIGENCE // PANDUAN SEWA PROPERTI JABODETABEK</div>
+            <div>AFIATTA ILHAN SALEH • PORTOFOLIO DATA ANALYTICS</div>
         </footer>
 
+    </div>
+
+    <!-- =========================================================
+         LOGIN & ROLE MODAL
+    ========================================================= -->
+    <div id="login-modal" class="modal-overlay">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeLoginModal()">&times;</button>
+            <h3 style="font-size: 18px; margin-bottom: 6px;">Masuk ke Household Intelligence</h3>
+            <p style="color: var(--color-fog); font-size: 13px; margin-bottom: 20px;">
+                Pilih profil akses yang sesuai dengan tujuan kamu menggunakan platform ini.
+            </p>
+
+            <div class="persona-choice-card" onclick="selectPersonaOption('renter')">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <strong style="color: var(--color-paper); font-size: 14px;">🔍 Pencari Sewa / Komuter (Rian)</strong>
+                    <span class="badge-acid">GRATIS</span>
+                </div>
+                <div style="font-size: 12px; color: var(--color-fog);">
+                    Cari unit apartemen murah dekat stasiun, cek kewajaran harga sewa, dan filter unit terbaik di 10 kota Jabodetabek.
+                </div>
+            </div>
+
+            <div class="persona-choice-card selected" onclick="selectPersonaOption('investor')">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <strong style="color: var(--color-acid-lime); font-size: 14px;">🏢 Pemilik Properti & Investor (Bu Sarah)</strong>
+                    <span class="badge-acid">PRO ACCESS</span>
+                </div>
+                <div style="font-size: 12px; color: var(--color-fog);">
+                    Akses kalkulator balik modal renovasi interior (fit-out), analisis tarif sewa per meter, dan data statistik ekonometrika.
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 8px;">
+                <button class="btn-action-lime" style="width: 100%; justify-content: center;" onclick="confirmLoginSelection()">
+                    Lanjut Masuk Platform ↗
+                </button>
+                <button class="btn-outline-graphite" style="width: 100%;" onclick="closeLoginModal()">
+                    Batal
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- JAVASCRIPT APPLICATION LOGIC -->
@@ -954,7 +1131,9 @@
         let allListings = [];
         let allBenchmarks = {};
         let decayData = {};
-        let currentPersona = 'default';
+        let currentUserRole = 'guest'; // 'guest', 'renter', 'investor'
+        let selectedModalRole = 'investor';
+        let currentDealFilter = 'all';
         let mapInstance = null;
         let mapMarkersLayer = null;
         let decayChartInstance = null;
@@ -967,9 +1146,15 @@
             await fetchListings();
             await fetchDistanceDecay();
             runSimulation();
+
+            // Check localStorage auth state
+            const savedRole = localStorage.getItem('hi_user_role');
+            if (savedRole === 'investor') {
+                setInvestorRole(true);
+            }
         }
 
-        // Initialize Leaflet Map with CartoDB Dark Matter tiles
+        // Initialize Leaflet Map with ESRI Dark Canvas (No API Key Required)
         function initMap() {
             mapInstance = L.map('map', {
                 center: [-6.2088, 106.8456], // Jakarta Center
@@ -989,9 +1174,9 @@
                 maxZoom: 16
             }).addTo(mapInstance);
 
-                        mapMarkersLayer = L.layerGroup().addTo(mapInstance);
-            setTimeout(() => { mapInstance.invalidateSize(); }, 250);
-            window.addEventListener('resize', () => { mapInstance.invalidateSize(); });
+            mapMarkersLayer = L.layerGroup().addTo(mapInstance);
+
+            setTimeout(() => mapInstance.invalidateSize(), 300);
         }
 
         // Fetch Global Telemetry
@@ -1000,12 +1185,11 @@
                 const res = await fetch('/api/telemetry');
                 const data = await res.json();
                 document.getElementById('kpi-units').innerText = data.audited_units.toLocaleString();
-                document.getElementById('kpi-rent').innerText = 'Rp ' + (data.median_rent_idr / 1e6).toFixed(1) + 'M';
-                document.getElementById('kpi-m2').innerText = 'Rp ' + Math.round(data.median_price_per_m2_idr).toLocaleString();
-                document.getElementById('kpi-furnished').innerText = data.furnished_share_pct + '%';
-                document.getElementById('kpi-bargains').innerText = data.bargains_detected + ' Units';
+                document.getElementById('kpi-rent').innerText = 'Rp ' + (data.median_rent_idr / 1e6).toFixed(1) + ' Jt';
+                document.getElementById('kpi-m2').innerText = 'Rp ' + Math.round(data.median_price_per_m2_idr / 1000) + ' rb';
+                document.getElementById('kpi-bargains').innerText = data.bargains_detected + ' Unit';
             } catch (err) {
-                console.error("Failed to load telemetry", err);
+                console.error("Gagal memuat telemetri", err);
             }
         }
 
@@ -1016,7 +1200,7 @@
                 allBenchmarks = await res.json();
                 renderBenchmarkTable(allBenchmarks.cities);
             } catch (err) {
-                console.error("Failed to load benchmarks", err);
+                console.error("Gagal memuat benchmarks", err);
             }
         }
 
@@ -1027,86 +1211,95 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td style="font-weight: 500; color: var(--color-paper);">${c.target_city}</td>
-                    <td class="mono" style="color: var(--color-acid-lime);">Rp ${Math.round(c.median_price_per_m2_idr).toLocaleString()}</td>
-                    <td class="mono">Rp ${(c.median_rent_idr / 1e6).toFixed(1)}M</td>
                     <td class="mono" style="color: var(--color-fog);">${c.sample_size}</td>
+                    <td class="mono">Rp ${(c.median_rent_idr / 1e6).toFixed(1)} Jt</td>
+                    <td class="mono" style="color: var(--color-acid-lime);">Rp ${Math.round(c.median_price_per_m2_idr).toLocaleString()}</td>
                 `;
                 tbody.appendChild(row);
             });
         }
 
-        // Fetch Listings & Populate Map + Deal Hunter
+        // Fetch Listings & Render Map & Deals
         async function fetchListings() {
             try {
                 const res = await fetch('/api/listings?limit=800');
                 const data = await res.json();
-                allListings = data.data;
+                allListings = data.listings;
                 applyFilters();
             } catch (err) {
-                console.error("Failed to load listings", err);
+                console.error("Gagal memuat listing", err);
             }
         }
 
         // Apply Client-Side Reactive Filters
         function applyFilters() {
-            const city = document.getElementById('filter-city').value;
-            const layout = document.getElementById('filter-layout').value;
+            const selectedCity = document.getElementById('filter-city').value;
+            const selectedLayout = document.getElementById('filter-layout').value;
             const maxBudget = parseFloat(document.getElementById('filter-budget').value);
             const dealsOnly = document.getElementById('filter-deals-only').checked;
             const furnishedOnly = document.getElementById('filter-furnished').checked;
 
-            let filtered = allListings.filter(item => {
-                if (city !== 'All' && item.target_city !== city) return false;
-                if (layout !== 'All' && item.layout_category !== layout) return false;
+            const filtered = allListings.filter(item => {
+                if (selectedCity !== 'All' && item.target_city !== selectedCity) return false;
+                if (selectedLayout !== 'All' && item.layout_category !== selectedLayout) return false;
                 if (item.price_monthly_idr > maxBudget) return false;
                 if (dealsOnly && item.deal_score_z > -0.75) return false;
-                if (furnishedOnly && item.is_full_furnished !== 1) return false;
+                if (furnishedOnly && !item.is_full_furnished) return false;
                 return true;
             });
 
-            document.getElementById('filter-count').innerText = `${filtered.length} Matches`;
-
-            // Update Map Pins
+            document.getElementById('count-filtered').innerText = `${filtered.length} Unit Ditampilkan`;
             renderMapMarkers(filtered);
-
-            // Update Deals Feed
-            renderDealCards(filtered);
+            renderDealsList(filtered.filter(d => d.deal_score_z <= -0.75));
         }
 
-                // Render Leaflet Markers with CircleMarker (zero white boxes, smooth rendering)
+        // Render Map Points using Leaflet CircleMarker (Smooth, Zero White Boxes)
         function renderMapMarkers(listings) {
+            if (!mapMarkersLayer) return;
             mapMarkersLayer.clearLayers();
+
             const validLatLngs = [];
-            
+
             listings.forEach(item => {
-                // Strict coordinate validation for Jabodetabek
-                if (!item.latitude || !item.longitude) return;
-                const lat = parseFloat(item.latitude);
-                const lon = parseFloat(item.longitude);
-                if (lat < -6.8 || lat > -5.9 || lon < 106.3 || lon > 107.3) return;
+                if (item.latitude < -7.0 || item.latitude > -5.8 || item.longitude < 106.0 || item.longitude > 107.5) {
+                    return; // Skip invalid coords
+                }
 
-                const isDeal = item.deal_score_z <= -0.75;
-                const isDeep = item.deal_score_z <= -1.5;
+                const isDeepDeal = item.deal_score_z <= -1.5;
+                const isGoodDeal = item.deal_score_z <= -0.75;
 
-                // High-precision CircleMarker
-                const marker = L.circleMarker([lat, lon], {
-                    radius: isDeep ? 6 : (isDeal ? 5 : 3.5),
-                    fillColor: isDeep ? "#e4f222" : (isDeal ? "#818cf8" : "#02b8cc"),
-                    color: "#08090a",
+                let markerColor = '#02b8cc'; // Standard teal
+                let markerRadius = 3.5;
+                let markerOpacity = 0.75;
+
+                if (isDeepDeal) {
+                    markerColor = '#e4f222'; // Acid lime
+                    markerRadius = 6.0;
+                    markerOpacity = 0.95;
+                } else if (isGoodDeal) {
+                    markerColor = '#818cf8'; // Iris violet
+                    markerRadius = 5.0;
+                    markerOpacity = 0.90;
+                }
+
+                const circle = L.circleMarker([item.latitude, item.longitude], {
+                    radius: markerRadius,
+                    fillColor: markerColor,
+                    color: '#08090a',
                     weight: 1.2,
                     opacity: 1,
-                    fillOpacity: isDeal ? 0.95 : 0.75
+                    fillOpacity: markerOpacity
                 });
 
-                validLatLngs.push([lat, lon]);
+                validLatLngs.push([item.latitude, item.longitude]);
 
-                const cleanUrl = item.url.startsWith("http") ? item.url : `https://www.rumah123.com${item.url}`;
-                const savingsHtml = isDeal 
-                    ? `<div style="color: #e4f222; font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-top: 4px; font-weight: 500;">⚡ Net Savings: -Rp ${Math.abs(item.residual_idr).toLocaleString()}/mo (-${item.discount_pct}%)</div>`
-                    : "";
+                const cleanUrl = item.url.startsWith('http') ? item.url : `https://www.rumah123.com${item.url}`;
+                const savingsHtml = isGoodDeal 
+                    ? `<div style="font-size: 11px; color: #e4f222; margin-top: 4px;"><strong>Hemat: -Rp ${Math.abs(item.residual_idr).toLocaleString()}/bln</strong></div>`
+                    : '';
 
-                marker.bindPopup(`
-                    <div style="min-width: 220px; font-family: 'Inter', sans-serif;">
+                circle.bindPopup(`
+                    <div style="min-width: 200px; padding: 2px;">
                         <div class="mono" style="font-size: 10px; color: #8a8f98; text-transform: uppercase;">${item.listing_id} • ${item.target_city}</div>
                         <div style="font-size: 13px; font-weight: 500; color: #ffffff; margin: 3px 0 6px 0;">${item.title}</div>
                         <div style="font-size: 11px; color: #8a8f98; margin-bottom: 8px;">
@@ -1114,59 +1307,49 @@
                         </div>
                         <div style="border-top: 1px solid #23252a; padding-top: 6px; display: flex; justify-content: space-between; align-items: flex-end;">
                             <div>
-                                <div style="font-size: 10px; color: #8a8f98;">ASKING RENT</div>
+                                <div style="font-size: 9px; color: #8a8f98; text-transform: uppercase;">Harga Sewa</div>
                                 <div class="mono" style="font-size: 14px; color: #ffffff; font-weight: 500;">Rp ${item.price_monthly_idr.toLocaleString()}</div>
+                                ${savingsHtml}
                             </div>
-                            <a href="${cleanUrl}" target="_blank" style="background: #e4f222; color: #08090a; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 500; text-decoration: none;">View ↗</a>
+                            <a href="${cleanUrl}" target="_blank" style="background-color: #e4f222; color: #08090a; text-decoration: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 500;">
+                                Buka ↗
+                            </a>
                         </div>
-                        ${savingsHtml}
                     </div>
                 `);
 
-                mapMarkersLayer.addLayer(marker);
+                mapMarkersLayer.addLayer(circle);
             });
 
-            // Smooth auto-fit bounds
+            // Smoothly auto-fit bounds if filtered
             if (validLatLngs.length > 0 && mapInstance) {
                 const bounds = L.latLngBounds(validLatLngs);
-                mapInstance.fitBounds(bounds.pad(0.08), { maxZoom: 13, animate: true });
+                mapInstance.fitBounds(bounds.pad(0.08), { maxZoom: 14, animate: true });
             }
         }
 
-        // Render Deal Cards in Tab 2
-        let currentDealFilterTier = 'all';
-        function filterDealTier(tier) {
-            currentDealFilterTier = tier;
-            document.getElementById('deal-tab-all').classList.toggle('active', tier === 'all');
-            document.getElementById('deal-tab-deep').classList.toggle('active', tier === 'deep');
-            document.getElementById('deal-tab-good').classList.toggle('active', tier === 'good');
-            renderDealCards(allListings);
-        }
-
-        function renderDealCards(listings) {
-            const container = document.getElementById('deal-cards-container');
+        // Render Deal Hunter Cards
+        function renderDealsList(deals) {
+            const container = document.getElementById('deals-list-container');
             container.innerHTML = '';
 
-            let deals = listings.filter(item => item.deal_score_z <= -0.75);
-
-            if (currentDealFilterTier === 'deep') {
-                deals = deals.filter(item => item.deal_score_z <= -1.5);
-            } else if (currentDealFilterTier === 'good') {
-                deals = deals.filter(item => item.deal_score_z > -1.5 && item.deal_score_z <= -0.75);
+            let filteredDeals = deals;
+            if (currentDealFilter === 'deep') {
+                filteredDeals = deals.filter(d => d.deal_score_z <= -1.5);
+            } else if (currentDealFilter === 'good') {
+                filteredDeals = deals.filter(d => d.deal_score_z > -1.5 && d.deal_score_z <= -0.75);
             }
 
-            deals.sort((a, b) => a.deal_score_z - b.deal_score_z);
-
-            if (deals.length === 0) {
-                container.innerHTML = '<div style="color: var(--color-fog); padding: 32px; text-align: center;">No undervalued deals match the current filter.</div>';
+            if (filteredDeals.length === 0) {
+                container.innerHTML = '<div style="color: var(--color-fog); padding: 32px; text-align: center;">Tidak ada unit yang cocok dengan kriteria filter saat ini.</div>';
                 return;
             }
 
-            deals.slice(0, 25).forEach(item => {
+            filteredDeals.slice(0, 30).forEach(item => {
                 const isDeep = item.deal_score_z <= -1.5;
                 const badge = isDeep 
-                    ? `<span class="badge-acid">DEEP VALUE (-${item.discount_pct}%)</span>`
-                    : `<span class="badge-iris">GOOD DEAL (-${item.discount_pct}%)</span>`;
+                    ? `<span class="badge-acid">🔥 SUPER MURAH (HEMAT ${item.discount_pct}%)</span>`
+                    : `<span class="badge-iris">✨ HARGA TERBAIK (HEMAT ${item.discount_pct}%)</span>`;
 
                 const cleanUrl = item.url.startsWith('http') ? item.url : `https://www.rumah123.com${item.url}`;
 
@@ -1186,35 +1369,41 @@
                     <div style="font-size: 12px; color: var(--color-fog); margin-bottom: 14px;">
                         📐 ${item.floor_size_m2} m² &nbsp;•&nbsp; 
                         🛏️ ${item.layout_category} &nbsp;•&nbsp; 
-                        🚆 ${item.distance_to_transit_km} km to ${item.nearest_transit_hub} &nbsp;•&nbsp;
-                        🏛️ ${item.distance_to_cbd_km} km to Sudirman Core
+                        🚆 ${parseFloat(item.distance_to_transit_km).toFixed(1)} km ke ${item.nearest_transit_hub} &nbsp;•&nbsp;
+                        🏛️ ${parseFloat(item.distance_to_cbd_km).toFixed(1)} km ke Sudirman CBD
                     </div>
 
                     <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-graphite); padding-top: 14px;">
                         <div style="display: flex; gap: 32px;">
                             <div>
-                                <div style="font-size: 10px; color: var(--color-fog); text-transform: uppercase;">Actual Asking Rent</div>
+                                <div style="font-size: 10px; color: var(--color-fog); text-transform: uppercase;">Harga Sewa Pemilik</div>
                                 <div class="mono" style="font-size: 17px; color: var(--color-paper); font-weight: 500;">Rp ${item.price_monthly_idr.toLocaleString()}</div>
                             </div>
                             <div>
-                                <div style="font-size: 10px; color: var(--color-fog); text-transform: uppercase;">Fair Valuation</div>
+                                <div style="font-size: 10px; color: var(--color-fog); text-transform: uppercase;">Estimasi Pasaran Wajar</div>
                                 <div class="mono" style="font-size: 17px; color: var(--color-fog); font-weight: 500;">Rp ${item.fair_market_rent_idr.toLocaleString()}</div>
                             </div>
                             <div>
-                                <div style="font-size: 10px; color: var(--color-fog); text-transform: uppercase;">Monthly Savings</div>
-                                <div class="mono" style="font-size: 17px; color: var(--color-acid-lime); font-weight: 500;">-Rp ${Math.abs(item.residual_idr).toLocaleString()}</div>
+                                <div style="font-size: 10px; color: var(--color-fog); text-transform: uppercase;">Potensi Penghematan</div>
+                                <div class="mono" style="font-size: 17px; color: var(--color-acid-lime); font-weight: 500;">-Rp ${Math.abs(item.residual_idr).toLocaleString()}/bln</div>
                             </div>
                         </div>
 
                         <div>
                             <a href="${cleanUrl}" target="_blank" class="btn-action-lime">
-                                View Listing ↗
+                                Lihat Iklan Asli ↗
                             </a>
                         </div>
                     </div>
                 `;
                 container.appendChild(card);
             });
+        }
+
+        function filterDealsTier(tier) {
+            currentDealFilter = tier;
+            const deals = allListings.filter(d => d.deal_score_z <= -0.75);
+            renderDealsList(deals);
         }
 
         // Run Hedonic Valuation Simulator (API Call)
@@ -1242,16 +1431,18 @@
                 });
                 const result = await res.json();
 
-                document.getElementById('sim-output-rent').innerText = 'Rp ' + result.fair_market_rent_idr.toLocaleString();
-                document.getElementById('sim-output-ci').innerText = `Confidence Range: Rp ${(result.ci_lower_idr/1e6).toFixed(1)}M - Rp ${(result.ci_upper_idr/1e6).toFixed(1)}M / mo`;
-                document.getElementById('sim-output-rate').innerText = `Implicit Rate: Rp ${result.implicit_rate_per_m2_idr.toLocaleString()} / m²`;
+                document.getElementById('sim-output-rent').innerText = 'Rp ' + result.fair_market_rent_idr.toLocaleString() + ' / bln';
+                document.getElementById('sim-output-ci').innerText = `Rentang Toleransi Pasar: Rp ${(result.ci_lower_idr/1e6).toFixed(1)} Jt - Rp ${(result.ci_upper_idr/1e6).toFixed(1)} Jt / bulan`;
+                document.getElementById('sim-output-rate').innerText = `Tarif Efektif Ruang: Rp ${result.implicit_rate_per_m2_idr.toLocaleString()} / m²`;
 
-                // Bu Sarah ROI
-                const fa = result.furnishing_analysis;
-                document.getElementById('roi-monthly').innerText = '+Rp ' + fa.monthly_extra_cashflow_idr.toLocaleString();
-                document.getElementById('roi-annual').innerText = '+Rp ' + (fa.annual_extra_cashflow_idr / 1e6).toFixed(1) + 'M / yr';
-                document.getElementById('roi-cost').innerText = 'Rp ' + fa.estimated_fitout_cost_idr.toLocaleString();
-                document.getElementById('roi-payback').innerText = `${fa.payback_period_years} Years (${fa.payback_period_months} Mo)`;
+                // Update Bu Sarah Section if open
+                if (result.furnishing_analysis) {
+                    const fa = result.furnishing_analysis;
+                    document.getElementById('pro-roi-monthly').innerText = '+Rp ' + fa.monthly_extra_cashflow_idr.toLocaleString();
+                    document.getElementById('pro-roi-annual').innerText = '+Rp ' + (fa.annual_extra_cashflow_idr / 1e6).toFixed(1) + ' Jt';
+                    document.getElementById('pro-roi-cost').innerText = 'Rp ' + fa.estimated_fitout_cost_idr.toLocaleString();
+                    document.getElementById('pro-roi-payback').innerText = `${fa.payback_period_years} Tahun (${fa.payback_period_months} Bulan)`;
+                }
 
             } catch (err) {
                 console.error("Simulation error", err);
@@ -1266,7 +1457,7 @@
                 renderDecayChart(decayData.points);
                 renderZonesTable(decayData.zones);
             } catch (err) {
-                console.error("Failed to load distance decay", err);
+                console.error("Gagal memuat distance decay", err);
             }
         }
 
@@ -1281,12 +1472,12 @@
                 type: 'scatter',
                 data: {
                     datasets: [{
-                        label: 'Rental Unit (Rp/m² vs Distance)',
+                        label: 'Tarif Sewa (Rp/m² vs Jarak CBD)',
                         data: scatterData,
                         backgroundColor: '#e4f222',
                         borderColor: '#e4f222',
-                        pointRadius: 3,
-                        pointHoverRadius: 6
+                        pointRadius: 2.5,
+                        pointHoverRadius: 5
                     }]
                 },
                 options: {
@@ -1294,12 +1485,12 @@
                     maintainAspectRatio: false,
                     scales: {
                         x: {
-                            title: { display: true, text: 'Distance to Sudirman Core (km)', color: '#8a8f98' },
+                            title: { display: true, text: 'Jarak ke Sudirman CBD (km)', color: '#8a8f98' },
                             grid: { color: '#23252a' },
                             ticks: { color: '#8a8f98' }
                         },
                         y: {
-                            title: { display: true, text: 'Price / m² (IDR)', color: '#8a8f98' },
+                            title: { display: true, text: 'Tarif per m² (Rp)', color: '#8a8f98' },
                             grid: { color: '#23252a' },
                             ticks: { 
                                 color: '#8a8f98',
@@ -1321,7 +1512,7 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td style="font-weight: 500; color: var(--color-paper);">${z.urban_zone}</td>
-                    <td class="mono" style="color: var(--color-fog);">${z.sample_units}</td>
+                    <td class="mono" style="color: var(--color-fog);">${z.sample_units} Unit</td>
                     <td class="mono" style="color: var(--color-acid-lime);">Rp ${Math.round(z.median_price_per_m2).toLocaleString()}</td>
                     <td class="mono">Rp ${Math.round(z.mean_price_per_m2).toLocaleString()}</td>
                 `;
@@ -1335,51 +1526,94 @@
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             
             document.getElementById(tabId).classList.add('active');
-            event.target.classList.add('active');
 
-            if (tabId === 'tab-map' && mapInstance) {
-                setTimeout(() => mapInstance.invalidateSize(), 100);
+            if (tabId === 'tab-map') {
+                document.getElementById('tab-btn-map').classList.add('active');
+                if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 150);
+            } else if (tabId === 'tab-deals') {
+                document.getElementById('tab-btn-deals').classList.add('active');
+            } else if (tabId === 'tab-simulator') {
+                document.getElementById('tab-btn-simulator').classList.add('active');
+            } else if (tabId === 'tab-investor') {
+                document.getElementById('tab-btn-investor').classList.add('active');
             }
         }
 
-        // Persona Switcher Lens
-        function setPersona(persona) {
-            currentPersona = persona;
-            document.getElementById('btn-persona-default').classList.toggle('active', persona === 'default');
-            document.getElementById('btn-persona-rian').classList.toggle('active', persona === 'rian');
-            document.getElementById('btn-persona-sarah').classList.toggle('active', persona === 'sarah');
+        // -------------------------------------------------------------
+        // AUTHENTICATION & PERSONA MANAGEMENT (LOGIN MODAL)
+        // -------------------------------------------------------------
+        function openLoginModal() {
+            document.getElementById('login-modal').classList.add('active');
+        }
 
-            if (persona === 'rian') {
-                // Rian: Commuter Lens (< Rp 7M/mo, Deals Only)
-                document.getElementById('filter-budget').value = 7000000;
-                document.getElementById('budget-label').innerText = 'Rp 7,000,000 / mo';
-                document.getElementById('filter-deals-only').checked = true;
-                document.getElementById('filter-city').value = 'All';
-                applyFilters();
-            } else if (persona === 'sarah') {
-                // Bu Sarah: Investor Lens
-                document.getElementById('filter-budget').value = 45000000;
-                document.getElementById('budget-label').innerText = 'Rp 45,000,000 / mo';
-                document.getElementById('filter-deals-only').checked = false;
-                document.getElementById('filter-furnished').checked = true;
-                applyFilters();
-                switchTab('tab-simulator');
-                document.querySelectorAll('.tab-btn')[2].classList.add('active');
-                document.querySelectorAll('.tab-btn')[0].classList.remove('active');
+        function closeLoginModal() {
+            document.getElementById('login-modal').classList.remove('active');
+        }
+
+        function selectPersonaOption(role) {
+            selectedModalRole = role;
+            const cards = document.querySelectorAll('.persona-choice-card');
+            cards[0].classList.toggle('selected', role === 'renter');
+            cards[1].classList.toggle('selected', role === 'investor');
+        }
+
+        function confirmLoginSelection() {
+            closeLoginModal();
+            if (selectedModalRole === 'investor') {
+                setInvestorRole(true);
+                switchTab('tab-investor');
             } else {
-                // Default
-                document.getElementById('filter-budget').value = 45000000;
-                document.getElementById('budget-label').innerText = 'Rp 45,000,000 / mo';
-                document.getElementById('filter-deals-only').checked = false;
-                document.getElementById('filter-furnished').checked = false;
-                document.getElementById('filter-city').value = 'All';
-                document.getElementById('filter-layout').value = 'All';
-                applyFilters();
+                setInvestorRole(false);
+                switchTab('tab-map');
+            }
+        }
+
+        function demoLoginInvestor() {
+            setInvestorRole(true);
+            switchTab('tab-investor');
+        }
+
+        function logoutInvestor() {
+            setInvestorRole(false);
+            switchTab('tab-map');
+        }
+
+        function setInvestorRole(isInvestor) {
+            currentUserRole = isInvestor ? 'investor' : 'guest';
+            localStorage.setItem('hi_user_role', currentUserRole);
+
+            const authContainer = document.getElementById('auth-container');
+            const lockedView = document.getElementById('investor-locked-view');
+            const unlockedView = document.getElementById('investor-unlocked-view');
+            const lockBadge = document.getElementById('investor-lock-badge');
+
+            if (isInvestor) {
+                authContainer.innerHTML = `
+                    <div class="user-profile-badge">
+                        <span>🏢 Bu Sarah (Investor)</span>
+                        <button class="btn-logout" onclick="logoutInvestor()">Keluar</button>
+                    </div>
+                `;
+                lockedView.style.display = 'none';
+                unlockedView.style.display = 'block';
+                lockBadge.innerText = 'TERBUKA';
+                lockBadge.style.color = 'var(--color-pulse-green)';
+                lockBadge.style.borderColor = 'rgba(39, 166, 68, 0.4)';
+            } else {
+                authContainer.innerHTML = `
+                    <button class="btn-nav-login" onclick="openLoginModal()">Masuk / Akses Investor ↗</button>
+                `;
+                lockedView.style.display = 'block';
+                unlockedView.style.display = 'none';
+                lockBadge.innerText = 'PRO';
+                lockBadge.style.color = 'var(--color-acid-lime)';
+                lockBadge.style.borderColor = 'rgba(228, 242, 34, 0.2)';
             }
         }
 
         function updateBudgetLabel(val) {
-            document.getElementById('budget-label').innerText = 'Rp ' + parseFloat(val).toLocaleString() + ' / mo';
+            const jt = (parseFloat(val) / 1e6).toFixed(1);
+            document.getElementById('budget-label').innerText = 'Rp ' + jt + ' Juta / bln';
         }
 
         // Start on Page Load
