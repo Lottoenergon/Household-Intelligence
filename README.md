@@ -1,15 +1,6 @@
 # Greater Jakarta (Jabodetabek) Rental Housing & Market Intelligence Engine
-## Automated Data Ingestion, Relational Star Schema, Hedonic Valuation (AVM) & PropTech Deal Radar
-
-[![Status](https://img.shields.io/badge/Status-Platform%20in%20Active%20Development%20(v0.2--alpha)-yellow.svg)]()
-[![Python](https://img.shields.io/badge/Python-3.14-blue.svg)](https://www.python.org/)
-[![Database](https://img.shields.io/badge/SQLite-Star%20Schema-green.svg)]()
-[![Backend](https://img.shields.io/badge/Backend-FastAPI%20%2B%20Uvicorn-009688.svg)](https://fastapi.tiangolo.com/)
-[![Frontend](https://img.shields.io/badge/Frontend-Linear%20Design%20System-black.svg)]()
-[![Model](https://img.shields.io/badge/Model-Gradient%20Boosting%20Hedonic%20(R%C2%B2%200.835)-purple.svg)]()
 
 > **⚠️ Development Status & Data Transparency Notice (v0.2-alpha)**  
-> Platform ini berada dalam status **Active Development (Work-in-Progress)**.
 
 ---
 
