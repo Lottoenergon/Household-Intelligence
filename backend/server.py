@@ -105,7 +105,8 @@ def get_listings(
     return {
         "count": len(subset),
         "total_matched": len(filtered),
-        "data": subset.to_dict(orient="records")
+        "data": subset.to_dict(orient="records"),
+        "listings": subset.to_dict(orient="records")
     }
 
 @app.get("/api/benchmarks")

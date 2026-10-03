@@ -504,6 +504,12 @@
             color: var(--color-paper);
         }
 
+        .btn-outline-graphite.active {
+            border-color: var(--color-acid-lime) !important;
+            color: var(--color-acid-lime) !important;
+            background-color: rgba(228, 242, 34, 0.08) !important;
+        }
+
         /* ---------------------------------------------------------
            SIMULATOR
         --------------------------------------------------------- */
@@ -794,9 +800,9 @@
                     </div>
                 </div>
                 <div style="display: flex; gap: 8px;">
-                    <button class="btn-outline-graphite" onclick="filterDealsTier('all')">Semua Unit Hemat</button>
-                    <button class="btn-outline-graphite" style="border-color: var(--color-acid-lime); color: var(--color-acid-lime);" onclick="filterDealsTier('deep')">🔥 Super Murah (>25% Diskon)</button>
-                    <button class="btn-outline-graphite" onclick="filterDealsTier('good')">✨ Harga Terbaik (15-25%)</button>
+                    <button class="btn-outline-graphite tier-filter-btn active" id="btn-tier-all" onclick="filterDealsTier('all')">Semua Unit Hemat</button>
+                    <button class="btn-outline-graphite tier-filter-btn" id="btn-tier-deep" onclick="filterDealsTier('deep')">🔥 Super Murah (>25% Diskon)</button>
+                    <button class="btn-outline-graphite tier-filter-btn" id="btn-tier-good" onclick="filterDealsTier('good')">✨ Harga Terbaik (15-25%)</button>
                 </div>
             </div>
 
@@ -1224,7 +1230,7 @@
             try {
                 const res = await fetch('/api/listings?limit=800');
                 const data = await res.json();
-                allListings = data.listings;
+                allListings = data.data || data.listings || [];
                 applyFilters();
             } catch (err) {
                 console.error("Gagal memuat listing", err);
@@ -1402,6 +1408,11 @@
 
         function filterDealsTier(tier) {
             currentDealFilter = tier;
+            document.querySelectorAll('.tier-filter-btn').forEach(btn => btn.classList.remove('active'));
+            if (tier === 'all') document.getElementById('btn-tier-all').classList.add('active');
+            if (tier === 'deep') document.getElementById('btn-tier-deep').classList.add('active');
+            if (tier === 'good') document.getElementById('btn-tier-good').classList.add('active');
+            
             const deals = allListings.filter(d => d.deal_score_z <= -0.75);
             renderDealsList(deals);
         }
