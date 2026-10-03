@@ -16,3 +16,9 @@ Thumbs.db
 # Temporary Database Journals
 *.db-journal
 *.db-wal
+
+# Logs & Temporary Files
+*.log
+*.tmp
+temp/
+logs/
