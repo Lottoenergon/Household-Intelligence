@@ -9,7 +9,7 @@
 [![Model](https://img.shields.io/badge/Model-Gradient%20Boosting%20Hedonic%20(R%C2%B2%200.835)-purple.svg)]()
 
 > **⚠️ Development Status & Data Transparency Notice (v0.2-alpha)**  
-> Platform ini berada dalam status **Active Development (Work-in-Progress)**. Seluruh data sewa apartemen dikumpulkan secara empiris apa adanya dari portal properti publik di 10 kota Jabodetabek. Analisis spasial dan visualisasi peta menggunakan **klaster makro kawasan/kecamatan (sentroid)** dan **bukan titik koordinat fiktif per unit**, mengingat portal listing agregator tidak mempublikasikan koordinat pintu/tower secara terbuka tanpa interaksi langsung (WhatsApp/broker). Kalibrasi wilayah, resolusi entitas gedung, dan deduplikasi multi-broker saat ini terus disempurnakan.
+> Platform ini berada dalam status **Active Development (Work-in-Progress)**.
 
 ---
 
