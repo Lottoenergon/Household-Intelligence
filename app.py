@@ -411,7 +411,7 @@ with tab1:
                 "Median Rent/Mo": "Rp {:,.0f}",
                 "Audited Units": "{:,}"
             }),
-            use_container_width=True,
+            width='stretch',
             hide_index=True
         )
 
@@ -646,7 +646,7 @@ with tab4:
                 "Median Price / m²": "Rp {:,.0f}",
                 "Mean Price / m²": "Rp {:,.0f}"
             }),
-            use_container_width=True,
+            width='stretch',
             hide_index=True
         )
 
