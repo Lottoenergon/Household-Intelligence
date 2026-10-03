@@ -147,7 +147,7 @@ ORDER BY avg_cbd_km ASC;
 
 ### 1. Clone & Set Up Environment
 ```bash
-git clone https://github.com/Lottoenergon/jabodetabek-rental-intelligence.git
+git clone https://github.com/Lottoenergon/Household-Intelligence.git
 cd jabodetabek-rental-intelligence
 
 python -m venv .venv
