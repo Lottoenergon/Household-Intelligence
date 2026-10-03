@@ -42,11 +42,12 @@ df["deal_score_z"] = df["deal_score_z"].round(2)
 
 class SimulationRequest(BaseModel):
     city: str = "Jakarta Selatan"
+    subdistrict: Optional[str] = None
     floor_size_m2: float = 45.0
     bedrooms: int = 2
     bathrooms: int = 1
-    distance_to_cbd_km: float = 8.0
-    distance_to_transit_km: float = 1.5
+    distance_to_cbd_km: Optional[float] = None
+    distance_to_transit_km: Optional[float] = None
     is_full_furnished: bool = True
     has_ac: bool = True
     has_pool: bool = True
@@ -149,13 +150,45 @@ def get_deals(tier: str = "all", limit: int = 50):
         "deals": deals.to_dict(orient="records")
     }
 
+@app.get("/api/districts")
+def get_districts(city: Optional[str] = None):
+    """Aggregate real property listings by administrative subdistrict / kawasan."""
+    dff = df.copy()
+    if city and city != "All":
+        dff = dff[dff["target_city"] == city]
+    
+    dist = dff.groupby(["target_city", "subdistrict"]).agg(
+        unit_count=("listing_id", "count"),
+        median_rent_idr=("price_monthly_idr", "median"),
+        median_price_per_m2_idr=("price_per_m2_idr", "median"),
+        deals_count=("deal_score_z", lambda z: (z <= -0.75).sum()),
+        latitude=("latitude", "mean"),
+        longitude=("longitude", "mean")
+    ).reset_index().sort_values("unit_count", ascending=False)
+
+    return {
+        "total_districts": len(dist),
+        "districts": dist.to_dict(orient="records")
+    }
+
 @app.post("/api/simulate")
 def simulate_rent(req: SimulationRequest):
     """
     Hedonic Pricing Automated Valuation Model (AVM) +
     Bu Sarah's Investor Tool (Furnishing Fit-Out Payback Analysis).
+    Calibrated 100% on empirical data as-is from listings.
     """
     city_base = df.groupby("target_city")["price_per_m2_idr"].median().get(req.city, 130000.0)
+    
+    # Subdistrict empirical base if available
+    area_base = float(city_base)
+    if req.subdistrict:
+        sub_series = df.loc[(df["target_city"] == req.city) & (df["subdistrict"] == req.subdistrict), "price_per_m2_idr"]
+        if not sub_series.empty:
+            sub_med = float(sub_series.median())
+            if sub_med > 0:
+                area_base = sub_med
+
     furnish_mult = 1.268 if req.is_full_furnished else 1.0
     ac_mult = 1.08 if req.has_ac else 1.0
     pool_mult = 1.05 if req.has_pool else 1.0
@@ -163,13 +196,30 @@ def simulate_rent(req: SimulationRequest):
     kitchen_mult = 1.05 if req.has_kitchen else 1.0
     balcony_mult = 1.03 if req.has_balcony else 1.0
 
+    # Distance to CBD / Transit (defaults to subdistrict or city median if not supplied)
+    cbd_km = req.distance_to_cbd_km
+    if cbd_km is None:
+        if req.subdistrict:
+            cbd_s = df.loc[(df["target_city"] == req.city) & (df["subdistrict"] == req.subdistrict), "distance_to_cbd_km"]
+            cbd_km = float(cbd_s.median()) if not cbd_s.empty else 8.0
+        else:
+            cbd_km = 8.0
+    
+    transit_km = req.distance_to_transit_km
+    if transit_km is None:
+        if req.subdistrict:
+            trans_s = df.loc[(df["target_city"] == req.city) & (df["subdistrict"] == req.subdistrict), "distance_to_transit_km"]
+            transit_km = float(trans_s.median()) if not trans_s.empty else 1.5
+        else:
+            transit_km = 1.5
+
     # Distance Decay Gradient
-    dist_cbd_decay = max(0.60, 1.0 - (req.distance_to_cbd_km - 5.0) * 0.013)
-    dist_transit_bonus = 1.10 if req.distance_to_transit_km <= 1.0 else (1.05 if req.distance_to_transit_km <= 2.5 else 0.95)
+    dist_cbd_decay = max(0.60, 1.0 - (cbd_km - 5.0) * 0.013)
+    dist_transit_bonus = 1.10 if transit_km <= 1.0 else (1.05 if transit_km <= 2.5 else 0.95)
 
     base_estimate = (
         req.floor_size_m2
-        * city_base
+        * area_base
         * furnish_mult
         * ac_mult
         * pool_mult

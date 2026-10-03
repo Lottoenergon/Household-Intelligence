@@ -698,13 +698,35 @@
         </div>
 
         <!-- =========================================================
-             TAB 1: PETA & JELAJAH APARTEMEN
+             TAB 1: JELAJAH KAWASAN & APARTEMEN (DATA APA ADANYA)
         ========================================================= -->
         <div id="tab-map" class="tab-content active">
+            <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px;">
+                <div>
+                    <h2>Jelajah Kawasan & Listing Sewa Apartemen</h2>
+                    <div style="font-size: 13px; color: var(--color-fog); margin-top: 4px;">
+                        Data sewa apa adanya yang tertera di website portal properti. Pemetaan berbasis sentroid kawasan/kecamatan makro (tanpa klaim titik GPS fiktif per unit).
+                    </div>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-outline-graphite view-toggle-btn active" id="btn-toggle-map" onclick="toggleAreaView('map')">🌐 Peta Kawasan Makro</button>
+                    <button class="btn-outline-graphite view-toggle-btn" id="btn-toggle-grid" onclick="toggleAreaView('grid')">📑 Katalog Kawasan (Grid)</button>
+                </div>
+            </div>
+
             <div class="split-view">
-                <!-- Map Left -->
-                <div class="map-card">
-                    <div id="map"></div>
+                <!-- Map / District Grid Left -->
+                <div class="map-card" style="display: flex; flex-direction: column;">
+                    <div style="padding: 10px 14px; border-bottom: 1px solid var(--color-graphite); font-size: 11px; color: var(--color-mist); background-color: var(--color-obsidian); display: flex; align-items: center; gap: 8px;">
+                        <span>ℹ️</span>
+                        <span>Lingkaran pada peta menunjukkan <strong>pusat kawasan/kecamatan</strong> (Kuningan, BSD, Sentul, dll), bukan titik rahasia per pintu unit.</span>
+                    </div>
+                    <div style="flex: 1; min-height: 560px; position: relative;">
+                        <div id="map" style="width: 100%; height: 100%; min-height: 560px;"></div>
+                        <div id="area-grid-view" style="display: none; padding: 16px; height: 560px; overflow-y: auto; background-color: var(--color-carbon);">
+                            <!-- Dynamic Kawasan Cards Populated by JS -->
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Filters & District Benchmarks Right -->
@@ -717,7 +739,7 @@
 
                         <div class="form-group">
                             <label class="form-label">Wilayah Kota</label>
-                            <select id="filter-city" class="select-input" onchange="applyFilters()">
+                            <select id="filter-city" class="select-input" onchange="onCityChange()">
                                 <option value="All">Seluruh Jabodetabek (10 Kota)</option>
                                 <option value="Jakarta Selatan">Jakarta Selatan</option>
                                 <option value="Jakarta Pusat">Jakarta Pusat</option>
@@ -729,6 +751,13 @@
                                 <option value="Depok">Depok (Margonda, dll)</option>
                                 <option value="Bekasi">Bekasi</option>
                                 <option value="Bogor">Bogor</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Kawasan / Kecamatan Spesifik</label>
+                            <select id="filter-subdistrict" class="select-input" onchange="applyFilters()">
+                                <option value="All">Semua Kawasan di Wilayah Ini</option>
                             </select>
                         </div>
 
@@ -784,6 +813,17 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Listing Terdata di Kawasan Ini -->
+                    <div class="panel-card" style="margin-top: 16px;">
+                        <div class="panel-header">
+                            <span>Listing Terdata di Kawasan Ini</span>
+                            <span class="mono" style="font-size: 11px; color: var(--color-acid-lime);" id="tab1-subdistrict-label">Seluruh Jabodetabek</span>
+                        </div>
+                        <div id="tab1-listings-container" style="max-height: 480px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-top: 4px;">
+                            <!-- Populated with real listing cards -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -827,10 +867,14 @@
                 <div class="panel-card">
                     <div class="panel-header">Atribut & Fasilitas Unit</div>
 
+                    <div style="background-color: var(--color-obsidian); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--color-graphite); margin-bottom: 14px; font-size: 12px; color: var(--color-mist);">
+                        <span>💡 <strong>Panduan Calon Penyewa/Pembeli:</strong> Masukkan data spesifik unit yang Anda peroleh dari survei atau chat WhatsApp pemilik/agen di bawah ini untuk menguji harga wajar pasaran.</span>
+                    </div>
+
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
                         <div class="form-group">
                             <label class="form-label">Wilayah Kota</label>
-                            <select id="sim-city" class="select-input" onchange="runSimulation()">
+                            <select id="sim-city" class="select-input" onchange="onSimCityChange()">
                                 <option value="Jakarta Selatan">Jakarta Selatan</option>
                                 <option value="Jakarta Pusat">Jakarta Pusat</option>
                                 <option value="Jakarta Barat">Jakarta Barat</option>
@@ -844,8 +888,27 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label class="form-label">Kawasan / Kecamatan Target</label>
+                            <select id="sim-subdistrict" class="select-input" onchange="onSimSubdistrictChange()">
+                                <option value="">Semua Kawasan (Rata-rata Kota)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="sim-subdistrict-baseline" style="display: none; background-color: rgba(228, 242, 34, 0.05); border: 1px solid rgba(228, 242, 34, 0.2); border-radius: 6px; padding: 8px 12px; margin-bottom: 12px; font-size: 11px; color: var(--color-acid-lime);"></div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                        <div class="form-group">
                             <label class="form-label">Luas Bangunan (m²)</label>
                             <input type="number" id="sim-size" class="text-input mono" value="45" min="15" max="300" onchange="runSimulation()">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Status Interior</label>
+                            <select id="sim-furnish-type" class="select-input" onchange="onFurnishSelectChange()">
+                                <option value="full" selected>Lengkap Perabot (Full Furnished)</option>
+                                <option value="semi">Semi Furnished</option>
+                                <option value="unfurnished">Kosongan (Unfurnished)</option>
+                            </select>
                         </div>
                     </div>
 
@@ -1135,11 +1198,13 @@
     <script>
         // State variables
         let allListings = [];
+        let allDistricts = [];
         let allBenchmarks = {};
         let decayData = {};
         let currentUserRole = 'guest'; // 'guest', 'renter', 'investor'
         let selectedModalRole = 'investor';
         let currentDealFilter = 'all';
+        let currentAreaMode = 'map';
         let mapInstance = null;
         let mapMarkersLayer = null;
         let decayChartInstance = null;
@@ -1149,8 +1214,10 @@
             initMap();
             await fetchTelemetry();
             await fetchBenchmarks();
+            await fetchDistricts();
             await fetchListings();
             await fetchDistanceDecay();
+            updateSimSubdistricts();
             runSimulation();
 
             // Check localStorage auth state
@@ -1158,6 +1225,112 @@
             if (savedRole === 'investor') {
                 setInvestorRole(true);
             }
+        }
+
+        // Fetch District Summary Data
+        async function fetchDistricts() {
+            try {
+                const res = await fetch('/api/districts');
+                const data = await res.json();
+                allDistricts = data.districts || [];
+                populateFilterSubdistricts();
+                renderDistrictsGrid();
+            } catch (err) {
+                console.error("Gagal memuat data kawasan", err);
+            }
+        }
+
+        function populateFilterSubdistricts() {
+            const city = document.getElementById('filter-city').value;
+            const sel = document.getElementById('filter-subdistrict');
+            if (!sel) return;
+            const currentVal = sel.value;
+            sel.innerHTML = '<option value="All">Semua Kawasan / Kecamatan</option>';
+            
+            const matched = allDistricts.filter(d => city === 'All' || d.target_city === city);
+            matched.forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = d.subdistrict;
+                opt.innerText = `${d.subdistrict} (${d.unit_count} unit)`;
+                sel.appendChild(opt);
+            });
+            if (matched.some(d => d.subdistrict === currentVal)) {
+                sel.value = currentVal;
+            }
+        }
+
+        function onCityFilterChange() {
+            populateFilterSubdistricts();
+            applyFilters();
+        }
+
+        function toggleAreaView(mode) {
+            currentAreaMode = mode;
+            const mapEl = document.getElementById('map');
+            const gridEl = document.getElementById('area-grid-view');
+            const btnMap = document.getElementById('btn-toggle-map');
+            const btnGrid = document.getElementById('btn-toggle-grid');
+
+            if (mode === 'map') {
+                if (mapEl) mapEl.style.display = 'block';
+                if (gridEl) gridEl.style.display = 'none';
+                if (btnMap) btnMap.classList.add('active');
+                if (btnGrid) btnGrid.classList.remove('active');
+                if (mapInstance) {
+                    setTimeout(() => mapInstance.invalidateSize(), 150);
+                }
+            } else {
+                if (mapEl) mapEl.style.display = 'none';
+                if (gridEl) gridEl.style.display = 'block';
+                if (btnMap) btnMap.classList.remove('active');
+                if (btnGrid) btnGrid.classList.add('active');
+                renderDistrictsGrid();
+            }
+        }
+        window.toggleMapMode = toggleAreaView;
+
+        function renderDistrictsGrid() {
+            const grid = document.getElementById('area-grid-view');
+            if (!grid) return;
+            grid.innerHTML = '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;" id="districts-grid"></div>';
+            const container = document.getElementById('districts-grid');
+
+            const selectedCity = document.getElementById('filter-city').value;
+            const matched = allDistricts.filter(d => selectedCity === 'All' || d.target_city === selectedCity);
+
+            if (matched.length === 0) {
+                grid.innerHTML = '<div style="color: var(--color-fog); padding: 24px;">Tidak ada kawasan yang cocok dengan filter kota.</div>';
+                return;
+            }
+
+            matched.forEach(d => {
+                const card = document.createElement('div');
+                card.style.cssText = "background-color: var(--color-obsidian); border: 1px solid var(--color-graphite); border-radius: 8px; padding: 14px; cursor: pointer; transition: all 0.15s ease;";
+                card.onmouseover = () => { card.style.borderColor = 'var(--color-acid-lime)'; };
+                card.onmouseout = () => { card.style.borderColor = 'var(--color-graphite)'; };
+                card.onclick = () => selectDistrictFromMap(d.subdistrict, d.target_city);
+
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+                        <div>
+                            <div class="mono" style="font-size: 10px; color: var(--color-fog); text-transform: uppercase;">${d.target_city}</div>
+                            <div style="font-size: 15px; font-weight: 600; color: var(--color-paper);">${d.subdistrict}</div>
+                        </div>
+                        <span class="mono" style="font-size: 11px; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; color: var(--color-mist);">${d.unit_count} Unit</span>
+                    </div>
+                    <div style="border-top: 1px solid var(--color-graphite); padding-top: 8px; margin-top: 8px; display: flex; justify-content: space-between; align-items: flex-end;">
+                        <div>
+                            <div style="font-size: 10px; color: var(--color-fog);">MEDIAN SEWA</div>
+                            <div class="mono" style="font-size: 14px; color: var(--color-acid-lime); font-weight: 500;">Rp ${(d.median_rent_idr/1e6).toFixed(1)} Jt</div>
+                        </div>
+                        <div class="mono" style="font-size: 11px; color: var(--color-fog);">
+                            Rp ${Math.round(d.median_price_per_m2_idr).toLocaleString()}/m²
+                        </div>
+                    </div>
+                    ${d.deals_count > 0 ? `<div style="font-size: 11px; color: var(--color-acid-lime); margin-top: 6px;">🔥 ${d.deals_count} Unit Super Murah</div>` : ''}
+                `;
+                container.appendChild(card);
+            });
         }
 
         // Initialize Leaflet Map with ESRI Dark Canvas (No API Key Required)
@@ -1240,6 +1413,8 @@
         // Apply Client-Side Reactive Filters
         function applyFilters() {
             const selectedCity = document.getElementById('filter-city').value;
+            const subdistrictEl = document.getElementById('filter-subdistrict');
+            const selectedSubdistrict = subdistrictEl ? subdistrictEl.value : 'All';
             const selectedLayout = document.getElementById('filter-layout').value;
             const maxBudget = parseFloat(document.getElementById('filter-budget').value);
             const dealsOnly = document.getElementById('filter-deals-only').checked;
@@ -1247,6 +1422,7 @@
 
             const filtered = allListings.filter(item => {
                 if (selectedCity !== 'All' && item.target_city !== selectedCity) return false;
+                if (selectedSubdistrict !== 'All' && item.subdistrict !== selectedSubdistrict) return false;
                 if (selectedLayout !== 'All' && item.layout_category !== selectedLayout) return false;
                 if (item.price_monthly_idr > maxBudget) return false;
                 if (dealsOnly && item.deal_score_z > -0.75) return false;
@@ -1255,83 +1431,152 @@
             });
 
             document.getElementById('count-filtered').innerText = `${filtered.length} Unit Ditampilkan`;
-            renderMapMarkers(filtered);
+            renderKawasanBubbles(filtered);
             renderDealsList(filtered.filter(d => d.deal_score_z <= -0.75));
+
+            // Render Tab 1 Listing Cards
+            const tab1Container = document.getElementById('tab1-listings-container');
+            const subLabel = document.getElementById('tab1-subdistrict-label');
+            if (subLabel) {
+                subLabel.innerText = selectedSubdistrict !== 'All' ? `${selectedSubdistrict} (${filtered.length} unit)` : (selectedCity !== 'All' ? `${selectedCity} (${filtered.length} unit)` : `Seluruh Jabodetabek (${filtered.length} unit)`);
+            }
+            if (tab1Container) {
+                tab1Container.innerHTML = '';
+                if (filtered.length === 0) {
+                    tab1Container.innerHTML = '<div style="color: var(--color-fog); padding: 24px; text-align: center; font-size: 12px;">Tidak ada unit yang cocok dengan kriteria filter.</div>';
+                } else {
+                    filtered.slice(0, 50).forEach(item => {
+                        const cleanUrl = item.url.startsWith('http') ? item.url : `https://www.rumah123.com${item.url}`;
+                        const card = document.createElement('div');
+                        card.style.cssText = "background-color: var(--color-obsidian); border: 1px solid var(--color-graphite); border-radius: 8px; padding: 12px; transition: border-color 0.15s ease;";
+                        card.onmouseover = () => { card.style.borderColor = 'var(--color-mist)'; };
+                        card.onmouseout = () => { card.style.borderColor = 'var(--color-graphite)'; };
+
+                        card.innerHTML = `
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
+                                <div>
+                                    <div class="mono" style="font-size: 10px; color: var(--color-fog); text-transform: uppercase;">${item.target_city} • ${item.subdistrict}</div>
+                                    <h4 style="font-size: 14px; font-weight: 500; color: var(--color-paper); margin-top: 2px;">${item.title}</h4>
+                                </div>
+                            </div>
+                            <div style="font-size: 11px; color: var(--color-fog); margin: 6px 0 10px 0;">
+                                📐 ${item.floor_size_m2} m² &nbsp;•&nbsp; 
+                                🛏️ ${item.layout_category} &nbsp;•&nbsp; 
+                                🛋️ ${item.is_full_furnished ? 'Full Furnished' : (item.is_semi_furnished ? 'Semi Furnished' : 'Unfurnished')}
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-graphite); padding-top: 8px;">
+                                <div>
+                                    <div style="font-size: 9px; color: var(--color-fog); text-transform: uppercase;">Harga Sewa Tertera</div>
+                                    <div class="mono" style="font-size: 15px; color: var(--color-paper); font-weight: 500;">Rp ${item.price_monthly_idr.toLocaleString()} <span style="font-size: 11px; color: var(--color-fog);">/ bln</span></div>
+                                </div>
+                                <a href="${cleanUrl}" target="_blank" class="btn-action-lime" style="padding: 6px 12px; font-size: 11px; text-decoration: none;">
+                                    Lihat Iklan Asli ↗
+                                </a>
+                            </div>
+                        `;
+                        tab1Container.appendChild(card);
+                    });
+                }
+            }
         }
 
-        // Render Map Points using Leaflet CircleMarker (Smooth, Zero White Boxes)
-        function renderMapMarkers(listings) {
+        // Render Macro Kawasan Bubbles (NOT specific unit dots!)
+        function renderKawasanBubbles(listings) {
             if (!mapMarkersLayer) return;
             mapMarkersLayer.clearLayers();
 
             const validLatLngs = [];
 
+            // Group by Kawasan / Subdistrict
+            const subdistrictMap = {};
             listings.forEach(item => {
-                if (item.latitude < -7.0 || item.latitude > -5.8 || item.longitude < 106.0 || item.longitude > 107.5) {
-                    return; // Skip invalid coords
+                const key = `${item.target_city}___${item.subdistrict}`;
+                if (!subdistrictMap[key]) {
+                    subdistrictMap[key] = {
+                        city: item.target_city,
+                        subdistrict: item.subdistrict,
+                        units: 0,
+                        dealsCount: 0,
+                        sumLat: 0,
+                        sumLon: 0,
+                        rents: [],
+                        m2Prices: []
+                    };
                 }
+                const s = subdistrictMap[key];
+                s.units += 1;
+                if (item.deal_score_z <= -0.75) s.dealsCount += 1;
+                s.sumLat += item.latitude;
+                s.sumLon += item.longitude;
+                s.rents.push(item.price_monthly_idr);
+                s.m2Prices.push(item.price_per_m2_idr);
+            });
 
-                const isDeepDeal = item.deal_score_z <= -1.5;
-                const isGoodDeal = item.deal_score_z <= -0.75;
+            Object.values(subdistrictMap).forEach(s => {
+                const avgLat = s.sumLat / s.units;
+                const avgLon = s.sumLon / s.units;
+                if (avgLat < -7.0 || avgLat > -5.8 || avgLon < 106.0 || avgLon > 107.5) return;
 
-                let markerColor = '#02b8cc'; // Standard teal
-                let markerRadius = 3.5;
-                let markerOpacity = 0.75;
+                // Radius scaled to unit count (between 12px and 28px)
+                const radius = Math.max(12, Math.min(28, Math.sqrt(s.units) * 3.6));
+                const hasDeals = s.dealsCount > 0;
+                const color = hasDeals ? '#e4f222' : '#02b8cc';
 
-                if (isDeepDeal) {
-                    markerColor = '#e4f222'; // Acid lime
-                    markerRadius = 6.0;
-                    markerOpacity = 0.95;
-                } else if (isGoodDeal) {
-                    markerColor = '#818cf8'; // Iris violet
-                    markerRadius = 5.0;
-                    markerOpacity = 0.90;
-                }
-
-                const circle = L.circleMarker([item.latitude, item.longitude], {
-                    radius: markerRadius,
-                    fillColor: markerColor,
+                const circle = L.circleMarker([avgLat, avgLon], {
+                    radius: radius,
+                    fillColor: color,
                     color: '#08090a',
-                    weight: 1.2,
+                    weight: 2,
                     opacity: 1,
-                    fillOpacity: markerOpacity
+                    fillOpacity: 0.85
                 });
 
-                validLatLngs.push([item.latitude, item.longitude]);
+                s.rents.sort((a,b) => a-b);
+                s.m2Prices.sort((a,b) => a-b);
+                const medianRent = s.rents[Math.floor(s.rents.length / 2)];
+                const medianM2 = s.m2Prices[Math.floor(s.m2Prices.length / 2)];
 
-                const cleanUrl = item.url.startsWith('http') ? item.url : `https://www.rumah123.com${item.url}`;
-                const savingsHtml = isGoodDeal 
-                    ? `<div style="font-size: 11px; color: #e4f222; margin-top: 4px;"><strong>Hemat: -Rp ${Math.abs(item.residual_idr).toLocaleString()}/bln</strong></div>`
-                    : '';
+                circle.bindTooltip(`<b>${s.subdistrict}</b> (${s.units} Unit)`, {
+                    permanent: false,
+                    direction: 'top'
+                });
 
                 circle.bindPopup(`
-                    <div style="min-width: 200px; padding: 2px;">
-                        <div class="mono" style="font-size: 10px; color: #8a8f98; text-transform: uppercase;">${item.listing_id} • ${item.target_city}</div>
-                        <div style="font-size: 13px; font-weight: 500; color: #ffffff; margin: 3px 0 6px 0;">${item.title}</div>
-                        <div style="font-size: 11px; color: #8a8f98; margin-bottom: 8px;">
-                            📐 ${item.floor_size_m2} m² • 🛏️ ${item.layout_category} • 🚆 ${parseFloat(item.distance_to_transit_km).toFixed(1)} km
+                    <div style="min-width: 220px; padding: 4px;">
+                        <div class="mono" style="font-size: 10px; color: #8a8f98; text-transform: uppercase;">KAWASAN MAKRO • ${s.city}</div>
+                        <div style="font-size: 15px; font-weight: 600; color: #ffffff; margin: 3px 0 6px 0;">${s.subdistrict}</div>
+                        <div style="font-size: 11px; color: #d0d6e0; margin-bottom: 8px;">
+                            📊 <strong>${s.units} Listing Terdata</strong> di Portal
                         </div>
-                        <div style="border-top: 1px solid #23252a; padding-top: 6px; display: flex; justify-content: space-between; align-items: flex-end;">
-                            <div>
-                                <div style="font-size: 9px; color: #8a8f98; text-transform: uppercase;">Harga Sewa</div>
-                                <div class="mono" style="font-size: 14px; color: #ffffff; font-weight: 500;">Rp ${item.price_monthly_idr.toLocaleString()}</div>
-                                ${savingsHtml}
-                            </div>
-                            <a href="${cleanUrl}" target="_blank" style="background-color: #e4f222; color: #08090a; text-decoration: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 500;">
-                                Buka ↗
-                            </a>
+                        <div style="border-top: 1px solid #23252a; padding: 6px 0; margin-bottom: 8px;">
+                            <div style="font-size: 9px; color: #8a8f98; text-transform: uppercase;">Median Sewa Kawasan</div>
+                            <div class="mono" style="font-size: 15px; color: #e4f222; font-weight: 500;">Rp ${(medianRent/1e6).toFixed(1)} Jt / bln</div>
+                            <div class="mono" style="font-size: 11px; color: #8a8f98;">(Rp ${Math.round(medianM2).toLocaleString()} / m²)</div>
                         </div>
+                        ${hasDeals ? `<div style="font-size: 11px; color: #e4f222; margin-bottom: 8px;">🔥 <strong>${s.dealsCount} Unit di Bawah Harga Pasaran</strong></div>` : ''}
+                        <button onclick="selectDistrictFromMap('${s.subdistrict}', '${s.city}')" style="width: 100%; background-color: #e4f222; color: #08090a; border: none; padding: 7px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer;">
+                            Lihat ${s.units} Unit di Kawasan Ini ↗
+                        </button>
                     </div>
                 `);
 
                 mapMarkersLayer.addLayer(circle);
+                validLatLngs.push([avgLat, avgLon]);
             });
 
-            // Smoothly auto-fit bounds if filtered
+            // Smoothly auto-fit bounds
             if (validLatLngs.length > 0 && mapInstance) {
                 const bounds = L.latLngBounds(validLatLngs);
-                mapInstance.fitBounds(bounds.pad(0.08), { maxZoom: 14, animate: true });
+                mapInstance.fitBounds(bounds.pad(0.12), { maxZoom: 13, animate: true });
             }
+        }
+
+        function selectDistrictFromMap(subdistrict, city) {
+            document.getElementById('filter-city').value = city;
+            populateFilterSubdistricts();
+            const subEl = document.getElementById('filter-subdistrict');
+            if (subEl) subEl.value = subdistrict;
+            applyFilters();
         }
 
         // Render Deal Hunter Cards
@@ -1417,15 +1662,55 @@
             renderDealsList(deals);
         }
 
+        function updateSimSubdistricts() {
+            const city = document.getElementById('sim-city').value;
+            const sel = document.getElementById('sim-subdistrict');
+            if (!sel) return;
+            const currentVal = sel.value;
+            sel.innerHTML = '<option value="">Pilih Kawasan / Kecamatan (Opsional)</option>';
+
+            const matched = allDistricts.filter(d => d.target_city === city);
+            matched.forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = d.subdistrict;
+                opt.innerText = `${d.subdistrict} (Median: Rp ${Math.round(d.median_price_per_m2_idr).toLocaleString()}/m²)`;
+                sel.appendChild(opt);
+            });
+            if (matched.some(d => d.subdistrict === currentVal)) {
+                sel.value = currentVal;
+            }
+            onSimSubdistrictChange();
+        }
+
+        function onSimSubdistrictChange() {
+            const city = document.getElementById('sim-city').value;
+            const sub = document.getElementById('sim-subdistrict').value;
+            const found = allDistricts.find(d => d.target_city === city && d.subdistrict === sub);
+
+            const baselineBox = document.getElementById('sim-subdistrict-baseline');
+            if (found && baselineBox) {
+                baselineBox.style.display = 'block';
+                baselineBox.innerHTML = `📍 <strong>Data Pasaran ${found.subdistrict}:</strong> Median tarif pasaran <strong>Rp ${Math.round(found.median_price_per_m2_idr).toLocaleString()} / m²</strong> (${found.unit_count} listing terdata di kawasan ini).`;
+            } else if (baselineBox) {
+                baselineBox.style.display = 'none';
+            }
+            runSimulation();
+        }
+
         // Run Hedonic Valuation Simulator (API Call)
         async function runSimulation() {
+            const subVal = document.getElementById('sim-subdistrict') ? document.getElementById('sim-subdistrict').value : '';
+            const cbdInput = document.getElementById('sim-cbd');
+            const transitInput = document.getElementById('sim-transit');
+
             const payload = {
                 city: document.getElementById('sim-city').value,
-                floor_size_m2: parseFloat(document.getElementById('sim-size').value),
-                bedrooms: parseInt(document.getElementById('sim-beds').value),
-                bathrooms: parseInt(document.getElementById('sim-baths').value),
-                distance_to_cbd_km: parseFloat(document.getElementById('sim-cbd').value),
-                distance_to_transit_km: parseFloat(document.getElementById('sim-transit').value),
+                subdistrict: subVal || null,
+                floor_size_m2: parseFloat(document.getElementById('sim-size').value) || 45,
+                bedrooms: parseInt(document.getElementById('sim-beds').value) || 2,
+                bathrooms: parseInt(document.getElementById('sim-baths').value) || 1,
+                distance_to_cbd_km: (cbdInput && cbdInput.value) ? parseFloat(cbdInput.value) : null,
+                distance_to_transit_km: (transitInput && transitInput.value) ? parseFloat(transitInput.value) : null,
                 is_full_furnished: document.getElementById('sim-ff').checked,
                 has_ac: document.getElementById('sim-ac').checked,
                 has_pool: document.getElementById('sim-pool').checked,
