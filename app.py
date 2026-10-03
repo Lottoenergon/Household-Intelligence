@@ -192,6 +192,8 @@ with tab2:
         for idx, row in deals_df.head(15).iterrows():
             badge_class = "deal-badge-deep" if row["deal_score_z"] <= -1.5 else "deal-badge-good"
             badge_text = "🔥 DEEP VALUE DEAL" if row["deal_score_z"] <= -1.5 else "✨ GOOD DEAL"
+            raw_url = str(row['url']).strip()
+            clean_url = raw_url if raw_url.startswith("http") else f"https://www.rumah123.com{raw_url}"
             
             with st.container():
                 st.markdown(f"""
@@ -208,7 +210,7 @@ with tab2:
                         <div><span style="font-size: 12px; color: #64748B;">Fair Market Valuation:</span><br><b style="color: #475569; font-size: 18px;">Rp {row['fair_market_rent_idr']:,.0f}</b></div>
                         <div><span style="font-size: 12px; color: #64748B;">Est. Monthly Savings:</span><br><b style="color: #DC2626; font-size: 18px;">Rp {abs(row['residual_idr']):,.0f}/bln</b></div>
                         <div style="margin-left: auto; align-self: center;">
-                            <a href="https://www.rumah123.com{row['url']}" target="_blank" style="background: #2563EB; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600;">Lihat Listing ↗</a>
+                            <a href="{clean_url}" target="_blank" style="background: #2563EB; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600;">Lihat Listing ↗</a>
                         </div>
                     </div>
                 </div>
