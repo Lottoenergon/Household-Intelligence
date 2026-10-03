@@ -118,10 +118,11 @@ def extract_listings_from_html(html: str, region_meta: Dict[str, str]) -> List[D
     return combined
 
 
-def run_ingestion_pipeline(pages_per_region: int = 5, output_dir: str = "data/raw") -> str:
+def run_ingestion_pipeline(pages_per_region: int = 8, output_dir: str = "data/raw") -> str:
     os.makedirs(output_dir, exist_ok=True)
     all_extracted_records = []
     total_regions = len(TARGET_REGIONS)
+    session = requests.Session()
     
     logger.info(f"Starting ingestion: {total_regions} regions, up to {pages_per_region} pages/region...")
 
@@ -148,7 +149,7 @@ def run_ingestion_pipeline(pages_per_region: int = 5, output_dir: str = "data/ra
             region_count += len(page_records)
             
             # Politeness delay
-            time.sleep(random.uniform(0.6, 1.2))
+            time.sleep(random.uniform(0.4, 0.8))
 
         logger.info(f"Completed {city}: Ingested {region_count} listings.")
 
@@ -163,6 +164,7 @@ def run_ingestion_pipeline(pages_per_region: int = 5, output_dir: str = "data/ra
 if __name__ == "__main__":
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     target_out = os.path.join(base_dir, "data", "raw")
-    # Quick CLI test run (3 pages per region)
-    pages = 3 if "--test" in sys.argv else 5
+    pages = 8
+    if "--quick" in sys.argv:
+        pages = 3
     run_ingestion_pipeline(pages_per_region=pages, output_dir=target_out)

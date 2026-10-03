@@ -1,13 +1,17 @@
 """
 run_pipeline.py
-Master Orchestrator for Pillar 2: Jabodetabek Rental Housing & Market Intelligence.
-Runs Ingestion -> Transformation -> Market Intelligence (Valuation) -> DB Sync.
+Master Pipeline Orchestrator for Pillar 2: Jabodetabek Rental Housing & Market Intelligence Engine.
+End-to-End Execution: Ingestion (or Staged Verify) -> Data Cleaning & Geospatial Engineering -> 
+Hedonic Valuation Model -> Relational Star Schema DB -> Data Quality Assertions.
 """
 
 import os
 import sys
+import json
+import sqlite3
 import subprocess
 import logging
+import pandas as pd
 
 logging.basicConfig(
     level=logging.INFO,
@@ -16,38 +20,95 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+EXPECTED_VIEWS = [
+    "view_city_market_benchmarks",
+    "view_urban_zone_distance_decay",
+    "view_transit_proximity_premium",
+    "view_layout_and_bedroom_matrix",
+    "view_top_undervalued_deals",
+    "view_amenity_hedonic_premiums"
+]
 
-def main():
+
+def run_pipeline():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     src_dir = os.path.join(base_dir, "src")
-    
-    logger.info("=" * 75)
-    logger.info("STARTING JABODETABEK RENTAL HOUSING MARKET INTELLIGENCE PIPELINE")
-    logger.info("=" * 75)
+    data_raw_dir = os.path.join(base_dir, "data", "raw")
+    data_proc_dir = os.path.join(base_dir, "data", "processed")
+    raw_staged_file = os.path.join(data_raw_dir, "raw_rental_listings_staged.json")
+    db_file = os.path.join(data_proc_dir, "rental_intelligence.db")
+    eval_csv = os.path.join(data_proc_dir, "jabodetabek_rental_evaluated.csv")
+    metrics_file = os.path.join(data_proc_dir, "model_evaluation_metrics.json")
 
-    # 1. Ingestion (Optional flag --skip-ingest to use existing raw json)
-    raw_json = os.path.join(base_dir, "data", "raw", "raw_rental_listings_staged.json")
-    if "--fresh-crawl" in sys.argv or not os.path.exists(raw_json):
-        logger.info("\n[Phase 1/3] Ingestion: Extracting live listings from property portal...")
-        subprocess.run([sys.executable, os.path.join(src_dir, "ingestion.py")], check=True)
+    logger.info("=" * 80)
+    logger.info("JABODETABEK RENTAL HOUSING & MARKET INTELLIGENCE ENGINE (PILLAR 2)")
+    logger.info("=" * 80)
+
+    # ---------------------------------------------------------
+    # Step 1: Ingestion
+    # ---------------------------------------------------------
+    scrape_requested = "--scrape" in sys.argv or not os.path.exists(raw_staged_file)
+    if scrape_requested:
+        logger.info("[[Phase 1/4] Running Web Ingestion Engine across 10 Jabodetabek cities...]")
+        ingest_script = os.path.join(src_dir, "ingestion.py")
+        subprocess.run([sys.executable, ingest_script], check=True)
     else:
-        logger.info(f"\n[Phase 1/3] Ingestion: Using existing raw staged dataset ({raw_json}).")
+        logger.info("[[Phase 1/4] Ingestion: Using verified staged raw records ({os.path.basename(raw_staged_file)}).]")
 
-    # 2. Transformation
-    logger.info("\n[Phase 2/3] Transformation: Normalizing prices, features & locations...")
-    subprocess.run([sys.executable, os.path.join(src_dir, "transformation.py")], check=True)
+    # ---------------------------------------------------------
+    # Step 2: Transformation & Feature Engineering
+    # ---------------------------------------------------------
+    logger.info("[[Phase 2/4] Running Transformation, Cleaning, & Geospatial Engineering...]")
+    transform_script = os.path.join(src_dir, "transformation.py")
+    subprocess.run([sys.executable, transform_script], check=True)
 
-    # 3. Market Intelligence & SQL Sync
-    logger.info("\n[Phase 3/3] Market Intelligence: Hedonic Valuation & Database Sync...")
-    subprocess.run([sys.executable, os.path.join(src_dir, "market_intelligence.py")], check=True)
+    # ---------------------------------------------------------
+    # Step 3: Hedonic Valuation & Database Synchronization
+    # ---------------------------------------------------------
+    logger.info("[[Phase 3/4] Training Econometric Hedonic Model & Syncing Star Schema DB...]")
+    mi_script = os.path.join(src_dir, "market_intelligence.py")
+    subprocess.run([sys.executable, mi_script], check=True)
 
-    logger.info("\n" + "=" * 75)
-    logger.info("PIPELINE EXECUTION COMPLETED SUCCESSFULLY!")
-    logger.info(" -> Processed CSV: data/processed/jabodetabek_rental_evaluated.csv")
-    logger.info(" -> SQLite DB:     data/processed/rental_intelligence.db")
-    logger.info(" -> Run Dashboard: streamlit run app.py")
-    logger.info("=" * 75)
+    # ---------------------------------------------------------
+    # Step 4: Quality & Integrity Assertions
+    # ---------------------------------------------------------
+    logger.info("[[Phase 4/4] Executing Automated Data Integrity & Schema Assertions...]")
+    
+    if not os.path.exists(db_file):
+        raise FileNotFoundError(f"Database {db_file} was not generated!")
+    if not os.path.exists(eval_csv):
+        raise FileNotFoundError(f"Processed dataset {eval_csv} was not generated!")
+    if not os.path.exists(metrics_file):
+        raise FileNotFoundError(f"Evaluation metrics {metrics_file} missing!")
+
+    conn = sqlite3.connect(db_file)
+    cur = conn.cursor()
+
+    # Verify Views return rows
+    for v in EXPECTED_VIEWS:
+        count = cur.execute(f"SELECT COUNT(*) FROM {v}").fetchone()[0]
+        if count == 0:
+            raise ValueError(f"Integrity check failed: View {v} returned 0 rows!")
+        logger.info(f" -> Assertion PASSED: View '{v}' verified ({count} rows).")
+
+    # Verify Star Schema Relationships
+    fact_count = cur.execute("SELECT COUNT(*) FROM fact_rental_listings").fetchone()[0]
+    loc_count = cur.execute("SELECT COUNT(*) FROM dim_locations").fetchone()[0]
+    spec_count = cur.execute("SELECT COUNT(*) FROM dim_property_specs").fetchone()[0]
+    amenity_count = cur.execute("SELECT COUNT(*) FROM dim_amenities").fetchone()[0]
+    conn.close()
+
+    with open(metrics_file, "r", encoding="utf-8") as f:
+        metrics = json.load(f)
+
+    logger.info(f" -> Star Schema Verified: {fact_count} Facts | {loc_count} Locs | {spec_count} Specs | {amenity_count} Amenities.")
+    logger.info(f" -> Model Performance: CV R2 = {metrics['cv_r2_mean_gb']} | Full R2 = {metrics['full_dataset_r2']} | MAE = Rp {metrics['mae_idr']:,.0f} ({metrics['mape_pct']}%)")
+
+    logger.info("=" * 80)
+    logger.info("PIPELINE COMPLETED SUCCESSFULLY! ALL ARTIFACTS VERIFIED.")
+    logger.info(f"Interactive Web App: streamlit run app.py")
+    logger.info("=" * 80)
 
 
 if __name__ == "__main__":
-    main()
+    run_pipeline()

@@ -1,0 +1,52 @@
+{
+  "model_type": "GradientBoostingRegressor (Hedonic Price Engine)",
+  "cv_r2_mean_gb": 0.8347,
+  "cv_r2_mean_ridge": 0.7575,
+  "full_dataset_r2": 0.9586,
+  "mae_idr": 1110815.0,
+  "rmse_idr": 1969354.0,
+  "mape_pct": 13.73,
+  "sample_size": 787,
+  "feature_importances": [
+    {
+      "feature": "log_floor_size",
+      "importance": 0.6743
+    },
+    {
+      "feature": "city_Jakarta Selatan",
+      "importance": 0.0939
+    },
+    {
+      "feature": "distance_to_cbd_km",
+      "importance": 0.0797
+    },
+    {
+      "feature": "distance_to_transit_km",
+      "importance": 0.0633
+    },
+    {
+      "feature": "city_Jakarta Pusat",
+      "importance": 0.021
+    },
+    {
+      "feature": "bedrooms",
+      "importance": 0.0148
+    },
+    {
+      "feature": "is_full_furnished",
+      "importance": 0.0116
+    },
+    {
+      "feature": "city_Jakarta Utara",
+      "importance": 0.0078
+    },
+    {
+      "feature": "city_Bogor",
+      "importance": 0.0072
+    },
+    {
+      "feature": "bathrooms",
+      "importance": 0.0054
+    }
+  ]
+}
