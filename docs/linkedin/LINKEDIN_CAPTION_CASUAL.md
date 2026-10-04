@@ -23,7 +23,7 @@ As it turns out, urban economists solved this theoretical question decades ago w
 From that theoretical foundation, I designed and built an end-to-end platform called **Household Intelligence**:
 1. **Data Cleaning & Sanity Checks:** Purged multi-billion purchase ads erroneously tagged under rentals, normalized rates to monthly IDR standards, and extracted furnishing tiers with regex NLP.
 2. **Relational Data Warehouse:** Built a Kimball Star Schema in SQLite (fact table + 3 dimensions + 6 production analytical SQL views) designed for BI tools.
-3. **Econometric Valuation & Deal Hunter:** Trained a non-linear Gradient Boosting Regressor (5-Fold Cross Validation R² = 0.835, MAPE = 13.7%) and used standardized residual Z-scores to spot 39 genuinely undervalued "Bargain Deals" (15%–32% discount).
+3. **Econometric Valuation & Deal Hunter:** Trained a Gradient Boosting Regressor evaluated out-of-fold across 5-fold cross-validation (Out-of-Fold R² = 0.830, beating naive baselines) and used log-residual Z-scores to spot 139 statistically undervalued "Bargain Deals" across 728 verified listings.
 4. **Modern Web Platform:** Deployed a high-performance **FastAPI backend** (<10ms) paired with an interactive Single Page Application styled after the sleek **Linear Design System**.
 
 ---

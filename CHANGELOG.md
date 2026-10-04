@@ -77,5 +77,5 @@ All notable changes to this project. The v0.3 work was a self-audit: I re-checke
 - Single source (Rumah123), apartments for rent, asking prices only.
 - Cross-broker de-duplication is a heuristic and may drop genuinely identical units in the same building.
 - `requirements.txt` still contains unused packages; CORS is still open (`allow_origins=["*"]`).
-- `dashboard/LINKEDIN_*.md` still contain pre-audit numbers; rewrite before posting.
+- Social post drafts and case study are archived under `docs/linkedin/` with verified out-of-fold metrics.
 - Check the portal's terms and robots.txt before republishing raw listing data.
