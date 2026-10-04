@@ -53,7 +53,7 @@ def run_pipeline():
         ingest_script = os.path.join(src_dir, "ingestion.py")
         subprocess.run([sys.executable, ingest_script], check=True)
     else:
-        logger.info("[[Phase 1/4] Ingestion: Using verified staged raw records ({os.path.basename(raw_staged_file)}).]")
+        logger.info(f"[[Phase 1/4] Ingestion: Using staged raw records ({os.path.basename(raw_staged_file)}).]")
 
     # ---------------------------------------------------------
     # Step 2: Transformation & Feature Engineering
@@ -102,7 +102,12 @@ def run_pipeline():
         metrics = json.load(f)
 
     logger.info(f" -> Star Schema Verified: {fact_count} Facts | {loc_count} Locs | {spec_count} Specs | {amenity_count} Amenities.")
-    logger.info(f" -> Model Performance: CV R2 = {metrics['cv_r2_mean_gb']} | Full R2 = {metrics['full_dataset_r2']} | MAE = Rp {metrics['mae_idr']:,.0f} ({metrics['mape_pct']}%)")
+    logger.info(f" -> Model Performance (out-of-fold, KFold 5x3): R2 = {metrics['evaluation']['kfold_5x3']['gb']['r2']} | MAE = Rp {metrics['evaluation']['kfold_5x3']['gb']['mae_idr']:,.0f} | MAPE = {metrics['evaluation']['kfold_5x3']['gb']['mape_pct']}%")
+
+    # ---------------------------------------------------------
+    # Step 5: README dirender ulang dari artefak (angka tidak pernah diketik manual)
+    # ---------------------------------------------------------
+    subprocess.run([sys.executable, os.path.join(base_dir, "scripts", "render_readme.py")], check=True)
 
     logger.info("=" * 80)
     logger.info("PIPELINE COMPLETED SUCCESSFULLY! ALL ARTIFACTS VERIFIED.")

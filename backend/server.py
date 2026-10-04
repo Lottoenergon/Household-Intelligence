@@ -5,10 +5,12 @@ Adheres strictly to PRD v1.0 specifications and serves the modern Linear-themed 
 """
 
 import os
+import json
 import sqlite3
+import joblib
 import pandas as pd
 import numpy as np
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -19,6 +21,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_PATH = os.path.join(BASE_DIR, "data", "processed", "jabodetabek_rental_evaluated.csv")
 DB_PATH = os.path.join(BASE_DIR, "data", "processed", "rental_intelligence.db")
 FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
+MODEL_PATH = os.path.join(BASE_DIR, "models", "hedonic_gb.joblib")
+METRICS_PATH = os.path.join(BASE_DIR, "data", "processed", "model_evaluation_metrics.json")
+SUMMARY_PATH = os.path.join(BASE_DIR, "data", "processed", "market_summary.json")
 
 app = FastAPI(
     title="Household Intelligence API",
@@ -40,6 +45,20 @@ df["discount_pct"] = df["discount_pct"].round(1)
 df["residual_idr"] = df["residual_idr"].round(0)
 df["deal_score_z"] = df["deal_score_z"].round(2)
 
+for _p in (MODEL_PATH, METRICS_PATH, SUMMARY_PATH):
+    if not os.path.exists(_p):
+        raise RuntimeError(f"Artefak {_p} tidak ditemukan. Jalankan `python run_pipeline.py` dulu.")
+
+ARTIFACT = joblib.load(MODEL_PATH)
+MODEL = ARTIFACT["model"]
+FEATURE_COLUMNS = ARTIFACT["feature_columns"]
+INTERVAL = ARTIFACT["interval"]
+with open(METRICS_PATH, encoding="utf-8") as _f:
+    METRICS = json.load(_f)
+with open(SUMMARY_PATH, encoding="utf-8") as _f:
+    SUMMARY = json.load(_f)
+
+
 class SimulationRequest(BaseModel):
     city: str = "Jakarta Selatan"
     subdistrict: Optional[str] = None
@@ -54,23 +73,46 @@ class SimulationRequest(BaseModel):
     has_gym: bool = False
     has_balcony: bool = False
     has_kitchen: bool = True
+    # Fitur tambahan yang ada di model (default False = tidak disebut di iklan)
+    is_semi_furnished: bool = False
+    has_wifi: bool = False
+    has_water_heater: bool = False
+    near_transit: bool = False
+    has_parking: bool = False
+    # ASUMSI pengguna (bukan hasil data): biaya fit-out per m2 untuk kalkulator payback
+    fitout_cost_per_m2_idr: float = 1_200_000.0
 
 @app.get("/api/telemetry")
 def get_telemetry():
-    """Global high-level market metrics for the Linear executive ribbon."""
+    """Metrik pasar & model. Semua angka dibaca dari artefak pipeline, tidak ada yang ditulis manual."""
+    ev = METRICS["evaluation"]
+    gb, naive, ridge = ev["kfold_5x3"]["gb"], ev["kfold_5x3"]["naive"], ev["kfold_5x3"]["ridge"]
+    grp = ev["group_kfold_subdistrict"]
+    deals = SUMMARY["deals"]
     return {
-        "audited_units": int(len(df)),
-        "monitored_regions": int(df["target_city"].nunique()),
-        "median_rent_idr": float(df["price_monthly_idr"].median()),
-        "median_price_per_m2_idr": float(df["price_per_m2_idr"].median()),
-        "mean_price_per_m2_idr": float(df["price_per_m2_idr"].mean()),
-        "furnished_share_pct": round(float(df["is_full_furnished"].mean() * 100), 1),
-        "bargains_detected": int((df["deal_score_z"] <= -0.75).sum()),
-        "deep_value_count": int((df["deal_score_z"] <= -1.5).sum()),
-        "good_deals_count": int(((df["deal_score_z"] > -1.5) & (df["deal_score_z"] <= -0.75)).sum()),
-        "avm_model_r2": 0.959,
-        "avm_cross_val_r2": 0.835,
-        "avm_mape_pct": 13.7
+        "audited_units": SUMMARY["n_units"],
+        "monitored_regions": SUMMARY["n_cities"],
+        "median_rent_idr": SUMMARY["median_rent_idr"],
+        "median_price_per_m2_idr": SUMMARY["median_price_per_m2_idr"],
+        "furnished_share_pct": SUMMARY["furnished_share_pct"],
+        "furnishing_premium_adjusted_pct": SUMMARY["furnishing_premium_adjusted_pct"],
+        "furnishing_premium_raw_pct": SUMMARY["furnishing_premium_raw_pct"],
+        "bargains_detected": deals["below_estimate_total"],
+        "deep_value_count": deals["deep"],
+        "good_deals_count": deals["good"],
+        "below_estimate_share_pct": deals["below_estimate_share_pct"],
+        "model": {
+            "validation": "out-of-fold, KFold 5-lipat x3 pengulangan",
+            "r2": gb["r2"], "mae_idr": gb["mae_idr"], "mape_pct": gb["mape_pct"],
+            "median_ape_pct": gb["median_ape_pct"],
+            "baseline_naive_r2": naive["r2"], "ridge_r2": ridge["r2"],
+            "unseen_subdistrict_r2": grp["gb"]["r2"],
+            "train_in_sample_r2_diagnostic": METRICS["train_in_sample_r2_DIAGNOSTIC_ONLY"],
+            "top_features": METRICS["feature_importances"][:3],
+            "interval_level": INTERVAL["level"],
+            "interval_lower_factor": INTERVAL["lower_factor"],
+            "interval_upper_factor": INTERVAL["upper_factor"],
+        },
     }
 
 @app.get("/api/listings")
@@ -171,90 +213,81 @@ def get_districts(city: Optional[str] = None):
         "districts": dist.to_dict(orient="records")
     }
 
+def _area_default(req: SimulationRequest, col: str, fallback: float) -> float:
+    """Median jarak per subdistrik (jika diketahui), lalu median kota, lalu fallback."""
+    scope = df[df["target_city"] == req.city]
+    if req.subdistrict:
+        sub = scope.loc[scope["subdistrict"] == req.subdistrict, col]
+        if not sub.empty:
+            return float(sub.median())
+    return float(scope[col].median()) if not scope.empty else fallback
+
+
+def _feature_row(req: SimulationRequest, cbd_km: float, transit_km: float) -> pd.DataFrame:
+    """Susun satu baris fitur persis seperti build_hedonic_features() di pipeline training."""
+    row = {c: 0.0 for c in FEATURE_COLUMNS}
+    row.update({
+        "log_floor_size": float(np.log(req.floor_size_m2)),
+        "bedrooms": req.bedrooms, "bathrooms": req.bathrooms,
+        "distance_to_cbd_km": cbd_km, "distance_to_transit_km": transit_km,
+        "is_full_furnished": int(req.is_full_furnished), "is_semi_furnished": int(req.is_semi_furnished),
+        "has_ac": int(req.has_ac), "has_wifi": int(req.has_wifi), "has_water_heater": int(req.has_water_heater),
+        "has_pool": int(req.has_pool), "has_gym": int(req.has_gym), "near_transit": int(req.near_transit),
+        "has_balcony": int(req.has_balcony), "has_kitchen": int(req.has_kitchen), "has_parking": int(req.has_parking),
+    })
+    dummy = f"city_{req.city}"
+    if dummy in row:          # kota baseline (drop_first) tidak punya kolom dummy
+        row[dummy] = 1.0
+    return pd.DataFrame([row], columns=FEATURE_COLUMNS)
+
+
 @app.post("/api/simulate")
 def simulate_rent(req: SimulationRequest):
+    """Estimasi harga sewa wajar dari model Gradient Boosting yang SAMA dengan yang dievaluasi.
+
+    Rentang = kuantil empiris residual out-of-fold (bukan interval statistik formal).
+    Analisis furnishing = selisih prediksi model dengan/ tanpa flag furnished (ceteris paribus),
+    dan biaya fit-out adalah asumsi pengguna.
     """
-    Hedonic Pricing Automated Valuation Model (AVM) +
-    Bu Sarah's Investor Tool (Furnishing Fit-Out Payback Analysis).
-    Calibrated 100% on empirical data as-is from listings.
-    """
-    city_base = df.groupby("target_city")["price_per_m2_idr"].median().get(req.city, 130000.0)
-    
-    # Subdistrict empirical base if available
-    area_base = float(city_base)
-    if req.subdistrict:
-        sub_series = df.loc[(df["target_city"] == req.city) & (df["subdistrict"] == req.subdistrict), "price_per_m2_idr"]
-        if not sub_series.empty:
-            sub_med = float(sub_series.median())
-            if sub_med > 0:
-                area_base = sub_med
+    if req.city not in ARTIFACT["cities"]:
+        raise HTTPException(status_code=400, detail=f"Kota tidak dikenal: {req.city}. Pilihan: {ARTIFACT['cities']}")
+    if not (15 <= req.floor_size_m2 <= 350):
+        raise HTTPException(status_code=400, detail="floor_size_m2 harus di antara 15 dan 350 (rentang data latih).")
 
-    furnish_mult = 1.268 if req.is_full_furnished else 1.0
-    ac_mult = 1.08 if req.has_ac else 1.0
-    pool_mult = 1.05 if req.has_pool else 1.0
-    gym_mult = 1.04 if req.has_gym else 1.0
-    kitchen_mult = 1.05 if req.has_kitchen else 1.0
-    balcony_mult = 1.03 if req.has_balcony else 1.0
+    cbd_km = req.distance_to_cbd_km if req.distance_to_cbd_km is not None else _area_default(req, "distance_to_cbd_km", 8.0)
+    transit_km = req.distance_to_transit_km if req.distance_to_transit_km is not None else _area_default(req, "distance_to_transit_km", 1.5)
 
-    # Distance to CBD / Transit (defaults to subdistrict or city median if not supplied)
-    cbd_km = req.distance_to_cbd_km
-    if cbd_km is None:
-        if req.subdistrict:
-            cbd_s = df.loc[(df["target_city"] == req.city) & (df["subdistrict"] == req.subdistrict), "distance_to_cbd_km"]
-            cbd_km = float(cbd_s.median()) if not cbd_s.empty else 8.0
-        else:
-            cbd_km = 8.0
-    
-    transit_km = req.distance_to_transit_km
-    if transit_km is None:
-        if req.subdistrict:
-            trans_s = df.loc[(df["target_city"] == req.city) & (df["subdistrict"] == req.subdistrict), "distance_to_transit_km"]
-            transit_km = float(trans_s.median()) if not trans_s.empty else 1.5
-        else:
-            transit_km = 1.5
+    fair = float(np.exp(MODEL.predict(_feature_row(req, cbd_km, transit_km))[0]))
+    est_fair_rent = round(fair / 50_000) * 50_000
+    ci_lower = round(fair * INTERVAL["lower_factor"] / 50_000) * 50_000
+    ci_upper = round(fair * INTERVAL["upper_factor"] / 50_000) * 50_000
 
-    # Distance Decay Gradient
-    dist_cbd_decay = max(0.60, 1.0 - (cbd_km - 5.0) * 0.013)
-    dist_transit_bonus = 1.10 if transit_km <= 1.0 else (1.05 if transit_km <= 2.5 else 0.95)
+    # Premi furnished ceteris paribus: prediksi (full furnished) - prediksi (tidak full furnished)
+    on, off = req.model_copy(update={"is_full_furnished": True}), req.model_copy(update={"is_full_furnished": False})
+    rent_on = float(np.exp(MODEL.predict(_feature_row(on, cbd_km, transit_km))[0]))
+    rent_off = float(np.exp(MODEL.predict(_feature_row(off, cbd_km, transit_km))[0]))
+    premium_monthly = max(rent_on - rent_off, 0.0)
+    fitout_cost = req.floor_size_m2 * req.fitout_cost_per_m2_idr
+    payback_months = round(fitout_cost / premium_monthly, 1) if premium_monthly > 0 else None
 
-    base_estimate = (
-        req.floor_size_m2
-        * area_base
-        * furnish_mult
-        * ac_mult
-        * pool_mult
-        * gym_mult
-        * kitchen_mult
-        * balcony_mult
-        * dist_cbd_decay
-        * dist_transit_bonus
-    )
-    est_fair_rent = round(base_estimate / 50_000) * 50_000
-    ci_lower = round((est_fair_rent * 0.90) / 50_000) * 50_000
-    ci_upper = round((est_fair_rent * 1.10) / 50_000) * 50_000
-    implicit_m2 = round(est_fair_rent / req.floor_size_m2)
-
-    # Bu Sarah Investor Calculations:
-    unfurnished_rent = est_fair_rent / furnish_mult
-    furnish_premium_monthly = est_fair_rent - unfurnished_rent
-    furnish_premium_annual = furnish_premium_monthly * 12
-    est_fitout_cost = req.floor_size_m2 * 1_200_000  # Market avg ~IDR 1.2M/m2 fitout
-    payback_months = round(est_fitout_cost / furnish_premium_monthly, 1) if furnish_premium_monthly > 0 else 0
-
+    city_base = float(df.loc[df["target_city"] == req.city, "price_per_m2_idr"].median())
     return {
         "fair_market_rent_idr": float(est_fair_rent),
         "ci_lower_idr": float(ci_lower),
         "ci_upper_idr": float(ci_upper),
-        "implicit_rate_per_m2_idr": float(implicit_m2),
-        "city_benchmark_rate_m2": float(city_base),
+        "interval_level_pct": int(INTERVAL["level"] * 100),
+        "implicit_rate_per_m2_idr": float(round(est_fair_rent / req.floor_size_m2)),
+        "city_benchmark_rate_m2": city_base,
+        "inputs_used": {"distance_to_cbd_km": round(cbd_km, 2), "distance_to_transit_km": round(transit_km, 2)},
         "furnishing_analysis": {
-            "unfurnished_baseline_idr": float(round(unfurnished_rent)),
-            "monthly_extra_cashflow_idr": float(round(furnish_premium_monthly)),
-            "annual_extra_cashflow_idr": float(round(furnish_premium_annual)),
-            "estimated_fitout_cost_idr": float(est_fitout_cost),
-            "payback_period_months": float(payback_months),
-            "payback_period_years": round(payback_months / 12, 1)
-        }
+            "unfurnished_baseline_idr": float(round(rent_off)),
+            "monthly_extra_cashflow_idr": float(round(premium_monthly)),
+            "annual_extra_cashflow_idr": float(round(premium_monthly * 12)),
+            "estimated_fitout_cost_idr": float(fitout_cost),
+            "fitout_cost_is_user_assumption": True,
+            "payback_period_months": payback_months,
+            "payback_period_years": round(payback_months / 12, 1) if payback_months is not None else None,
+        },
     }
 
 @app.get("/api/distance-decay")

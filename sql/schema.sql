@@ -170,7 +170,7 @@ SELECT
 FROM fact_rental_listings f
 JOIN dim_locations l ON f.location_key = l.location_key
 JOIN dim_property_specs s ON f.spec_key = s.spec_key
-WHERE f.deal_score_z <= -1.0
+WHERE f.deal_score_z <= -0.75  -- harus sama dengan ambang "below estimate" di market_intelligence.py
 ORDER BY f.deal_score_z ASC;
 
 -- View 6: Furnishing & Amenity Premiums

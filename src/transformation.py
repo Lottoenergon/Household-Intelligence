@@ -44,6 +44,64 @@ KEY_TRANSIT_HUBS = {
 }
 
 
+# Bounding box Jabodetabek (WGS84). Koordinat di luar kotak ini dianggap tidak valid.
+JABODETABEK_BBOX = {"lat_min": -6.80, "lat_max": -5.95, "lon_min": 106.35, "lon_max": 107.25}
+MIN_LISTINGS_FOR_SUBDISTRICT_CENTROID = 2
+
+
+def is_valid_jabodetabek_coord(lat: float, lon: float) -> bool:
+    """True jika koordinat ada, bukan NaN, dan berada di dalam bounding box Jabodetabek.
+
+    Otomatis menolak kasus portal di mana longitude tersalin dari latitude
+    (misal -6.23168, -6.23168), karena nilai itu jatuh di luar bounding box.
+    """
+    if lat is None or lon is None or pd.isna(lat) or pd.isna(lon):
+        return False
+    b = JABODETABEK_BBOX
+    return (b["lat_min"] <= lat <= b["lat_max"]) and (b["lon_min"] <= lon <= b["lon_max"])
+
+
+def clean_and_impute_coordinates(df: pd.DataFrame) -> pd.DataFrame:
+    """Validasi koordinat lalu imputasi yang hilang/rusak TANPA memakai titik CBD.
+
+    Urutan imputasi:
+      1. koordinat listing asli (jika valid)          -> geo_source = "listing"
+      2. median koordinat valid se-subdistrik         -> geo_source = "subdistrict_centroid"
+      3. median koordinat valid se-kota               -> geo_source = "city_centroid"
+    Butuh kolom: latitude, longitude, subdistrict, target_city.
+    """
+    out = df.copy()
+    out["latitude"] = pd.to_numeric(out["latitude"], errors="coerce")
+    out["longitude"] = pd.to_numeric(out["longitude"], errors="coerce")
+
+    valid = pd.Series(
+        [is_valid_jabodetabek_coord(a, b) for a, b in zip(out["latitude"], out["longitude"])],
+        index=out.index,
+    )
+    out["geo_source"] = np.where(valid, "listing", "missing")
+    out.loc[~valid, ["latitude", "longitude"]] = np.nan
+
+    good = out[valid]
+    sub_stats = good.groupby(["target_city", "subdistrict"])[["latitude", "longitude"]].agg(["median", "count"])
+    city_stats = good.groupby("target_city")[["latitude", "longitude"]].median()
+
+    for idx in out.index[~valid]:
+        city, sub = out.at[idx, "target_city"], out.at[idx, "subdistrict"]
+        key = (city, sub)
+        if key in sub_stats.index and sub_stats.loc[key, ("latitude", "count")] >= MIN_LISTINGS_FOR_SUBDISTRICT_CENTROID:
+            out.at[idx, "latitude"] = sub_stats.loc[key, ("latitude", "median")]
+            out.at[idx, "longitude"] = sub_stats.loc[key, ("longitude", "median")]
+            out.at[idx, "geo_source"] = "subdistrict_centroid"
+        elif city in city_stats.index:
+            out.at[idx, "latitude"] = city_stats.at[city, "latitude"]
+            out.at[idx, "longitude"] = city_stats.at[city, "longitude"]
+            out.at[idx, "geo_source"] = "city_centroid"
+        # jika kota pun tidak punya koordinat valid, biarkan NaN (jangan dikarang)
+
+    out["geo_is_imputed"] = (out["geo_source"] != "listing").astype(int)
+    return out
+
+
 def haversine_distance_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     """Calculates great-circle distance between two geographic coordinates in kilometers."""
     R = 6371.0  # Earth radius in km
@@ -164,6 +222,21 @@ def extract_amenity_features(title: str, desc: str) -> Dict[str, int]:
     }
 
 
+CONTENT_DUP_KEY = ["price_monthly_idr", "floor_size_m2", "bedrooms", "bathrooms", "display_location"]
+
+
+def drop_content_duplicates(df: pd.DataFrame) -> Tuple[pd.DataFrame, int]:
+    """Buang listing kembar antar-broker: harga, luas, kamar, kamar mandi, dan lokasi sama persis.
+
+    Dedup URL saja tidak cukup karena satu unit sering diiklankan beberapa broker dengan URL berbeda.
+    Listing pertama dipertahankan. Kolom NaN diperlakukan sama (luas kosong + atribut lain sama = kembar).
+    Risiko yang diterima: dua unit berbeda dengan spesifikasi identik di gedung yang sama ikut terbuang.
+    """
+    before = len(df)
+    out = df.drop_duplicates(subset=CONTENT_DUP_KEY, keep="first").reset_index(drop=True)
+    return out, before - len(out)
+
+
 def clean_and_transform_pipeline(raw_json_path: str, output_dir: str = "data/processed") -> pd.DataFrame:
     os.makedirs(output_dir, exist_ok=True)
     logger.info(f"Loading raw staged JSON from {raw_json_path}...")
@@ -173,11 +246,13 @@ def clean_and_transform_pipeline(raw_json_path: str, output_dir: str = "data/pro
 
     df = pd.DataFrame(raw_data)
     initial_count = len(df)
+    audit = {"raw_records": int(initial_count)}
     logger.info(f"Loaded {initial_count} raw records.")
 
     # 1. Deduplication on URL and title
     df = df.drop_duplicates(subset=["url"]).reset_index(drop=True)
     logger.info(f"Deduplicated by URL: {len(df)} remaining (-{initial_count - len(df)} duplicates).")
+    audit["after_url_dedup"] = int(len(df))
 
     # 2. Parse price & rental duration
     price_res = [parse_normalized_price(p) for p in df["raw_price"]]
@@ -189,11 +264,19 @@ def clean_and_transform_pipeline(raw_json_path: str, output_dir: str = "data/pro
     valid_mask = df["price_monthly_idr"].notnull() & (~df["is_price_outlier"])
     df_valid = df[valid_mask].copy().reset_index(drop=True)
     logger.info(f"Price validation complete: {len(df_valid)} valid rentals remaining (-{len(df) - len(df_valid)} outliers/ads).")
+    audit["after_price_validation"] = int(len(df_valid))
+    audit["price_period_counts"] = {k: int(v) for k, v in df_valid["original_period"].value_counts().items()}
 
     # 3. Clean numeric fields (bedrooms, bathrooms, floor_size)
     df_valid["bedrooms"] = pd.to_numeric(df_valid["bedrooms"], errors="coerce").fillna(1).astype(int)
     df_valid["bathrooms"] = pd.to_numeric(df_valid["bathrooms"], errors="coerce").fillna(1).astype(int)
     
+    # 3b. Dedup berbasis konten (sebelum imputasi luas, agar median imputasi tidak terdistorsi duplikat)
+    df_valid, n_content_dups = drop_content_duplicates(df_valid)
+    logger.info(f"Content-based dedup: {len(df_valid)} remaining (-{n_content_dups} duplikat lintas-broker).")
+    audit["content_duplicates_removed"] = int(n_content_dups)
+    audit["after_content_dedup"] = int(len(df_valid))
+
     # Layout Category
     def classify_layout(br: int) -> str:
         if br <= 1:
@@ -209,12 +292,15 @@ def clean_and_transform_pipeline(raw_json_path: str, output_dir: str = "data/pro
 
     # Impute missing floor size by median of same bedroom count in same city
     df_valid["floor_size_m2"] = pd.to_numeric(df_valid["floor_size_m2"], errors="coerce")
+    audit["floor_size_missing_imputed"] = int(df_valid["floor_size_m2"].isna().sum())
     median_by_br = df_valid.groupby(["target_city", "bedrooms"])["floor_size_m2"].transform("median")
     fallback_median = df_valid.groupby("bedrooms")["floor_size_m2"].transform("median")
     df_valid["floor_size_m2"] = df_valid["floor_size_m2"].fillna(median_by_br).fillna(fallback_median).fillna(36.0)
     
     # Floor size realistic bounds (15 m2 studio to 350 m2 penthouse)
     df_valid = df_valid[(df_valid["floor_size_m2"] >= 15) & (df_valid["floor_size_m2"] <= 350)].copy()
+
+    audit["after_floor_bounds"] = int(len(df_valid))
 
     # 4. Calculate Price per m2 (Key Real Estate Metric)
     df_valid["price_per_m2_idr"] = df_valid["price_monthly_idr"] / df_valid["floor_size_m2"]
@@ -228,16 +314,22 @@ def clean_and_transform_pipeline(raw_json_path: str, output_dir: str = "data/pro
     for col in df_amenities.columns:
         df_valid[col] = df_amenities[col].values
 
-    # 6. Geospatial Coordinates & Distance Calculations
-    df_valid["latitude"] = pd.to_numeric(df_valid["latitude"], errors="coerce")
-    df_valid["longitude"] = pd.to_numeric(df_valid["longitude"], errors="coerce")
-    
-    if "city_default_lat" in df_valid.columns and "city_default_lon" in df_valid.columns:
-        df_valid["latitude"] = df_valid["latitude"].fillna(df_valid["city_default_lat"])
-        df_valid["longitude"] = df_valid["longitude"].fillna(df_valid["city_default_lon"])
-    else:
-        df_valid["latitude"] = df_valid["latitude"].fillna(-6.2088)
-        df_valid["longitude"] = df_valid["longitude"].fillna(106.8200)
+    # 6. Geospatial: subdistrik dulu (dibutuhkan untuk imputasi centroid), lalu validasi koordinat
+    def extract_subdistrict(row):
+        loc = str(row["display_location"]).strip()
+        parts = [p.strip() for p in loc.split(",") if p.strip()]
+        if len(parts) >= 2:
+            return parts[0]
+        return row["target_city"]
+
+    df_valid["subdistrict"] = df_valid.apply(extract_subdistrict, axis=1)
+
+    n_before = int(df_valid[["latitude", "longitude"]].apply(pd.to_numeric, errors="coerce").isna().any(axis=1).sum())
+    df_valid = clean_and_impute_coordinates(df_valid)
+    src_counts = df_valid["geo_source"].value_counts().to_dict()
+    logger.info(f"Geo cleaning: {n_before} koordinat kosong di sumber; hasil geo_source = {src_counts}")
+    df_valid = df_valid.dropna(subset=["latitude", "longitude"]).copy()
+    audit["geo_source_counts"] = {k: int(v) for k, v in src_counts.items()}
 
     # Distance to Jakarta Prime CBD
     cbd_lat, cbd_lon = JAKARTA_CBD_COORDS
@@ -271,16 +363,6 @@ def clean_and_transform_pipeline(raw_json_path: str, output_dir: str = "data/pro
 
     df_valid["urban_zone"] = df_valid["distance_to_cbd_km"].apply(assign_urban_zone)
 
-    # 7. Normalize Location Attributes
-    def extract_subdistrict(row):
-        loc = str(row["display_location"]).strip()
-        parts = [p.strip() for p in loc.split(",") if p.strip()]
-        if len(parts) >= 2:
-            return parts[0]
-        return row["target_city"]
-
-    df_valid["subdistrict"] = df_valid.apply(extract_subdistrict, axis=1)
-    
     # Assign unique surrogate ID
     df_valid["listing_id"] = [f"LST-{i+1:05d}" for i in range(len(df_valid))]
 
@@ -292,13 +374,18 @@ def clean_and_transform_pipeline(raw_json_path: str, output_dir: str = "data/pro
         "is_full_furnished", "is_semi_furnished", "is_unfurnished",
         "has_ac", "has_wifi", "has_water_heater", "has_pool", "has_gym", "near_transit",
         "has_balcony", "has_kitchen", "has_parking",
-        "latitude", "longitude", "image_url", "short_description"
+        "latitude", "longitude", "geo_source", "geo_is_imputed", "image_url", "short_description"
     ]
     df_final = df_valid[ordered_cols].copy()
 
     clean_csv_path = os.path.join(output_dir, "jabodetabek_rental_cleaned.csv")
     df_final.to_csv(clean_csv_path, index=False, encoding="utf-8")
     logger.info(f"Transformation complete! Saved {len(df_final)} clean records to {clean_csv_path}")
+
+    audit["final_records"] = int(len(df_final))
+    audit["geo_imputed_share_by_city"] = {k: round(float(v), 4) for k, v in df_final.groupby("target_city")["geo_is_imputed"].mean().items()}
+    with open(os.path.join(output_dir, "pipeline_audit.json"), "w", encoding="utf-8") as f:
+        json.dump(audit, f, indent=2)
 
     return df_final
 

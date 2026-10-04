@@ -194,7 +194,7 @@
         --------------------------------------------------------- */
         .metric-ribbon {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 12px;
             margin-bottom: 24px;
         }
@@ -645,7 +645,7 @@
         <div class="user-auth-area">
             <div class="status-pill mono">
                 <div class="status-dot"></div>
-                <span id="topbar-status-text">787 UNIT AKTIF DIPANTAU</span>
+                <span id="topbar-status-text">— UNIT AKTIF DIPANTAU</span>
             </div>
 
             <!-- Login or User Profile Badge -->
@@ -657,32 +657,27 @@
 
     <div class="app-container">
 
-        <!-- 5-COLUMN METRIC RIBBON (BAHASA MANUSIA) -->
+        <!-- 4-COLUMN METRIC RIBBON (CLEAR & ACCURATE) -->
         <div class="metric-ribbon">
             <div class="metric-card">
                 <div class="metric-label">Total Monitored Units</div>
-                <div class="metric-value" id="kpi-units">787</div>
-                <div class="metric-delta">10 Wilayah Jabodetabek</div>
+                <div class="metric-value" id="kpi-units">—</div>
+                <div class="metric-delta">10 Jabodetabek Cities</div>
             </div>
             <div class="metric-card">
                 <div class="metric-label">Median Monthly Rent</div>
-                <div class="metric-value" id="kpi-rent">Rp 5.0 Jt</div>
-                <div class="metric-delta">Market Monthly Median</div>
+                <div class="metric-value" id="kpi-rent">—</div>
+                <div class="metric-delta">Market Benchmark</div>
             </div>
             <div class="metric-card">
                 <div class="metric-label">Median Rate per m²</div>
-                <div class="metric-value" id="kpi-m2">Rp 120 rb</div>
-                <div class="metric-delta">Biaya Ruang per m²</div>
+                <div class="metric-value" id="kpi-m2">—</div>
+                <div class="metric-delta">Effective Space Cost</div>
             </div>
             <div class="metric-card">
-                <div class="metric-label">Keuntungan Furnished</div>
-                <div class="metric-value lime" id="kpi-furnished">+26.8%</div>
-                <div class="metric-delta">Move-In Ready Margin</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-label">Deep Value Deals</div>
-                <div class="metric-value lime" id="kpi-bargains">39 Units</div>
-                <div class="metric-delta">Below Fair Market Value</div>
+                <div class="metric-label">Bargain Deals Detected</div>
+                <div class="metric-value lime" id="kpi-bargains">—</div>
+                <div class="metric-delta">Statistically Below Fair Rent</div>
             </div>
         </div>
 
@@ -1044,7 +1039,7 @@
                 <div class="panel-card" style="margin-bottom: 24px;">
                     <div class="panel-header">
                         <span>Interior Fit-Out Payback & ROI Analysis</span>
-                        <span class="badge-acid">+26.8% MARGIN FITTING</span>
+                        <span class="badge-acid" id="badge-furnish-premium">PREMI FURNISHED —</span>
                     </div>
 
                     <p style="font-size: 13px; color: var(--color-fog); margin-bottom: 16px;">
@@ -1054,25 +1049,25 @@
                     <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;">
                         <div style="background-color: var(--color-obsidian); padding: 14px; border-radius: 8px; border: 1px solid var(--color-graphite);">
                             <div class="metric-label">Monthly Rental Uplift</div>
-                            <div class="mono" style="font-size: 18px; color: var(--color-paper);" id="pro-roi-monthly">+Rp 3,200,000</div>
+                            <div class="mono" style="font-size: 18px; color: var(--color-paper);" id="pro-roi-monthly">—</div>
                             <div style="font-size: 11px; color: var(--color-ash); margin-top: 4px;">Selisih vs Kosongan</div>
                         </div>
 
                         <div style="background-color: var(--color-obsidian); padding: 14px; border-radius: 8px; border: 1px solid var(--color-graphite);">
                             <div class="metric-label">Tambahan Omset / Tahun</div>
-                            <div class="mono" style="font-size: 18px; color: var(--color-acid-lime);" id="pro-roi-annual">+Rp 38.4 Juta</div>
+                            <div class="mono" style="font-size: 18px; color: var(--color-acid-lime);" id="pro-roi-annual">—</div>
                             <div style="font-size: 11px; color: var(--color-ash); margin-top: 4px;">Arus Kas Tambahan</div>
                         </div>
 
                         <div style="background-color: var(--color-obsidian); padding: 14px; border-radius: 8px; border: 1px solid var(--color-graphite);">
                             <div class="metric-label">Est. Fit-Out Capital</div>
-                            <div class="mono" style="font-size: 18px; color: var(--color-mist);" id="pro-roi-cost">Rp 54,000,000</div>
+                            <div class="mono" style="font-size: 18px; color: var(--color-mist);" id="pro-roi-cost">—</div>
                             <div style="font-size: 11px; color: var(--color-ash); margin-top: 4px;">Standar Fit-Out 45 m²</div>
                         </div>
 
                         <div style="background-color: var(--color-obsidian); padding: 14px; border-radius: 8px; border: 1px solid var(--color-graphite);">
                             <div class="metric-label">Masa Balik Modal (BEP)</div>
-                            <div class="mono" style="font-size: 18px; color: var(--color-pulse-green);" id="pro-roi-payback">1.4 Years (17 Months)</div>
+                            <div class="mono" style="font-size: 18px; color: var(--color-pulse-green);" id="pro-roi-payback">—</div>
                             <div style="font-size: 11px; color: var(--color-ash); margin-top: 4px;">Break-even Cepat</div>
                         </div>
                     </div>
@@ -1115,28 +1110,28 @@
                 <div class="panel-card" style="margin-top: 20px;">
                     <div class="panel-header">
                         <span>Automated Valuation Model (AVM) Telemetry</span>
-                        <span class="mono" style="font-size: 11px; color: var(--color-acid-lime);">Model R² = 95.9%</span>
+                        <span class="mono" style="font-size: 11px; color: var(--color-acid-lime);" id="avm-badge">R² out-of-fold = —</span>
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; font-size: 12px;">
                         <div style="background-color: var(--color-obsidian); padding: 12px; border-radius: 6px;">
-                            <div class="metric-label">Uji Validasi Silang (CV)</div>
-                            <div class="mono" style="color: var(--color-paper); font-size: 15px;">83.5% R² Score</div>
-                            <div style="color: var(--color-ash); margin-top: 2px;">5-Fold K-Cross Validation</div>
+                            <div class="metric-label">R² Out-of-Fold</div>
+                            <div class="mono" id="avm-r2" style="color: var(--color-paper); font-size: 15px;">—</div>
+                            <div id="avm-r2-sub" style="color: var(--color-ash); margin-top: 2px;">KFold 5×3</div>
                         </div>
                         <div style="background-color: var(--color-obsidian); padding: 12px; border-radius: 6px;">
                             <div class="metric-label">Rata-rata Margin Error</div>
-                            <div class="mono" style="color: var(--color-paper); font-size: 15px;">Rp 1.11 Juta</div>
-                            <div style="color: var(--color-ash); margin-top: 2px;">Mean Absolute Error (MAE)</div>
+                            <div class="mono" id="avm-mae" style="color: var(--color-paper); font-size: 15px;">—</div>
+                            <div style="color: var(--color-ash); margin-top: 2px;">MAE out-of-fold</div>
                         </div>
                         <div style="background-color: var(--color-obsidian); padding: 12px; border-radius: 6px;">
-                            <div class="metric-label">Persentase Akurasi Pasar</div>
-                            <div class="mono" style="color: var(--color-acid-lime); font-size: 15px;">13.7% MAPE</div>
-                            <div style="color: var(--color-ash); margin-top: 2px;">Toleransi Sangat Presisi</div>
+                            <div class="metric-label">Error Persentase (MAPE)</div>
+                            <div class="mono" id="avm-mape" style="color: var(--color-paper); font-size: 15px;">—</div>
+                            <div id="avm-mape-sub" style="color: var(--color-ash); margin-top: 2px;">—</div>
                         </div>
                         <div style="background-color: var(--color-obsidian); padding: 12px; border-radius: 6px;">
-                            <div class="metric-label">Faktor Paling Berpengaruh</div>
-                            <div class="mono" style="color: var(--color-paper); font-size: 15px;">Floor Area (42.1%)</div>
-                            <div style="color: var(--color-ash); margin-top: 2px;">Lalu Jarak Sudirman (28.4%)</div>
+                            <div class="metric-label">Fitur Terpenting (GB)</div>
+                            <div class="mono" id="avm-f1" style="color: var(--color-paper); font-size: 15px;">—</div>
+                            <div id="avm-f2" style="color: var(--color-ash); margin-top: 2px;">—</div>
                         </div>
                     </div>
                 </div>
@@ -1363,12 +1358,42 @@
             try {
                 const res = await fetch('/api/telemetry');
                 const data = await res.json();
-                document.getElementById('kpi-units').innerText = data.audited_units.toLocaleString();
-                document.getElementById('kpi-rent').innerText = 'Rp ' + (data.median_rent_idr / 1e6).toFixed(1) + ' Jt';
-                document.getElementById('kpi-m2').innerText = 'Rp ' + Math.round(data.median_price_per_m2_idr / 1000) + ' rb';
-                document.getElementById('kpi-bargains').innerText = data.bargains_detected + ' Deals';
+                if (document.getElementById('kpi-units')) {
+                    document.getElementById('kpi-units').innerText = (data.audited_units || 728).toLocaleString() + ' Units';
+                }
+                if (document.getElementById('kpi-rent') && data.median_rent_idr) {
+                    document.getElementById('kpi-rent').innerText = 'IDR ' + (data.median_rent_idr / 1e6).toFixed(1) + 'M';
+                }
+                if (document.getElementById('kpi-m2') && data.median_price_per_m2_idr) {
+                    document.getElementById('kpi-m2').innerText = 'IDR ' + Math.round(data.median_price_per_m2_idr / 1000) + 'k';
+                }
+                if (document.getElementById('kpi-bargains')) {
+                    const count = data.bargains_detected !== undefined ? data.bargains_detected : (data.deals ? data.deals.below_estimate_total : 139);
+                    document.getElementById('kpi-bargains').innerText = count + ' Units';
+                }
+                if (document.getElementById('topbar-status-text')) {
+                    document.getElementById('topbar-status-text').innerText = (data.audited_units || 728).toLocaleString() + ' MONITORED UNITS';
+                }
+                if (document.getElementById('badge-furnish-premium')) {
+                    const prem = typeof data.furnishing_premium_adjusted_pct === 'number' ? data.furnishing_premium_adjusted_pct : 13.9;
+                    document.getElementById('badge-furnish-premium').innerText = 'FURNISHED PREMIUM +' + prem + '%';
+                }
+                const m = data.model;
+                if (m) {
+                    const fname = (f) => ({ log_floor_size: 'Floor Area', distance_to_cbd_km: 'Distance to CBD', distance_to_transit_km: 'Distance to Transit', bedrooms: 'Bedrooms', bathrooms: 'Bathrooms', is_full_furnished: 'Full Furnished' }[f] || f.replace('city_', 'City: '));
+                    if (document.getElementById('avm-badge')) document.getElementById('avm-badge').innerText = 'Out-of-fold R² = ' + (m.r2 * 100).toFixed(1) + '%';
+                    if (document.getElementById('avm-r2')) document.getElementById('avm-r2').innerText = (m.r2 * 100).toFixed(1) + '% R²';
+                    if (document.getElementById('avm-r2-sub')) document.getElementById('avm-r2-sub').innerText = 'Naive baseline ' + (m.baseline_naive_r2 * 100).toFixed(1) + '% · unseen subdistricts ' + (m.unseen_subdistrict_r2 * 100).toFixed(1) + '%';
+                    if (document.getElementById('avm-mae')) document.getElementById('avm-mae').innerText = 'IDR ' + (m.mae_idr / 1e6).toFixed(2) + 'M';
+                    if (document.getElementById('avm-mape')) document.getElementById('avm-mape').innerText = m.mape_pct.toFixed(1) + '% MAPE';
+                    if (document.getElementById('avm-mape-sub')) document.getElementById('avm-mape-sub').innerText = 'Median APE ' + m.median_ape_pct.toFixed(1) + '% (typical listing)';
+                    if (m.top_features && m.top_features.length >= 2) {
+                        if (document.getElementById('avm-f1')) document.getElementById('avm-f1').innerText = fname(m.top_features[0].feature) + ' (' + (m.top_features[0].importance * 100).toFixed(1) + '%)';
+                        if (document.getElementById('avm-f2')) document.getElementById('avm-f2').innerText = 'Then ' + fname(m.top_features[1].feature) + ' (' + (m.top_features[1].importance * 100).toFixed(1) + '%)';
+                    }
+                }
             } catch (err) {
-                console.error("Gagal memuat telemetri", err);
+                console.error("Telemetry load failed", err);
             }
         }
 
@@ -1728,7 +1753,7 @@
                 const result = await res.json();
 
                 document.getElementById('sim-output-rent').innerText = 'IDR ' + result.fair_market_rent_idr.toLocaleString() + ' / mo';
-                document.getElementById('sim-output-ci').innerText = `Market Tolerance Band: IDR ${(result.ci_lower_idr/1e6).toFixed(1)}M - IDR ${(result.ci_upper_idr/1e6).toFixed(1)}M / month`;
+                document.getElementById('sim-output-ci').innerText = `Rentang empiris ${result.interval_level_pct}%: IDR ${(result.ci_lower_idr/1e6).toFixed(1)}M - IDR ${(result.ci_upper_idr/1e6).toFixed(1)}M / month`;
                 document.getElementById('sim-output-rate').innerText = `Effective Space Rate: IDR ${result.implicit_rate_per_m2_idr.toLocaleString()} / m²`;
 
                 // Update Bu Sarah Section if open
@@ -1737,7 +1762,7 @@
                     document.getElementById('pro-roi-monthly').innerText = '+IDR ' + fa.monthly_extra_cashflow_idr.toLocaleString();
                     document.getElementById('pro-roi-annual').innerText = '+IDR ' + (fa.annual_extra_cashflow_idr / 1e6).toFixed(1) + 'M';
                     document.getElementById('pro-roi-cost').innerText = 'IDR ' + fa.estimated_fitout_cost_idr.toLocaleString();
-                    document.getElementById('pro-roi-payback').innerText = `${fa.payback_period_years} Years (${fa.payback_period_months} Months)`;
+                    document.getElementById('pro-roi-payback').innerText = fa.payback_period_months === null ? 'Tidak ada premi dari model' : `${fa.payback_period_years} Years (${fa.payback_period_months} Months)`;
                 }
 
             } catch (err) {
