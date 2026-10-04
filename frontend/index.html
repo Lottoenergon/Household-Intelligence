@@ -760,9 +760,9 @@
                     <div class="form-group" style="margin-bottom: 0;">
                         <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
                             <label class="form-label">Maximum Monthly Budget</label>
-                            <span class="mono" style="font-size: 11px; color: var(--color-acid-lime);" id="budget-label">IDR 45M / mo</span>
+                            <span class="mono" style="font-size: 11px; color: var(--color-acid-lime);" id="budget-label">All Budgets (No Limit)</span>
                         </div>
-                        <input type="range" id="filter-budget" class="range-slider" min="1500000" max="45000000" step="500000" value="45000000" oninput="updateBudgetLabel(this.value)" onchange="applyFilters()">
+                        <input type="range" id="filter-budget" class="range-slider" min="1000000" max="100000000" step="1000000" value="100000000" oninput="updateBudgetLabel(this.value)" onchange="applyFilters()">
                     </div>
                 </div>
 
@@ -1380,8 +1380,8 @@
             const sub = document.getElementById('filter-subdistrict');
             if (sub) sub.value = 'All';
             document.getElementById('filter-layout').value = 'All';
-            document.getElementById('filter-budget').value = 45000000;
-            updateBudgetLabel(45000000);
+            document.getElementById('filter-budget').value = 100000000;
+            updateBudgetLabel(100000000);
             document.getElementById('filter-furnished').checked = false;
             setInventoryMode('all');
             setDealTier('all');
@@ -1491,7 +1491,7 @@
                 if (selectedCity !== 'All' && item.target_city !== selectedCity) return false;
                 if (selectedSubdistrict !== 'All' && item.subdistrict !== selectedSubdistrict) return false;
                 if (selectedLayout !== 'All' && item.layout_category !== selectedLayout) return false;
-                if (item.price_monthly_idr > maxBudget) return false;
+                if (maxBudget < 100000000 && item.price_monthly_idr > maxBudget) return false;
                 if (furnishedOnly && !item.is_full_furnished) return false;
 
                 if (currentInventoryMode === 'deals') {
@@ -1699,8 +1699,13 @@
         }
 
         function updateBudgetLabel(val) {
-            const jt = (parseFloat(val) / 1e6).toFixed(1);
-            document.getElementById('budget-label').innerText = 'Rp ' + jt + ' Juta / bln';
+            const num = parseFloat(val);
+            if (num >= 100000000) {
+                document.getElementById('budget-label').innerText = 'All Budgets (No Limit)';
+            } else {
+                const jt = (num / 1e6).toFixed(1);
+                document.getElementById('budget-label').innerText = 'IDR ' + jt + 'M / mo';
+            }
         }
 
         // Start on Page Load
