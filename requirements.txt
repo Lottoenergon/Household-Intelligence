@@ -41,7 +41,7 @@ scipy==1.18.1
 six==1.17.0
 soupsieve==2.10
 starlette==1.7.0
-streamlit==1.65.0
+fastapi==0.142.2
 threadpoolctl==3.7.0
 toml==0.10.2
 typing_extensions==4.16.0

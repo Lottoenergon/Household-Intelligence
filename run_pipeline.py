@@ -106,7 +106,7 @@ def run_pipeline():
 
     logger.info("=" * 80)
     logger.info("PIPELINE COMPLETED SUCCESSFULLY! ALL ARTIFACTS VERIFIED.")
-    logger.info(f"Interactive Web App: streamlit run app.py")
+    logger.info("Interactive Web App (FastAPI + SPA): python -m uvicorn backend.server:app --port 8080 --reload (or run start_platform.bat)")
     logger.info("=" * 80)
 
 
