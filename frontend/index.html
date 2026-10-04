@@ -1727,16 +1727,16 @@
                 });
                 const result = await res.json();
 
-                document.getElementById('sim-output-rent').innerText = 'Rp ' + result.fair_market_rent_idr.toLocaleString() + ' / bln';
-                document.getElementById('sim-output-ci').innerText = `Rentang Toleransi Pasar: Rp ${(result.ci_lower_idr/1e6).toFixed(1)} Jt - Rp ${(result.ci_upper_idr/1e6).toFixed(1)} Jt / bulan`;
-                document.getElementById('sim-output-rate').innerText = `Tarif Efektif Ruang: Rp ${result.implicit_rate_per_m2_idr.toLocaleString()} / m²`;
+                document.getElementById('sim-output-rent').innerText = 'IDR ' + result.fair_market_rent_idr.toLocaleString() + ' / mo';
+                document.getElementById('sim-output-ci').innerText = `Market Tolerance Band: IDR ${(result.ci_lower_idr/1e6).toFixed(1)}M - IDR ${(result.ci_upper_idr/1e6).toFixed(1)}M / month`;
+                document.getElementById('sim-output-rate').innerText = `Effective Space Rate: IDR ${result.implicit_rate_per_m2_idr.toLocaleString()} / m²`;
 
                 // Update Bu Sarah Section if open
                 if (result.furnishing_analysis) {
                     const fa = result.furnishing_analysis;
-                    document.getElementById('pro-roi-monthly').innerText = '+Rp ' + fa.monthly_extra_cashflow_idr.toLocaleString();
-                    document.getElementById('pro-roi-annual').innerText = '+Rp ' + (fa.annual_extra_cashflow_idr / 1e6).toFixed(1) + ' Jt';
-                    document.getElementById('pro-roi-cost').innerText = 'Rp ' + fa.estimated_fitout_cost_idr.toLocaleString();
+                    document.getElementById('pro-roi-monthly').innerText = '+IDR ' + fa.monthly_extra_cashflow_idr.toLocaleString();
+                    document.getElementById('pro-roi-annual').innerText = '+IDR ' + (fa.annual_extra_cashflow_idr / 1e6).toFixed(1) + 'M';
+                    document.getElementById('pro-roi-cost').innerText = 'IDR ' + fa.estimated_fitout_cost_idr.toLocaleString();
                     document.getElementById('pro-roi-payback').innerText = `${fa.payback_period_years} Years (${fa.payback_period_months} Months)`;
                 }
 

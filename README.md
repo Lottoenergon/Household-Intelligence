@@ -181,7 +181,4 @@ Open your web browser at: **`http://localhost:8080`**.
 ---
 
 ## Author
-* **Afiatta Ilhan Saleh** (Atta)
-* B.Eng in Chemical Engineering, Universitas Sultan Ageng Tirtayasa (GPA 3.43)
-* Intensive Data Analytics Distinction (89/100)
-* Track Record: QC Statistical Process Control & Process Optimization, Industrial Automation, PropTech Market Intelligence.
+* **Afiatta Ilhan Saleh**
