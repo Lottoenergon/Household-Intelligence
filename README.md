@@ -110,7 +110,7 @@ Scraping is capped by pages per city, so city sizes reflect the scraper, not the
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 python run_pipeline.py            # cleans, trains, writes model + metrics + this README (add --scrape to re-ingest)
-python -m uvicorn backend.server:app --port 8080    # open http://localhost:8080
+python -m uvicorn backend.server:app --port 8000    # open http://localhost:8000
 ```
 
 Tests: `pip install -r requirements-dev.txt && python -m pytest tests -q` (includes checks that the API, UI and this README agree with the pipeline output).

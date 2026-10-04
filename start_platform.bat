@@ -10,12 +10,12 @@ echo.
 
 if not exist .venv\Scripts\python.exe goto :no_venv
 
-echo Starting FastAPI Backend and Modern SPA on http://localhost:8080 ...
+echo Starting FastAPI Backend and Modern SPA on http://localhost:8000 ...
 echo Close this window or press Ctrl+C to stop the server.
 echo.
 
-start "" "http://localhost:8080"
-".venv\Scripts\python.exe" -m uvicorn backend.server:app --host 0.0.0.0 --port 8080 --reload
+start "" "http://localhost:8000"
+".venv\Scripts\python.exe" -m uvicorn backend.server:app --host 0.0.0.0 --port 8000 --reload
 pause
 exit /b 0
 
