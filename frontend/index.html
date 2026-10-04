@@ -679,32 +679,47 @@
 
         <!-- TAB NAVIGATION -->
         <div class="tab-bar">
-            <button class="tab-btn active" id="tab-btn-map" onclick="switchTab('tab-map')">01 // Market & District Explorer</button>
-            <button class="tab-btn" id="tab-btn-deals" onclick="switchTab('tab-deals')">02 // Bargain Deals Radar</button>
-            <button class="tab-btn" id="tab-btn-simulator" onclick="switchTab('tab-simulator')">03 // Smart Rent Valuation Simulator</button>
+            <button class="tab-btn active" id="tab-btn-map" onclick="switchTab('tab-map')">01 // Rental Market & Deal Explorer</button>
+            <button class="tab-btn" id="tab-btn-simulator" onclick="switchTab('tab-simulator')">02 // Smart Rent Valuation Simulator</button>
             <button class="tab-btn tab-pro" id="tab-btn-investor" onclick="switchTab('tab-investor')">
-                04 // Pro Investor Portal (Bu Sarah)
+                03 // Pro Investor Portal (Bu Sarah)
                 <span class="lock-tag" id="investor-lock-badge">PRO</span>
             </button>
         </div>
 
         <!-- =========================================================
-             TAB 1: MARKET & DISTRICT EXPLORER (GRID DIRECTORY)
+             TAB 1: RENTAL MARKET & DEAL EXPLORER (INTEGRATED)
         ========================================================= -->
         <div id="tab-map" class="tab-content active">
             <div style="margin-bottom: 20px;">
-                <h2>01 // Market & District Explorer</h2>
+                <h2>01 // Rental Market & Deal Explorer</h2>
                 <div style="font-size: 13px; color: var(--color-fog); margin-top: 4px;">
-                    Empirical rental housing directory across 10 Greater Jakarta administrative jurisdictions. Direct market listings aggregated from verified portal feeds without speculative pinpoints.
+                    Comprehensive rental housing directory and algorithmic deal hunter across 10 Greater Jakarta administrative jurisdictions.
                 </div>
             </div>
 
             <!-- COMMAND FILTER BAR -->
             <div class="panel-card" style="margin-bottom: 20px;">
-                <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-                    <span>Filter Rental Inventory</span>
+                <!-- Row 1: Mode Switcher & Quick Counts -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+                    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <span style="font-size: 11px; color: var(--color-fog); text-transform: uppercase; font-weight: 600;">Feed Mode:</span>
+                        <button class="btn-outline-graphite active" id="mode-btn-all" style="font-size: 11px; padding: 5px 12px;" onclick="setInventoryMode('all')">
+                            All Monitored Listings (<span id="count-all-badge">728</span>)
+                        </button>
+                        <button class="btn-outline-graphite" id="mode-btn-deals" style="font-size: 11px; padding: 5px 12px;" onclick="setInventoryMode('deals')">
+                            ⚡ Bargain Deals Radar (<span id="count-deals-badge">139</span>)
+                        </button>
+                        <div id="deal-tier-filters" style="display: none; gap: 6px; align-items: center; margin-left: 6px;">
+                            <button class="btn-outline-graphite active" id="tier-pill-all" style="font-size: 10px; padding: 4px 8px;" onclick="setDealTier('all')">All Deals</button>
+                            <button class="btn-outline-graphite" id="tier-pill-deep" style="font-size: 10px; padding: 4px 8px;" onclick="setDealTier('deep')">🔥 Deep Value (&gt;25%)</button>
+                            <button class="btn-outline-graphite" id="tier-pill-good" style="font-size: 10px; padding: 4px 8px;" onclick="setDealTier('good')">✨ Good Deals (15-25%)</button>
+                        </div>
+                    </div>
                     <span class="mono" style="font-size: 11px; color: var(--color-acid-lime);" id="count-filtered">728 Units Displayed</span>
                 </div>
+
+                <!-- Row 2: Dimensional Filters -->
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; align-items: flex-end;">
                     <div class="form-group" style="margin-bottom: 0;">
                         <label class="form-label">City Jurisdiction</label>
@@ -751,12 +766,9 @@
                     </div>
                 </div>
 
+                <!-- Row 3: Furnishing & Reset -->
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--color-graphite); flex-wrap: wrap; gap: 12px;">
                     <div class="checkbox-group" style="margin: 0; display: flex; gap: 20px;">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="filter-deals-only" onchange="applyFilters()">
-                            <span style="color: var(--color-acid-lime); font-weight: 500;">⚡ Deals Only (Below Fair Rent)</span>
-                        </label>
                         <label class="checkbox-label">
                             <input type="checkbox" id="filter-furnished" onchange="applyFilters()">
                             <span>Full Furnished Only</span>
@@ -786,13 +798,13 @@
                             <span>Monitored Rental Listings Feed</span>
                             <span class="mono" style="font-size: 11px; color: var(--color-acid-lime);" id="tab1-subdistrict-label">Greater Jakarta Region</span>
                         </div>
-                        <div id="tab1-listings-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 12px; max-height: 680px; overflow-y: auto; padding-right: 4px;">
+                        <div id="tab1-listings-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 12px; max-height: 720px; overflow-y: auto; padding-right: 4px;">
                             <!-- Populated with real listing cards -->
                         </div>
                     </div>
                 </div>
 
-                <!-- Benchmarks & Governance Right -->
+                <!-- Benchmarks & Commercial Advisory Right -->
                 <div>
                     <div class="panel-card" style="margin-bottom: 20px;">
                         <div class="panel-header">
@@ -814,46 +826,38 @@
                         </table>
                     </div>
 
-                    <div class="panel-card" style="background-color: var(--color-obsidian);">
-                        <div class="panel-header" style="color: var(--color-mist); margin-bottom: 10px;">
-                            <span>Data Integrity & Methodology Note</span>
+                    <div class="panel-card" style="background-color: var(--color-obsidian); border-color: var(--color-graphite);">
+                        <div class="panel-header" style="color: var(--color-paper); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                            <span>💼 Commercial Renter & Investor Advisory</span>
                         </div>
-                        <div style="font-size: 12px; color: var(--color-fog); line-height: 1.6;">
-                            <p style="margin-bottom: 8px;">
-                                🛡️ <strong>No Synthetic GPS Coordinates:</strong> Real estate classified portals never publish exact unit/tower coordinates without direct broker contact. To preserve analytical integrity, this platform uses verified administrative subdistrict centroids instead of fabricated pins.
-                            </p>
-                            <p style="margin-bottom: 8px;">
-                                📊 <strong>Hedonic Valuation:</strong> All fair market rents are evaluated out-of-fold by the Gradient Boosting Regressor (Rosen 1974), isolating physical size, transit distance, and spatial fixed effects.
-                            </p>
-                            <p style="margin: 0;">
-                                ⚡ <strong>Deal Hunter Radar:</strong> Units flagged as deals represent statistically significant log-residual discounts (Z ≤ -0.75) against equilibrium fair market rents.
-                            </p>
+                        <div style="font-size: 12px; color: var(--color-fog); line-height: 1.65;">
+                            <div style="margin-bottom: 12px;">
+                                <strong style="color: var(--color-mist);">1. Building Maintenance & IPL Fee Audit</strong>
+                                <div style="color: var(--color-ash); margin-top: 2px;">
+                                    Always verify whether building maintenance charges (IPL) and sinking fund fees (typically IDR 15,000–35,000/m²/month in Jabodetabek) are bundled into the asking rent or billed separately to the tenant.
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <strong style="color: var(--color-mist);">2. Model Fair Rent as Negotiation Anchor</strong>
+                                <div style="color: var(--color-ash); margin-top: 2px;">
+                                    Use the hedonic AVM valuation range as an objective baseline for counter-offers before scheduling on-site visits or negotiating with leasing brokers.
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <strong style="color: var(--color-mist);">3. Furnishing & Appliance Condition Check</strong>
+                                <div style="color: var(--color-ash); margin-top: 2px;">
+                                    For units advertised as Full Furnished, inspect active condition of high-draw appliances (inverter AC, water heater, kitchen appliances) to avoid unexpected move-in maintenance costs.
+                                </div>
+                            </div>
+                            <div>
+                                <strong style="color: var(--color-mist);">4. Payment Terms & Annual Lease Discount</strong>
+                                <div style="color: var(--color-ash); margin-top: 2px;">
+                                    Full 1-year advance payments typically command an additional 5%–10% bargaining discount compared to semi-annual or quarterly payment terms.
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- =========================================================
-             TAB 2: RADAR UNIT MURAH (BARGAIN DEALS)
-        ========================================================= -->
-        <div id="tab-deals" class="tab-content">
-            <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
-                <div>
-                    <h2>Algorithmic Deal Hunter (Mispriced Apartments)</h2>
-                    <div style="font-size: 13px; color: var(--color-fog); margin-top: 4px;">
-                        Verified apartment listings priced significantly below equilibrium fair market rent based on hedonic residual scoring.
-                    </div>
-                </div>
-                <div style="display: flex; gap: 8px;">
-                    <button class="btn-outline-graphite tier-filter-btn active" id="btn-tier-all" onclick="filterDealsTier('all')">All Verified Deals</button>
-                    <button class="btn-outline-graphite tier-filter-btn" id="btn-tier-deep" onclick="filterDealsTier('deep')">🔥 Deep Value (>25% Discount)</button>
-                    <button class="btn-outline-graphite tier-filter-btn" id="btn-tier-good" onclick="filterDealsTier('good')">✨ Good Deals (15-25% Discount)</button>
-                </div>
-            </div>
-
-            <div id="deals-list-container">
-                <!-- Dynamically rendered deal cards -->
             </div>
         </div>
 
@@ -1209,7 +1213,8 @@
         let decayData = {};
         let currentUserRole = 'guest'; // 'guest', 'renter', 'investor'
         let selectedModalRole = 'investor';
-        let currentDealFilter = 'all';
+        let currentInventoryMode = 'all'; // 'all' or 'deals'
+        let currentDealTier = 'all'; // 'all', 'deep', 'good'
         let decayChartInstance = null;
 
         // Initialize Application
@@ -1228,6 +1233,30 @@
                 setInvestorRole(true);
             }
         }
+
+        // Mode and Tier Toggles
+        function setInventoryMode(mode) {
+            currentInventoryMode = mode;
+            const btnAll = document.getElementById('mode-btn-all');
+            const btnDeals = document.getElementById('mode-btn-deals');
+            const tierFilters = document.getElementById('deal-tier-filters');
+
+            if (btnAll) btnAll.classList.toggle('active', mode === 'all');
+            if (btnDeals) btnDeals.classList.toggle('active', mode === 'deals');
+            if (tierFilters) tierFilters.style.display = (mode === 'deals') ? 'flex' : 'none';
+
+            applyFilters();
+        }
+
+        function setDealTier(tier) {
+            currentDealTier = tier;
+            ['all', 'deep', 'good'].forEach(t => {
+                const el = document.getElementById('tier-pill-' + t);
+                if (el) el.classList.toggle('active', t === tier);
+            });
+            applyFilters();
+        }
+        window.filterDealsTier = setDealTier;
 
         // Fetch District Summary Data
         async function fetchDistricts() {
@@ -1276,11 +1305,17 @@
             const subdistrictEl = document.getElementById('filter-subdistrict');
             const selectedSub = subdistrictEl ? subdistrictEl.value : 'All';
 
-            const matched = allDistricts.filter(d => selectedCity === 'All' || d.target_city === selectedCity);
-            if (badge) badge.innerText = `${matched.length} Districts Monitored`;
+            let matched = allDistricts.filter(d => selectedCity === 'All' || d.target_city === selectedCity);
+            if (currentInventoryMode === 'deals') {
+                matched = matched.filter(d => d.deals_count > 0);
+            }
+
+            if (badge) {
+                badge.innerText = `${matched.length} Districts ${currentInventoryMode === 'deals' ? 'with Deals' : 'Monitored'}`;
+            }
 
             if (matched.length === 0) {
-                container.innerHTML = '<div style="color: var(--color-fog); padding: 16px; font-size: 12px;">No districts match the selected city filter.</div>';
+                container.innerHTML = '<div style="color: var(--color-fog); padding: 16px; font-size: 12px;">No districts match the selected criteria.</div>';
                 return;
             }
 
@@ -1342,12 +1377,14 @@
         function resetAllFilters() {
             document.getElementById('filter-city').value = 'All';
             populateFilterSubdistricts();
-            document.getElementById('filter-subdistrict').value = 'All';
+            const sub = document.getElementById('filter-subdistrict');
+            if (sub) sub.value = 'All';
             document.getElementById('filter-layout').value = 'All';
             document.getElementById('filter-budget').value = 45000000;
             updateBudgetLabel(45000000);
-            document.getElementById('filter-deals-only').checked = false;
             document.getElementById('filter-furnished').checked = false;
+            setInventoryMode('all');
+            setDealTier('all');
             applyFilters();
         }
 
@@ -1371,6 +1408,13 @@
                 }
                 if (document.getElementById('topbar-status-text')) {
                     document.getElementById('topbar-status-text').innerText = (data.audited_units || 728).toLocaleString() + ' MONITORED UNITS';
+                }
+                if (document.getElementById('count-all-badge')) {
+                    document.getElementById('count-all-badge').innerText = (data.audited_units || 728).toLocaleString();
+                }
+                if (document.getElementById('count-deals-badge')) {
+                    const count = data.bargains_detected !== undefined ? data.bargains_detected : 139;
+                    document.getElementById('count-deals-badge').innerText = count.toLocaleString();
                 }
                 if (document.getElementById('badge-furnish-premium')) {
                     const prem = typeof data.furnishing_premium_adjusted_pct === 'number' ? data.furnishing_premium_adjusted_pct : 13.9;
@@ -1441,7 +1485,6 @@
             const selectedSubdistrict = subdistrictEl ? subdistrictEl.value : 'All';
             const selectedLayout = document.getElementById('filter-layout').value;
             const maxBudget = parseFloat(document.getElementById('filter-budget').value);
-            const dealsOnly = document.getElementById('filter-deals-only').checked;
             const furnishedOnly = document.getElementById('filter-furnished').checked;
 
             const filtered = allListings.filter(item => {
@@ -1449,42 +1492,75 @@
                 if (selectedSubdistrict !== 'All' && item.subdistrict !== selectedSubdistrict) return false;
                 if (selectedLayout !== 'All' && item.layout_category !== selectedLayout) return false;
                 if (item.price_monthly_idr > maxBudget) return false;
-                if (dealsOnly && item.deal_score_z > -0.75) return false;
                 if (furnishedOnly && !item.is_full_furnished) return false;
+
+                if (currentInventoryMode === 'deals') {
+                    if (item.deal_score_z > -0.75) return false;
+                    if (currentDealTier === 'deep' && !(item.deal_tier === 'Deep Value' || item.deal_score_z <= -1.2)) return false;
+                    if (currentDealTier === 'good' && !(item.deal_tier === 'Good Deal' || (item.deal_score_z > -1.2 && item.deal_score_z <= -0.75))) return false;
+                }
                 return true;
             });
 
             document.getElementById('count-filtered').innerText = `${filtered.length} Units Displayed`;
             renderDistrictsGrid();
-            renderDealsList(filtered.filter(d => d.deal_score_z <= -0.75));
 
             // Render Tab 1 Listing Cards
             const tab1Container = document.getElementById('tab1-listings-container');
             const subLabel = document.getElementById('tab1-subdistrict-label');
             if (subLabel) {
-                subLabel.innerText = selectedSubdistrict !== 'All' ? `${selectedSubdistrict} (${filtered.length} units)` : (selectedCity !== 'All' ? `${selectedCity} (${filtered.length} units)` : `Greater Jakarta Region (${filtered.length} units)`);
+                const modePrefix = currentInventoryMode === 'deals' ? '⚡ Deals in ' : '';
+                subLabel.innerText = selectedSubdistrict !== 'All' 
+                    ? `${modePrefix}${selectedSubdistrict} (${filtered.length} units)` 
+                    : (selectedCity !== 'All' ? `${modePrefix}${selectedCity} (${filtered.length} units)` : `${modePrefix}Greater Jakarta (${filtered.length} units)`);
             }
+
             if (tab1Container) {
                 tab1Container.innerHTML = '';
                 if (filtered.length === 0) {
-                    tab1Container.innerHTML = '<div style="color: var(--color-fog); padding: 32px; text-align: center; font-size: 13px; grid-column: 1 / -1;">No listings match the selected filter criteria.</div>';
+                    tab1Container.innerHTML = '<div style="color: var(--color-fog); padding: 36px; text-align: center; font-size: 13px; grid-column: 1 / -1;">No listings match the selected filter criteria.</div>';
                 } else {
                     filtered.slice(0, 60).forEach(item => {
                         const cleanUrl = item.url.startsWith('http') ? item.url : `https://www.rumah123.com${item.url}`;
                         const isDeal = (item.deal_score_z <= -0.75);
+                        const isDeep = (item.deal_score_z <= -1.2 || item.deal_tier === 'Deep Value');
                         const card = document.createElement('div');
                         card.style.cssText = `
                             background-color: var(--color-obsidian);
-                            border: 1px solid ${isDeal ? 'rgba(228, 242, 34, 0.4)' : 'var(--color-graphite)'};
+                            border: 1px solid ${isDeal ? 'rgba(228, 242, 34, 0.45)' : 'var(--color-graphite)'};
+                            ${isDeal ? 'box-shadow: 0 0 12px rgba(228, 242, 34, 0.05);' : ''}
                             border-radius: 8px;
                             padding: 14px;
-                            transition: border-color 0.15s ease;
+                            transition: all 0.15s ease;
                             display: flex;
                             flex-direction: column;
                             justify-content: space-between;
                         `;
-                        card.onmouseover = () => { card.style.borderColor = 'var(--color-mist)'; };
-                        card.onmouseout = () => { card.style.borderColor = isDeal ? 'rgba(228, 242, 34, 0.4)' : 'var(--color-graphite)'; };
+                        card.onmouseover = () => { card.style.borderColor = isDeal ? 'var(--color-acid-lime)' : 'var(--color-mist)'; };
+                        card.onmouseout = () => { card.style.borderColor = isDeal ? 'rgba(228, 242, 34, 0.45)' : 'var(--color-graphite)'; };
+
+                        let dealPricingBlock = '';
+                        if (isDeal) {
+                            const fairEst = item.fair_market_rent_idr || (item.price_monthly_idr * (1 + (item.discount_pct || 20) / 100));
+                            const savings = Math.max(0, fairEst - item.price_monthly_idr);
+                            const discount = item.discount_pct ? Math.round(item.discount_pct) : Math.round((savings / fairEst) * 100);
+                            dealPricingBlock = `
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; background: rgba(228, 242, 34, 0.04); border: 1px solid rgba(228, 242, 34, 0.15); border-radius: 6px; padding: 8px 10px; margin: 8px 0;">
+                                    <div>
+                                        <div style="font-size: 9px; color: var(--color-fog); text-transform: uppercase;">Asking Rent</div>
+                                        <div class="mono" style="font-size: 13px; color: var(--color-paper); font-weight: 600;">IDR ${(item.price_monthly_idr/1e6).toFixed(1)}M</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 9px; color: var(--color-fog); text-transform: uppercase;">Fair Est.</div>
+                                        <div class="mono" style="font-size: 13px; color: var(--color-fog); font-weight: 500;">IDR ${(fairEst/1e6).toFixed(1)}M</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 9px; color: var(--color-acid-lime); text-transform: uppercase;">Savings</div>
+                                        <div class="mono" style="font-size: 13px; color: var(--color-acid-lime); font-weight: 600;">-${discount}%</div>
+                                    </div>
+                                </div>
+                            `;
+                        }
 
                         card.innerHTML = `
                             <div>
@@ -1492,24 +1568,28 @@
                                     <div class="mono" style="font-size: 10px; color: var(--color-fog); text-transform: uppercase;">
                                         ${item.target_city} • ${item.subdistrict}
                                     </div>
-                                    ${isDeal ? `<span class="mono" style="font-size: 9px; background: rgba(228, 242, 34, 0.15); color: var(--color-acid-lime); padding: 2px 6px; border-radius: 4px; font-weight: 600;">⚡ DEAL ${Math.round(item.discount_pct || 0)}%</span>` : ''}
+                                    ${isDeal ? `<span class="mono" style="font-size: 9px; background: ${isDeep ? 'rgba(228, 242, 34, 0.2)' : 'rgba(100, 100, 255, 0.15)'}; color: ${isDeep ? 'var(--color-acid-lime)' : 'var(--color-paper)'}; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${isDeep ? '🔥 DEEP VALUE' : '✨ GOOD DEAL'}</span>` : ''}
                                 </div>
                                 <h4 style="font-size: 13px; font-weight: 500; color: var(--color-paper); margin-bottom: 8px; line-height: 1.35;">${item.title}</h4>
-                                <div style="font-size: 11px; color: var(--color-fog); margin-bottom: 12px; display: flex; flex-wrap: wrap; gap: 6px;">
+                                <div style="font-size: 11px; color: var(--color-fog); margin-bottom: 8px; display: flex; flex-wrap: wrap; gap: 6px;">
                                     <span class="mono" style="background: rgba(255,255,255,0.04); padding: 2px 6px; border-radius: 4px;">📐 ${item.floor_size_m2} m²</span>
                                     <span class="mono" style="background: rgba(255,255,255,0.04); padding: 2px 6px; border-radius: 4px;">🛏️ ${item.layout_category}</span>
                                     <span style="background: rgba(255,255,255,0.04); padding: 2px 6px; border-radius: 4px;">🛋️ ${item.is_full_furnished ? 'Furnished' : (item.is_semi_furnished ? 'Semi' : 'Unfurnished')}</span>
                                 </div>
+                                ${dealPricingBlock}
                             </div>
                             <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-graphite); padding-top: 10px; margin-top: 6px;">
                                 <div>
+                                    ${!isDeal ? `
                                     <div style="font-size: 9px; color: var(--color-fog); text-transform: uppercase;">Asking Rent</div>
                                     <div class="mono" style="font-size: 15px; color: var(--color-paper); font-weight: 600;">
                                         IDR ${(item.price_monthly_idr/1e6).toFixed(1)}M <span style="font-size: 10px; color: var(--color-fog); font-weight: 400;">/ mo</span>
                                     </div>
+                                    ` : `
                                     <div class="mono" style="font-size: 10px; color: var(--color-fog);">
                                         IDR ${Math.round(item.price_per_m2_idr/1000)}k/m²
                                     </div>
+                                    `}
                                 </div>
                                 <a href="${cleanUrl}" target="_blank" class="btn-action-lime" style="padding: 6px 12px; font-size: 11px; text-decoration: none;">
                                     View Listing ↗
@@ -1522,259 +1602,27 @@
             }
         }
 
-        // Render Deal Hunter Cards
-        function renderDealsList(deals) {
-            const container = document.getElementById('deals-list-container');
-            container.innerHTML = '';
-
-            let filteredDeals = deals;
-            if (currentDealFilter === 'deep') {
-                filteredDeals = deals.filter(d => d.deal_score_z <= -1.5);
-            } else if (currentDealFilter === 'good') {
-                filteredDeals = deals.filter(d => d.deal_score_z > -1.5 && d.deal_score_z <= -0.75);
-            }
-
-            if (filteredDeals.length === 0) {
-                container.innerHTML = '<div style="color: var(--color-fog); padding: 32px; text-align: center;">Tidak ada unit yang cocok dengan kriteria filter saat ini.</div>';
-                return;
-            }
-
-            filteredDeals.slice(0, 30).forEach(item => {
-                const isDeep = item.deal_score_z <= -1.5;
-                const badge = isDeep 
-                    ? `<span class="badge-acid">🔥 SUPER MURAH (HEMAT ${item.discount_pct}%)</span>`
-                    : `<span class="badge-iris">✨ HARGA TERBAIK (HEMAT ${item.discount_pct}%)</span>`;
-
-                const cleanUrl = item.url.startsWith('http') ? item.url : `https://www.rumah123.com${item.url}`;
-
-                const card = document.createElement('div');
-                card.className = 'deal-card';
-                card.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                        <div>
-                            <div class="mono" style="font-size: 11px; color: var(--color-fog); margin-bottom: 2px;">
-                                ${item.listing_id} &nbsp;•&nbsp; ${item.target_city.toUpperCase()} (${item.subdistrict})
-                            </div>
-                            <h3 style="font-size: 16px; color: var(--color-paper);">${item.title}</h3>
-                        </div>
-                        <div>${badge}</div>
-                    </div>
-
-                    <div style="font-size: 12px; color: var(--color-fog); margin-bottom: 14px;">
-                        📐 ${item.floor_size_m2} m² &nbsp;•&nbsp; 
-                        🛏️ ${item.layout_category} &nbsp;•&nbsp; 
-                        🚆 ${parseFloat(item.distance_to_transit_km).toFixed(1)} km ke ${item.nearest_transit_hub} &nbsp;•&nbsp;
-                        🏛️ ${parseFloat(item.distance_to_cbd_km).toFixed(1)} km ke Sudirman CBD
-                    </div>
-
-                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-graphite); padding-top: 14px;">
-                        <div style="display: flex; gap: 32px;">
-                            <div>
-                                <div style="font-size: 10px; color: var(--color-fog); text-transform: uppercase;">Harga Sewa Pemilik</div>
-                                <div class="mono" style="font-size: 17px; color: var(--color-paper); font-weight: 500;">Rp ${item.price_monthly_idr.toLocaleString()}</div>
-                            </div>
-                            <div>
-                                <div style="font-size: 10px; color: var(--color-fog); text-transform: uppercase;">Estimasi Pasaran Wajar</div>
-                                <div class="mono" style="font-size: 17px; color: var(--color-fog); font-weight: 500;">Rp ${item.fair_market_rent_idr.toLocaleString()}</div>
-                            </div>
-                            <div>
-                                <div style="font-size: 10px; color: var(--color-fog); text-transform: uppercase;">Potensi Penghematan</div>
-                                <div class="mono" style="font-size: 17px; color: var(--color-acid-lime); font-weight: 500;">-Rp ${Math.abs(item.residual_idr).toLocaleString()}/bln</div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <a href="${cleanUrl}" target="_blank" class="btn-action-lime">
-                                View Original Listing ↗
-                            </a>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function filterDealsTier(tier) {
-            currentDealFilter = tier;
-            document.querySelectorAll('.tier-filter-btn').forEach(btn => btn.classList.remove('active'));
-            if (tier === 'all') document.getElementById('btn-tier-all').classList.add('active');
-            if (tier === 'deep') document.getElementById('btn-tier-deep').classList.add('active');
-            if (tier === 'good') document.getElementById('btn-tier-good').classList.add('active');
-            
-            const deals = allListings.filter(d => d.deal_score_z <= -0.75);
-            renderDealsList(deals);
-        }
-
-        function updateSimSubdistricts() {
-            const city = document.getElementById('sim-city').value;
-            const sel = document.getElementById('sim-subdistrict');
-            if (!sel) return;
-            const currentVal = sel.value;
-            sel.innerHTML = '<option value="">Pilih Kawasan / Kecamatan (Opsional)</option>';
-
-            const matched = allDistricts.filter(d => d.target_city === city);
-            matched.forEach(d => {
-                const opt = document.createElement('option');
-                opt.value = d.subdistrict;
-                opt.innerText = `${d.subdistrict} (Median: Rp ${Math.round(d.median_price_per_m2_idr).toLocaleString()}/m²)`;
-                sel.appendChild(opt);
-            });
-            if (matched.some(d => d.subdistrict === currentVal)) {
-                sel.value = currentVal;
-            }
-            onSimSubdistrictChange();
-        }
-
-        function onSimSubdistrictChange() {
-            const city = document.getElementById('sim-city').value;
-            const sub = document.getElementById('sim-subdistrict').value;
-            const found = allDistricts.find(d => d.target_city === city && d.subdistrict === sub);
-
-            const baselineBox = document.getElementById('sim-subdistrict-baseline');
-            if (found && baselineBox) {
-                baselineBox.style.display = 'block';
-                baselineBox.innerHTML = `📍 <strong>Data Pasaran ${found.subdistrict}:</strong> Median tarif pasaran <strong>Rp ${Math.round(found.median_price_per_m2_idr).toLocaleString()} / m²</strong> (${found.unit_count} listing terdata di kawasan ini).`;
-            } else if (baselineBox) {
-                baselineBox.style.display = 'none';
-            }
-            runSimulation();
-        }
-
-        // Run Hedonic Valuation Simulator (API Call)
-        async function runSimulation() {
-            const subVal = document.getElementById('sim-subdistrict') ? document.getElementById('sim-subdistrict').value : '';
-            const cbdInput = document.getElementById('sim-cbd');
-            const transitInput = document.getElementById('sim-transit');
-
-            const payload = {
-                city: document.getElementById('sim-city').value,
-                subdistrict: subVal || null,
-                floor_size_m2: parseFloat(document.getElementById('sim-size').value) || 45,
-                bedrooms: parseInt(document.getElementById('sim-beds').value) || 2,
-                bathrooms: parseInt(document.getElementById('sim-baths').value) || 1,
-                distance_to_cbd_km: (cbdInput && cbdInput.value) ? parseFloat(cbdInput.value) : null,
-                distance_to_transit_km: (transitInput && transitInput.value) ? parseFloat(transitInput.value) : null,
-                is_full_furnished: document.getElementById('sim-ff').checked,
-                has_ac: document.getElementById('sim-ac').checked,
-                has_pool: document.getElementById('sim-pool').checked,
-                has_gym: document.getElementById('sim-gym').checked,
-                has_balcony: document.getElementById('sim-balcony').checked,
-                has_kitchen: document.getElementById('sim-kitchen').checked
-            };
-
-            try {
-                const res = await fetch('/api/simulate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const result = await res.json();
-
-                document.getElementById('sim-output-rent').innerText = 'IDR ' + result.fair_market_rent_idr.toLocaleString() + ' / mo';
-                document.getElementById('sim-output-ci').innerText = `Rentang empiris ${result.interval_level_pct}%: IDR ${(result.ci_lower_idr/1e6).toFixed(1)}M - IDR ${(result.ci_upper_idr/1e6).toFixed(1)}M / month`;
-                document.getElementById('sim-output-rate').innerText = `Effective Space Rate: IDR ${result.implicit_rate_per_m2_idr.toLocaleString()} / m²`;
-
-                // Update Bu Sarah Section if open
-                if (result.furnishing_analysis) {
-                    const fa = result.furnishing_analysis;
-                    document.getElementById('pro-roi-monthly').innerText = '+IDR ' + fa.monthly_extra_cashflow_idr.toLocaleString();
-                    document.getElementById('pro-roi-annual').innerText = '+IDR ' + (fa.annual_extra_cashflow_idr / 1e6).toFixed(1) + 'M';
-                    document.getElementById('pro-roi-cost').innerText = 'IDR ' + fa.estimated_fitout_cost_idr.toLocaleString();
-                    document.getElementById('pro-roi-payback').innerText = fa.payback_period_months === null ? 'Tidak ada premi dari model' : `${fa.payback_period_years} Years (${fa.payback_period_months} Months)`;
-                }
-
-            } catch (err) {
-                console.error("Simulation error", err);
-            }
-        }
-
-        // Fetch Distance Decay Analytics & Render Chart
-        async function fetchDistanceDecay() {
-            try {
-                const res = await fetch('/api/distance-decay');
-                decayData = await res.json();
-                renderDecayChart(decayData.points);
-                renderZonesTable(decayData.zones);
-            } catch (err) {
-                console.error("Gagal memuat distance decay", err);
-            }
-        }
-
-        function renderDecayChart(points) {
-            const ctx = document.getElementById('decayChart').getContext('2d');
-            const scatterData = points.map(p => ({
-                x: p.distance_to_cbd_km,
-                y: p.price_per_m2_idr
-            }));
-
-            decayChartInstance = new Chart(ctx, {
-                type: 'scatter',
-                data: {
-                    datasets: [{
-                        label: 'Tarif Sewa (Rp/m² vs Jarak CBD)',
-                        data: scatterData,
-                        backgroundColor: '#e4f222',
-                        borderColor: '#e4f222',
-                        pointRadius: 2.5,
-                        pointHoverRadius: 5
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            title: { display: true, text: 'Jarak ke Sudirman CBD (km)', color: '#8a8f98' },
-                            grid: { color: '#23252a' },
-                            ticks: { color: '#8a8f98' }
-                        },
-                        y: {
-                            title: { display: true, text: 'Tarif per m² (Rp)', color: '#8a8f98' },
-                            grid: { color: '#23252a' },
-                            ticks: { 
-                                color: '#8a8f98',
-                                callback: val => 'Rp ' + (val / 1000) + 'k'
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: { display: false }
-                    }
-                }
-            });
-        }
-
-        function renderZonesTable(zones) {
-            const tbody = document.getElementById('zones-tbody');
-            tbody.innerHTML = '';
-            zones.forEach(z => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td style="font-weight: 500; color: var(--color-paper);">${z.urban_zone}</td>
-                    <td class="mono" style="color: var(--color-fog);">${z.sample_units} Units</td>
-                    <td class="mono" style="color: var(--color-acid-lime);">Rp ${Math.round(z.median_price_per_m2).toLocaleString()}</td>
-                    <td class="mono">Rp ${Math.round(z.mean_price_per_m2).toLocaleString()}</td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
         // Tab Switcher
         function switchTab(tabId) {
+            if (tabId === 'tab-deals') {
+                tabId = 'tab-map';
+                setInventoryMode('deals');
+            }
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             
-            document.getElementById(tabId).classList.add('active');
+            const targetEl = document.getElementById(tabId);
+            if (targetEl) targetEl.classList.add('active');
 
             if (tabId === 'tab-map') {
-                document.getElementById('tab-btn-map').classList.add('active');
-                if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 150);
-            } else if (tabId === 'tab-deals') {
-                document.getElementById('tab-btn-deals').classList.add('active');
+                const btn = document.getElementById('tab-btn-map');
+                if (btn) btn.classList.add('active');
             } else if (tabId === 'tab-simulator') {
-                document.getElementById('tab-btn-simulator').classList.add('active');
+                const btn = document.getElementById('tab-btn-simulator');
+                if (btn) btn.classList.add('active');
             } else if (tabId === 'tab-investor') {
-                document.getElementById('tab-btn-investor').classList.add('active');
+                const btn = document.getElementById('tab-btn-investor');
+                if (btn) btn.classList.add('active');
             }
         }
 
