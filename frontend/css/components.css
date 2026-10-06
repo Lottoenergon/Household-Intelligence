@@ -1,0 +1,587 @@
+/* ---------------------------------------------------------
+   STATUS PILL & USER AUTH BADGE
+--------------------------------------------------------- */
+.status-pill {
+    background-color: var(--color-newsprint-gray);
+    border: 1px solid var(--color-pebble);
+    border-radius: 9999px;
+    padding: 6px 14px;
+    font-size: 11px;
+    color: var(--color-fog);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all var(--transition-fast);
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--color-carbon-ink);
+}
+
+.btn-nav-login {
+    background-color: var(--color-carbon-ink);
+    color: var(--color-paper-white);
+    border: none;
+    border-radius: 9999px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-subtle);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.auth-btn-text-mobile {
+    display: none;
+}
+
+.btn-nav-login:hover {
+    background-color: #000000;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-hover);
+}
+
+.btn-nav-login:active {
+    transform: scale(0.98);
+}
+
+.user-profile-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--color-newsprint-gray);
+    border: 1px solid var(--color-pebble);
+    border-radius: 9999px;
+    padding: 6px 16px;
+    font-size: 12px;
+    color: var(--color-carbon-ink);
+    font-weight: 500;
+}
+
+.btn-logout {
+    background: transparent;
+    border: none;
+    color: var(--color-fog);
+    font-size: 12px;
+    cursor: pointer;
+    margin-left: 6px;
+    text-decoration: underline;
+    transition: color var(--transition-fast);
+}
+
+.btn-logout:hover {
+    color: var(--color-carbon-ink);
+}
+
+/* ---------------------------------------------------------
+   METRIC TELEMETRY RIBBON (Double-Bezel & Macro Precision)
+--------------------------------------------------------- */
+.metric-ribbon {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 36px;
+}
+
+.metric-card {
+    background-color: var(--color-paper-white);
+    border: 1px solid var(--color-pebble);
+    border-radius: var(--radius-cards);
+    padding: 22px 24px;
+    box-shadow: var(--shadow-subtle);
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+@media (hover: hover) {
+    .metric-card:hover {
+        border-color: var(--color-carbon-ink);
+        box-shadow: var(--shadow-hover);
+        transform: translateY(-2px);
+    }
+}
+
+.metric-label {
+    font-size: 11px;
+    color: var(--color-fog);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.metric-value {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--color-carbon-ink);
+    font-family: var(--font-mono);
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+}
+
+.metric-delta {
+    font-size: 12px;
+    color: var(--color-fog);
+    margin-top: 6px;
+    font-weight: 400;
+}
+
+/* ---------------------------------------------------------
+   TABS NAVIGATION (Floating Editorial Pills)
+--------------------------------------------------------- */
+.tab-bar {
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid var(--color-pebble);
+    margin-bottom: 36px;
+    padding-bottom: 10px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.tab-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.tab-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--color-fog);
+    font-family: var(--font-ui);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 9px 18px;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.tab-btn:hover {
+    color: var(--color-carbon-ink);
+    background-color: var(--color-newsprint-gray);
+}
+
+.tab-btn.active {
+    color: var(--color-carbon-ink);
+    background-color: var(--color-newsprint-gray);
+    border-color: var(--color-carbon-ink);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.tab-btn.tab-pro {
+    color: var(--color-fog);
+}
+
+.tab-btn.tab-pro.active {
+    color: var(--color-carbon-ink);
+}
+
+.lock-tag {
+    font-size: 10px;
+    background: var(--color-paper-white);
+    color: var(--color-carbon-ink);
+    padding: 1px 7px;
+    border-radius: 9999px;
+    border: 1px solid var(--color-carbon-ink);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+/* ---------------------------------------------------------
+   PANEL CARDS & HEADERS (Double-Bezel Architecture)
+--------------------------------------------------------- */
+.panel-card {
+    background-color: var(--color-paper-white);
+    border: 1px solid var(--color-pebble);
+    border-radius: var(--radius-cards);
+    padding: 26px;
+    margin-bottom: 26px;
+    box-shadow: var(--shadow-subtle);
+    transition: border-color var(--transition-normal);
+}
+
+.panel-header {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-carbon-ink);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    letter-spacing: -0.01em;
+}
+
+/* ---------------------------------------------------------
+   FORM CONTROLS (Tactile & Clean Focus Rings)
+--------------------------------------------------------- */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-fog);
+    margin-bottom: 7px;
+    letter-spacing: -0.005em;
+}
+
+.select-input,
+.text-input {
+    width: 100%;
+    background-color: var(--color-paper-white);
+    border: 1px solid var(--color-pebble);
+    color: var(--color-carbon-ink);
+    border-radius: var(--radius-inputs);
+    padding: 10px 14px;
+    font-size: 13px;
+    font-family: var(--font-ui);
+    outline: none;
+    transition: all var(--transition-fast);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.select-input:hover,
+.text-input:hover {
+    border-color: var(--color-ash);
+}
+
+.select-input:focus,
+.text-input:focus {
+    border-color: var(--color-carbon-ink);
+    box-shadow: 0 0 0 3px rgba(28, 28, 30, 0.08);
+}
+
+.range-slider {
+    width: 100%;
+    accent-color: var(--color-carbon-ink);
+    cursor: pointer;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 13px;
+    color: var(--color-carbon-ink);
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkbox-label input {
+    accent-color: var(--color-carbon-ink);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* ---------------------------------------------------------
+   DATA TABLES (Editorial Layout)
+--------------------------------------------------------- */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.data-table th {
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--color-pebble);
+    background-color: var(--color-newsprint-gray);
+    color: var(--color-fog);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.data-table td {
+    padding: 13px 14px;
+    border-bottom: 1px solid var(--color-pebble);
+    color: var(--color-carbon-ink);
+    transition: background-color var(--transition-fast);
+}
+
+.data-table tr:hover td {
+    background-color: var(--color-newsprint-gray);
+}
+
+/* ---------------------------------------------------------
+   LISTINGS & DISTRICT CARDS (Editorial Real Estate Comps)
+--------------------------------------------------------- */
+.listing-card {
+    background-color: var(--color-paper-white);
+    border: 1px solid var(--color-pebble);
+    border-radius: var(--radius-cards);
+    padding: 20px;
+    box-shadow: var(--shadow-subtle);
+    transition: all var(--transition-normal);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.listing-card:hover {
+    border-color: var(--color-carbon-ink);
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.listing-card.is-deal {
+    border-color: var(--color-carbon-ink);
+    background-color: var(--color-paper-white);
+}
+
+.district-card {
+    background-color: var(--color-paper-white);
+    border: 1px solid var(--color-pebble);
+    border-radius: var(--radius-inputs);
+    padding: 13px 15px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.015);
+}
+
+.district-card:hover {
+    border-color: var(--color-carbon-ink);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-subtle);
+}
+
+.district-card.active {
+    background-color: var(--color-newsprint-gray);
+    border-color: var(--color-carbon-ink);
+}
+
+.badge-acid {
+    background-color: var(--color-newsprint-gray);
+    color: var(--color-carbon-ink);
+    border: 1px solid var(--color-carbon-ink);
+    border-radius: 9999px;
+    padding: 3px 9px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    letter-spacing: 0.03em;
+}
+
+.deal-pricing-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    background: var(--color-newsprint-gray);
+    border: 1px solid var(--color-pebble);
+    border-radius: var(--radius-inputs);
+    padding: 10px 12px;
+    margin: 10px 0;
+}
+
+/* ---------------------------------------------------------
+   BUTTONS (Nested Button-in-Button Architecture)
+--------------------------------------------------------- */
+.btn-action-lime,
+.btn-action-dark {
+    background-color: var(--color-carbon-ink);
+    color: var(--color-paper-white);
+    border: none;
+    border-radius: 9999px;
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--shadow-subtle);
+}
+
+.btn-action-lime:hover,
+.btn-action-dark:hover {
+    background-color: #000000;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-hover);
+}
+
+.btn-action-lime:active,
+.btn-action-dark:active {
+    transform: scale(0.98);
+}
+
+.btn-bubble-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    font-size: 10px;
+    line-height: 1;
+    transition: transform var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.btn-action-dark:hover .btn-bubble-icon,
+.btn-action-lime:hover .btn-bubble-icon,
+.btn-nav-login:hover .btn-bubble-icon {
+    transform: translate(1px, -1px);
+}
+
+.btn-outline-graphite {
+    background: var(--color-paper-white);
+    border: 1px solid var(--color-pebble);
+    color: var(--color-carbon-ink);
+    border-radius: 9999px;
+    padding: 7px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.btn-outline-graphite:hover {
+    border-color: var(--color-carbon-ink);
+    color: var(--color-carbon-ink);
+}
+
+.btn-outline-graphite.active {
+    border-color: var(--color-carbon-ink) !important;
+    color: var(--color-paper-white) !important;
+    background-color: var(--color-carbon-ink) !important;
+}
+
+/* ---------------------------------------------------------
+   SIMULATOR RESULT & INVESTOR CARD
+--------------------------------------------------------- */
+.calc-result-box {
+    background: var(--color-newsprint-gray);
+    border: 1px solid var(--color-pebble);
+    border-radius: var(--radius-cards);
+    padding: 32px 28px;
+    text-align: center;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-subtle);
+}
+
+.locked-investor-card {
+    background: var(--color-newsprint-gray);
+    border: 1px dashed var(--color-carbon-ink);
+    border-radius: var(--radius-cards);
+    padding: 56px 36px;
+    text-align: center;
+    max-width: 720px;
+    margin: 40px auto;
+}
+
+/* ---------------------------------------------------------
+   LOGIN MODAL & PERSONA SELECTION
+--------------------------------------------------------- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(28, 28, 30, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    animation: modalOverlayFade 0.25s ease-out;
+}
+
+@keyframes modalOverlayFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-card {
+    background-color: var(--color-paper-white);
+    border: 1px solid var(--color-pebble);
+    border-radius: var(--radius-cards);
+    width: 100%;
+    max-width: 490px;
+    padding: 36px;
+    box-shadow: var(--shadow-modal);
+    position: relative;
+    animation: modalPop 0.3s var(--ease-spring);
+}
+
+@keyframes modalPop {
+    from {
+        opacity: 0;
+        transform: scale(0.96) translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    color: var(--color-fog);
+    font-size: 22px;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+}
+
+.modal-close:hover {
+    color: var(--color-carbon-ink);
+}
+
+.persona-choice-card {
+    background-color: var(--color-paper-white);
+    border: 1px solid var(--color-pebble);
+    border-radius: var(--radius-inputs);
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.persona-choice-card:hover {
+    border-color: var(--color-carbon-ink);
+    background-color: var(--color-newsprint-gray);
+}
+
+.persona-choice-card.selected {
+    border-color: var(--color-carbon-ink);
+    background-color: var(--color-newsprint-gray);
+    box-shadow: 0 0 0 1px var(--color-carbon-ink);
+}

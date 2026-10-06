@@ -40,10 +40,27 @@ app.add_middleware(
 )
 
 # Load evaluated dataset in memory for sub-millisecond querying
-df = pd.read_csv(DATA_PATH)
-df["discount_pct"] = df["discount_pct"].round(1)
-df["residual_idr"] = df["residual_idr"].round(0)
-df["deal_score_z"] = df["deal_score_z"].round(2)
+def load_dataset():
+    global df
+    df = pd.read_csv(DATA_PATH)
+    df["discount_pct"] = df["discount_pct"].round(1)
+    df["residual_idr"] = df["residual_idr"].round(0)
+    df["deal_score_z"] = df["deal_score_z"].round(2)
+    return df
+
+df = load_dataset()
+
+@app.get("/api/reload-data")
+@app.post("/api/reload-data")
+def reload_data():
+    """Reloads evaluated listings and clean titles into memory."""
+    load_dataset()
+    return {
+        "status": "success",
+        "total_listings": len(df),
+        "sample_title": df.iloc[0]["title"]
+    }
+
 
 for _p in (MODEL_PATH, METRICS_PATH, SUMMARY_PATH):
     if not os.path.exists(_p):
@@ -318,6 +335,12 @@ def fallback_tutorial_apartemen():
 # Mount static frontend
 if os.path.exists(FRONTEND_DIR):
     app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
+    css_dir = os.path.join(FRONTEND_DIR, "css")
+    if os.path.exists(css_dir):
+        app.mount("/css", StaticFiles(directory=css_dir), name="css")
+    js_dir = os.path.join(FRONTEND_DIR, "js")
+    if os.path.exists(js_dir):
+        app.mount("/js", StaticFiles(directory=js_dir), name="js")
 
 @app.get("/")
 def serve_index():

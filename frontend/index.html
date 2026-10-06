@@ -1,891 +1,57 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Household Intelligence • Greater Jakarta Rental Valuation & Deal Radar</title>
-    
-    <!-- Google Fonts: Inter Variable & JetBrains Mono -->
+
+    <!-- Google Fonts: Plus Jakarta Sans, Inter Variable & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Modular CSS Stylesheets (Airbnb.org Editorial Light System) -->
+    <link rel="stylesheet" href="/static/css/tokens.css?v=2">
+    <link rel="stylesheet" href="/static/css/components.css?v=2">
+    <link rel="stylesheet" href="/static/css/layout.css?v=2">
 
     <!-- Chart.js for Minimalist Urban Decay Analytics (Deferred to prevent render-blocking) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-
-    <style>
-        /* ---------------------------------------------------------
-           LINEAR DESIGN SYSTEM TOKENS (DESIGN.md)
-        --------------------------------------------------------- */
-        :root {
-            --color-void: #08090a;
-            --color-carbon: #0f1011;
-            --color-obsidian: #161718;
-            --color-graphite: #23252a;
-            --color-smoke: #383b3f;
-            --color-ash: #62666d;
-            --color-fog: #8a8f98;
-            --color-mist: #d0d6e0;
-            --color-paper: #ffffff;
-            --color-acid-lime: #e4f222;
-            --color-pulse-green: #27a644;
-            --color-coral-red: #eb5757;
-            --color-signal-teal: #02b8cc;
-            --color-iris-violet: #6366f1;
-            --color-lavender: #8b5cf6;
-            
-            --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            --font-mono: 'JetBrains Mono', 'Berkeley Mono', ui-monospace, monospace;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: var(--color-void);
-            color: var(--color-mist);
-            font-family: var(--font-ui);
-            font-size: 14px;
-            line-height: 1.5;
-            letter-spacing: -0.011em;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-        }
-
-        h1, h2, h3, h4, h5 {
-            color: var(--color-paper);
-            font-weight: 500;
-            letter-spacing: -0.022em;
-        }
-
-        .mono {
-            font-family: var(--font-mono);
-            letter-spacing: -0.013em;
-        }
-
-        /* ---------------------------------------------------------
-           NAVBAR / TOPBAR
-        --------------------------------------------------------- */
-        .topbar {
-            background-color: rgba(8, 9, 10, 0.92);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--color-graphite);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            height: 58px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 28px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .brand-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-        }
-
-        .brand-glyph {
-            width: 18px;
-            height: 18px;
-            background: linear-gradient(135deg, var(--color-acid-lime), #8aff00);
-            border-radius: 4px;
-            box-shadow: 0 0 12px rgba(228, 242, 34, 0.4);
-        }
-
-        .brand-title {
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--color-paper);
-            letter-spacing: -0.02em;
-        }
-
-        .user-auth-area {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .status-pill {
-            background-color: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--color-graphite);
-            border-radius: 9999px;
-            padding: 4px 12px;
-            font-size: 12px;
-            color: var(--color-fog);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background-color: var(--color-pulse-green);
-            box-shadow: 0 0 8px rgba(39, 166, 68, 0.8);
-        }
-
-        .btn-nav-login {
-            background-color: var(--color-paper);
-            color: var(--color-void);
-            border: none;
-            border-radius: 9999px;
-            padding: 6px 16px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
-
-        .btn-nav-login:hover {
-            background-color: var(--color-mist);
-            transform: translateY(-1px);
-        }
-
-        .user-profile-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background-color: var(--color-obsidian);
-            border: 1px solid var(--color-smoke);
-            border-radius: 9999px;
-            padding: 4px 14px;
-            font-size: 12px;
-            color: var(--color-acid-lime);
-        }
-
-        .btn-logout {
-            background: transparent;
-            border: none;
-            color: var(--color-fog);
-            font-size: 12px;
-            cursor: pointer;
-            margin-left: 6px;
-            text-decoration: underline;
-        }
-
-        .btn-logout:hover {
-            color: var(--color-paper);
-        }
-
-        /* ---------------------------------------------------------
-           LAYOUT CONTAINER
-        --------------------------------------------------------- */
-        .app-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 24px 28px 60px 28px;
-        }
-
-        /* ---------------------------------------------------------
-           METRIC TELEMETRY RIBBON
-        --------------------------------------------------------- */
-        .metric-ribbon {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .metric-card {
-            background-color: var(--color-carbon);
-            border: 1px solid var(--color-graphite);
-            border-radius: 12px;
-            padding: 16px 20px;
-            transition: border-color 0.15s ease;
-        }
-
-        .metric-card:hover {
-            border-color: var(--color-smoke);
-        }
-
-        .metric-label {
-            font-size: 12px;
-            color: var(--color-fog);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            margin-bottom: 6px;
-        }
-
-        .metric-value {
-            font-size: 22px;
-            font-weight: 500;
-            color: var(--color-paper);
-            font-family: var(--font-mono);
-            letter-spacing: -0.02em;
-        }
-
-        .metric-value.lime {
-            color: var(--color-acid-lime);
-        }
-
-        .metric-delta {
-            font-size: 12px;
-            color: var(--color-ash);
-            margin-top: 4px;
-        }
-
-        .metric-delta.lime {
-            color: var(--color-acid-lime);
-        }
-
-        /* ---------------------------------------------------------
-           TABS NAVIGATION
-        --------------------------------------------------------- */
-        .tab-bar {
-            display: flex;
-            gap: 8px;
-            border-bottom: 1px solid var(--color-graphite);
-            margin-bottom: 24px;
-            padding-bottom: 6px;
-            overflow-x: auto;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-
-        .tab-bar::-webkit-scrollbar {
-            display: none;
-        }
-
-        .tab-btn {
-            background: transparent;
-            border: none;
-            color: var(--color-fog);
-            font-family: var(--font-ui);
-            font-size: 13px;
-            font-weight: 500;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.15s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex-shrink: 0;
-        }
-
-        .tab-btn:hover {
-            color: var(--color-paper);
-            background-color: rgba(255, 255, 255, 0.02);
-        }
-
-        .tab-btn.active {
-            color: var(--color-paper);
-            background-color: var(--color-obsidian);
-            box-shadow: inset 0 0 0 1px var(--color-smoke);
-        }
-
-        .tab-btn.tab-pro {
-            color: var(--color-mist);
-        }
-
-        .tab-btn.tab-pro.active {
-            color: var(--color-acid-lime);
-        }
-
-        .lock-tag {
-            font-size: 10px;
-            background: rgba(228, 242, 34, 0.1);
-            color: var(--color-acid-lime);
-            padding: 1px 6px;
-            border-radius: 4px;
-            border: 1px solid rgba(228, 242, 34, 0.2);
-        }
-
-        /* ---------------------------------------------------------
-           SPLIT VIEW (TWO COLUMNS ON DESKTOP, STACK ON MOBILE)
-        --------------------------------------------------------- */
-        .split-view {
-            display: grid;
-            grid-template-columns: 1.6fr 1fr;
-            gap: 20px;
-        }
-
-
-        .panel-card {
-            background-color: var(--color-carbon);
-            border: 1px solid var(--color-graphite);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .panel-header {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--color-paper);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        /* Form Controls */
-        .form-group {
-            margin-bottom: 14px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 12px;
-            color: var(--color-fog);
-            margin-bottom: 6px;
-        }
-
-        .select-input, .text-input {
-            width: 100%;
-            background-color: var(--color-obsidian);
-            border: 1px solid var(--color-graphite);
-            color: var(--color-paper);
-            border-radius: 6px;
-            padding: 9px 12px;
-            font-size: 13px;
-            font-family: var(--font-ui);
-            outline: none;
-            transition: border-color 0.15s ease;
-        }
-
-        .select-input:focus, .text-input:focus {
-            border-color: var(--color-mist);
-        }
-
-        .range-slider {
-            width: 100%;
-            accent-color: var(--color-acid-lime);
-            cursor: pointer;
-        }
-
-        .checkbox-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            color: var(--color-mist);
-            cursor: pointer;
-        }
-
-        .checkbox-label input {
-            accent-color: var(--color-acid-lime);
-            width: 15px;
-            height: 15px;
-            cursor: pointer;
-        }
-
-        /* ---------------------------------------------------------
-           TABLES
-        --------------------------------------------------------- */
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-
-        .data-table th {
-            text-align: left;
-            padding: 10px 12px;
-            border-bottom: 1px solid var(--color-graphite);
-            color: var(--color-fog);
-            font-weight: 400;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .data-table td {
-            padding: 12px;
-            border-bottom: 1px solid rgba(35, 37, 42, 0.6);
-            color: var(--color-mist);
-        }
-
-        .data-table tr:hover td {
-            background-color: rgba(255, 255, 255, 0.015);
-        }
-
-        /* ---------------------------------------------------------
-           LISTING & DISTRICT CARDS (NATIVE CSS HOVER, GPU ACCELERATED)
-        --------------------------------------------------------- */
-        .listing-card {
-            background-color: var(--color-obsidian);
-            border: 1px solid var(--color-graphite);
-            border-radius: 8px;
-            padding: 14px;
-            transition: border-color 0.15s ease, box-shadow 0.15s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .listing-card:hover {
-            border-color: var(--color-mist);
-        }
-
-        .listing-card.is-deal {
-            border-color: rgba(228, 242, 34, 0.45);
-            box-shadow: 0 0 12px rgba(228, 242, 34, 0.05);
-        }
-
-        .listing-card.is-deal:hover {
-            border-color: var(--color-acid-lime);
-        }
-
-        .district-card {
-            background-color: var(--color-carbon);
-            border: 1px solid var(--color-graphite);
-            border-radius: 8px;
-            padding: 10px 12px;
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
-
-        .district-card:hover {
-            border-color: var(--color-mist);
-        }
-
-        .district-card.active {
-            background-color: rgba(228, 242, 34, 0.08);
-            border-color: var(--color-acid-lime);
-        }
-
-        .badge-acid {
-            background-color: rgba(228, 242, 34, 0.12);
-            color: var(--color-acid-lime);
-            border: 1px solid rgba(228, 242, 34, 0.3);
-            border-radius: 4px;
-            padding: 3px 8px;
-            font-size: 11px;
-            font-weight: 500;
-            font-family: var(--font-mono);
-            letter-spacing: 0.02em;
-        }
-
-        .btn-action-lime {
-            background-color: var(--color-acid-lime);
-            color: var(--color-void);
-            border: none;
-            border-radius: 6px;
-            padding: 9px 18px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.15s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-action-lime:hover {
-            filter: brightness(1.08);
-            transform: translateY(-1px);
-        }
-
-        .btn-outline-graphite {
-            background: transparent;
-            border: 1px solid var(--color-graphite);
-            color: var(--color-mist);
-            border-radius: 6px;
-            padding: 8px 14px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
-
-        .btn-outline-graphite:hover {
-            border-color: var(--color-mist);
-            color: var(--color-paper);
-        }
-
-        .btn-outline-graphite.active {
-            border-color: var(--color-acid-lime) !important;
-            color: var(--color-acid-lime) !important;
-            background-color: rgba(228, 242, 34, 0.08) !important;
-        }
-
-        /* ---------------------------------------------------------
-           SIMULATOR
-        --------------------------------------------------------- */
-        .calc-result-box {
-            background: linear-gradient(180deg, #111315 0%, #0c0d0e 100%);
-            border: 1px solid var(--color-smoke);
-            border-radius: 12px;
-            padding: 24px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        /* ---------------------------------------------------------
-           LOCKED PRO / INVESTOR BANNER
-        --------------------------------------------------------- */
-        .locked-investor-card {
-            background: radial-gradient(circle at 50% 0%, #17191d 0%, #0d0e10 100%);
-            border: 1px dashed var(--color-smoke);
-            border-radius: 14px;
-            padding: 48px 32px;
-            text-align: center;
-            max-width: 720px;
-            margin: 40px auto;
-        }
-
-        /* ---------------------------------------------------------
-           LOGIN MODAL
-        --------------------------------------------------------- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(8, 9, 10, 0.78);
-            backdrop-filter: blur(8px);
-            z-index: 2000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal-card {
-            background-color: var(--color-carbon);
-            border: 1px solid var(--color-smoke);
-            border-radius: 14px;
-            width: 100%;
-            max-width: 480px;
-            padding: 28px;
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
-            position: relative;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 18px;
-            right: 18px;
-            background: transparent;
-            border: none;
-            color: var(--color-fog);
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        .modal-close:hover {
-            color: var(--color-paper);
-        }
-
-        .persona-choice-card {
-            background-color: var(--color-obsidian);
-            border: 1px solid var(--color-graphite);
-            border-radius: 8px;
-            padding: 14px 16px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
-
-        .persona-choice-card:hover {
-            border-color: var(--color-mist);
-            background-color: #1a1c1e;
-        }
-
-        .persona-choice-card.selected {
-            border-color: var(--color-acid-lime);
-            background-color: rgba(228, 242, 34, 0.04);
-        }
-
-
-        /* Hide tabs utility */
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* ---------------------------------------------------------
-           RESPONSIVE UTILITIES & GRID SYSTEM
-        --------------------------------------------------------- */
-        .table-container {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: thin;
-        }
-
-        .form-row-2col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .checkbox-grid-2col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 6px;
-        }
-
-        .fitout-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
-        }
-
-        .telemetry-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            font-size: 12px;
-        }
-
-        .deal-pricing-block {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
-            background: rgba(228, 242, 34, 0.04);
-            border: 1px solid rgba(228, 242, 34, 0.15);
-            border-radius: 6px;
-            padding: 8px 10px;
-            margin: 8px 0;
-        }
-
-        .chart-container {
-            height: 340px;
-            position: relative;
-        }
-
-        /* ---------------------------------------------------------
-           MEDIA QUERIES FOR TABLETS & LAPTOPS (<= 1024px)
-        --------------------------------------------------------- */
-        @media (max-width: 1024px) {
-            .split-view {
-                grid-template-columns: 1fr !important;
-                gap: 16px;
-            }
-
-            .metric-ribbon {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-
-            .fitout-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-
-            .telemetry-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-        }
-
-        /* ---------------------------------------------------------
-           MEDIA QUERIES FOR MOBILE DEVICES (<= 768px)
-        --------------------------------------------------------- */
-        @media (max-width: 768px) {
-            .app-container {
-                padding: 14px 14px 48px 14px;
-            }
-
-            .topbar {
-                padding: 0 14px;
-                height: 52px;
-            }
-
-            .brand-sub {
-                display: none !important;
-            }
-
-            .brand-title {
-                font-size: 13px;
-                letter-spacing: -0.01em;
-            }
-
-            .status-pill {
-                padding: 3px 8px;
-                font-size: 11px;
-            }
-
-            .btn-nav-login {
-                padding: 5px 12px;
-                font-size: 12px;
-            }
-
-            .panel-card {
-                padding: 16px 14px;
-                border-radius: 10px;
-                margin-bottom: 14px;
-            }
-
-            .panel-header {
-                font-size: 13px;
-                margin-bottom: 12px;
-            }
-
-            .tab-bar {
-                gap: 6px;
-                margin-bottom: 16px;
-                padding-bottom: 6px;
-            }
-
-            .tab-btn {
-                font-size: 12px;
-                padding: 7px 12px;
-            }
-
-            .form-row-2col {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-
-            .chart-container {
-                height: 280px;
-            }
-
-            .calc-result-box {
-                padding: 18px 14px;
-            }
-
-            #sim-output-rent {
-                font-size: 28px !important;
-            }
-        }
-
-        /* ---------------------------------------------------------
-           MEDIA QUERIES FOR SMALL MOBILE (<= 480px)
-        --------------------------------------------------------- */
-        @media (max-width: 480px) {
-            .metric-ribbon {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
-            }
-
-            .metric-card {
-                padding: 10px 12px;
-                border-radius: 8px;
-            }
-
-            .metric-value {
-                font-size: 16px;
-            }
-
-            .metric-label {
-                font-size: 10px;
-                margin-bottom: 4px;
-            }
-
-            .metric-delta {
-                font-size: 10px;
-            }
-
-            .status-pill {
-                display: none;
-            }
-
-            #districts-grid-container {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
-                max-height: 190px !important;
-            }
-
-            #tab1-listings-container {
-                grid-template-columns: 1fr !important;
-                max-height: none !important;
-            }
-
-            .checkbox-grid-2col {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
-
-            .fitout-grid {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
-
-            .telemetry-grid {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
-
-            .deal-pricing-block {
-                gap: 4px;
-                padding: 6px 8px !important;
-            }
-
-            .deal-pricing-block .mono {
-                font-size: 11px !important;
-            }
-
-            .modal-card {
-                padding: 20px 16px;
-                margin: 12px;
-                width: calc(100% - 24px);
-                max-height: 85vh;
-                overflow-y: auto;
-            }
-
-            .locked-investor-card {
-                padding: 28px 14px;
-                margin: 20px auto;
-            }
-
-            .locked-investor-card div[style*="display: flex"] {
-                flex-direction: column !important;
-                width: 100%;
-            }
-
-            .locked-investor-card button {
-                width: 100%;
-            }
-
-            footer {
-                flex-direction: column !important;
-                gap: 8px !important;
-                text-align: center !important;
-            }
-        }
-    </style>
 </head>
+
 <body>
 
     <!-- TOPBAR NAVIGATION -->
-    <header class="topbar">
-        <div class="brand-container" onclick="switchTab('tab-map')">
-            <div class="brand-glyph"></div>
-            <div class="brand-title">HOUSEHOLD INTELLIGENCE</div>
-            <span class="mono brand-sub" style="font-size: 11px; color: var(--color-ash);">// PANDUAN SEWA & RADAR PROPERTI</span>
-        </div>
-
-        <div class="user-auth-area">
-            <div class="status-pill mono">
-                <div class="status-dot"></div>
-                <span id="topbar-status-text">— UNIT AKTIF DIPANTAU</span>
+    <div class="topbar-wrapper">
+        <header class="topbar">
+            <div class="brand-container" onclick="switchTab('tab-map')">
+                <div class="brand-glyph"></div>
+                <div class="brand-title">
+                    <span class="brand-accent">HOUSEHOLD</span><span class="brand-name">.INTELLIGENCE</span>
+                </div>
+                <span class="mono brand-sub">// PANDUAN SEWA & RADAR PROPERTI</span>
             </div>
 
-            <!-- Login or User Profile Badge -->
-            <div id="auth-container">
-                <button class="btn-nav-login" onclick="openLoginModal()">Sign In / Pro Investor Access ↗</button>
+            <div class="user-auth-area">
+                <div class="status-pill mono">
+                    <div class="status-dot"></div>
+                    <span id="topbar-status-text">— UNIT AKTIF DIPANTAU</span>
+                </div>
+
+                <!-- Login or User Profile Badge -->
+                <div id="auth-container">
+                    <button class="btn-nav-login" onclick="openLoginModal()">
+                        <span class="auth-btn-text-full">Sign In / Pro Investor Access</span>
+                        <span class="auth-btn-text-mobile">Investor Sign In</span>
+                        <span class="btn-bubble-icon">↗</span>
+                    </button>
+                </div>
             </div>
-        </div>
-    </header>
+        </header>
+    </div>
 
     <div class="app-container">
 
@@ -908,15 +74,19 @@
             </div>
             <div class="metric-card">
                 <div class="metric-label">Bargain Deals Detected</div>
-                <div class="metric-value lime" id="kpi-bargains">—</div>
+                <div class="metric-value" id="kpi-bargains">—</div>
                 <div class="metric-delta">Statistically Below Fair Rent</div>
             </div>
         </div>
 
         <!-- TAB NAVIGATION -->
         <div class="tab-bar">
-            <button class="tab-btn active" id="tab-btn-map" onclick="switchTab('tab-map')">01 // Rental Market & Deal Explorer</button>
-            <button class="tab-btn" id="tab-btn-simulator" onclick="switchTab('tab-simulator')">02 // Smart Rent Valuation Simulator</button>
+            <button class="tab-btn active" id="tab-btn-map" onclick="switchTab('tab-map')">
+                01 // Rental Market & Deal Explorer
+            </button>
+            <button class="tab-btn" id="tab-btn-simulator" onclick="switchTab('tab-simulator')">
+                02 // Smart Rent Valuation Simulator
+            </button>
             <button class="tab-btn tab-pro" id="tab-btn-investor" onclick="switchTab('tab-investor')">
                 03 // Pro Investor Portal (Bu Sarah)
                 <span class="lock-tag" id="investor-lock-badge">PRO</span>
@@ -927,39 +97,56 @@
              TAB 1: RENTAL MARKET & DEAL EXPLORER (INTEGRATED)
         ========================================================= -->
         <div id="tab-map" class="tab-content active">
-            <div style="margin-bottom: 20px;">
-                <h2>01 // Rental Market & Deal Explorer</h2>
-                <div style="font-size: 13px; color: var(--color-fog); margin-top: 4px;">
-                    Comprehensive rental housing directory and algorithmic deal hunter across 10 Greater Jakarta administrative jurisdictions.
+            <div style="margin-bottom: 24px;">
+                <div class="eyebrow-tag">Market Radar // Live Feed</div>
+                <h2 style="font-size: 22px; margin-bottom: 4px;">01 // Rental Market & Deal Explorer</h2>
+                <div style="font-size: 14px; color: var(--color-fog);">
+                    Comprehensive rental housing directory and algorithmic deal hunter across 10 Greater Jakarta
+                    administrative jurisdictions.
                 </div>
             </div>
 
             <!-- COMMAND FILTER BAR -->
-            <div class="panel-card" style="margin-bottom: 20px;">
+            <div class="panel-card" style="margin-bottom: 24px;">
                 <!-- Row 1: Mode Switcher & Quick Counts -->
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
                     <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                        <span style="font-size: 11px; color: var(--color-fog); text-transform: uppercase; font-weight: 600;">Feed Mode:</span>
-                        <button class="btn-outline-graphite active" id="mode-btn-all" style="font-size: 11px; padding: 5px 12px;" onclick="setInventoryMode('all')">
+                        <span
+                            style="font-size: 11px; color: var(--color-fog); text-transform: uppercase; font-weight: 600;">Feed
+                            Mode:</span>
+                        <button class="btn-outline-graphite active" id="mode-btn-all"
+                            style="font-size: 11px; padding: 6px 12px;" onclick="setInventoryMode('all')">
                             All Monitored Listings (<span id="count-all-badge">728</span>)
                         </button>
-                        <button class="btn-outline-graphite" id="mode-btn-deals" style="font-size: 11px; padding: 5px 12px;" onclick="setInventoryMode('deals')">
+                        <button class="btn-outline-graphite" id="mode-btn-deals"
+                            style="font-size: 11px; padding: 6px 12px;" onclick="setInventoryMode('deals')">
                             ⚡ Bargain Deals Radar (<span id="count-deals-badge">139</span>)
                         </button>
-                        <div id="deal-tier-filters" style="display: none; gap: 6px; align-items: center; margin-left: 6px;">
-                            <button class="btn-outline-graphite active" id="tier-pill-all" style="font-size: 10px; padding: 4px 8px;" onclick="setDealTier('all')">All Deals</button>
-                            <button class="btn-outline-graphite" id="tier-pill-deep" style="font-size: 10px; padding: 4px 8px;" onclick="setDealTier('deep')">🔥 Deep Value (&gt;25%)</button>
-                            <button class="btn-outline-graphite" id="tier-pill-good" style="font-size: 10px; padding: 4px 8px;" onclick="setDealTier('good')">✨ Good Deals (15-25%)</button>
+                        <div id="deal-tier-filters"
+                            style="display: none; gap: 6px; align-items: center; margin-left: 6px;">
+                            <button class="btn-outline-graphite active" id="tier-pill-all"
+                                style="font-size: 10px; padding: 5px 8px;" onclick="setDealTier('all')">All
+                                Deals</button>
+                            <button class="btn-outline-graphite" id="tier-pill-deep"
+                                style="font-size: 10px; padding: 5px 8px;" onclick="setDealTier('deep')">🔥 Deep Value
+                                (&gt;25%)</button>
+                            <button class="btn-outline-graphite" id="tier-pill-good"
+                                style="font-size: 10px; padding: 5px 8px;" onclick="setDealTier('good')">✨ Good Deals
+                                (15-25%)</button>
                         </div>
                     </div>
-                    <span class="mono" style="font-size: 11px; color: var(--color-acid-lime);" id="count-filtered">728 Units Displayed</span>
+                    <span class="mono" style="font-size: 12px; color: var(--color-carbon-ink); font-weight: 600;"
+                        id="count-filtered">728 Units Displayed</span>
                 </div>
 
                 <!-- Row 2: Search, Sort & Dimensional Filters -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; align-items: flex-end;">
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; align-items: flex-end;">
                     <div class="form-group" style="margin-bottom: 0;">
                         <label class="form-label">Search Property Name</label>
-                        <input type="text" id="filter-search" class="text-input" placeholder="e.g. Sudirman, Kalibata, Bassura..." oninput="onSearchInput()">
+                        <input type="text" id="filter-search" class="text-input"
+                            placeholder="e.g. Sudirman, Kalibata, Bassura..." oninput="onSearchInput()">
                     </div>
 
                     <div class="form-group" style="margin-bottom: 0;">
@@ -1013,31 +200,40 @@
                     <div class="form-group" style="margin-bottom: 0;">
                         <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
                             <label class="form-label">Maximum Monthly Budget</label>
-                            <span class="mono" style="font-size: 11px; color: var(--color-acid-lime);" id="budget-label">All Budgets (No Limit)</span>
+                            <span class="mono"
+                                style="font-size: 11px; color: var(--color-carbon-ink); font-weight: 600;"
+                                id="budget-label">All Budgets (No Limit)</span>
                         </div>
-                        <input type="range" id="filter-budget" class="range-slider" min="1000000" max="100000000" step="1000000" value="100000000" oninput="updateBudgetLabel(this.value)" onchange="applyFilters()">
+                        <input type="range" id="filter-budget" class="range-slider" min="1000000" max="100000000"
+                            step="1000000" value="100000000" oninput="updateBudgetLabel(this.value)"
+                            onchange="applyFilters()">
                     </div>
                 </div>
 
                 <!-- Row 3: Furnishing & Reset -->
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--color-graphite); flex-wrap: wrap; gap: 12px;">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--color-pebble); flex-wrap: wrap; gap: 12px;">
                     <div class="checkbox-group" style="margin: 0; display: flex; gap: 20px;">
                         <label class="checkbox-label">
                             <input type="checkbox" id="filter-furnished" onchange="applyFilters()">
                             <span>Full Furnished Only</span>
                         </label>
                     </div>
-                    <button class="btn-outline-graphite" style="font-size: 11px; padding: 5px 12px;" onclick="resetAllFilters()">Reset Filters ↺</button>
+                    <button class="btn-outline-graphite" style="font-size: 11px; padding: 6px 14px;"
+                        onclick="resetAllFilters()">Reset Filters ↺</button>
                 </div>
             </div>
 
             <!-- DISTRICT HOTSPOTS DIRECTORY -->
-            <div class="panel-card" style="margin-bottom: 20px;">
-                <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div class="panel-card" style="margin-bottom: 24px;">
+                <div class="panel-header"
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                     <span>Subdistrict Benchmarks & Hotspots (Click to Filter)</span>
-                    <span class="mono" style="font-size: 11px; color: var(--color-fog);" id="districts-count-badge">100 Districts Monitored</span>
+                    <span class="mono" style="font-size: 11px; color: var(--color-fog);" id="districts-count-badge">100
+                        Districts Monitored</span>
                 </div>
-                <div id="districts-grid-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; max-height: 220px; overflow-y: auto; padding-right: 4px;">
+                <div id="districts-grid-container"
+                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; max-height: 220px; overflow-y: auto; padding-right: 4px;">
                     <!-- Populated dynamically with subdistrict cards -->
                 </div>
             </div>
@@ -1047,23 +243,31 @@
                 <!-- Verified Listings Feed -->
                 <div>
                     <div class="panel-card">
-                        <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                        <div class="panel-header"
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                             <span>Monitored Rental Listings Feed</span>
-                            <span class="mono" style="font-size: 11px; color: var(--color-acid-lime);" id="tab1-subdistrict-label">Greater Jakarta Region</span>
+                            <span class="mono"
+                                style="font-size: 11px; color: var(--color-carbon-ink); font-weight: 600;"
+                                id="tab1-subdistrict-label">Greater Jakarta Region</span>
                         </div>
-                        <div id="tab1-listings-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 12px; max-height: 720px; overflow-y: auto; padding-right: 4px;">
+                        <div id="tab1-listings-container"
+                            style="display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px; max-height: 720px; overflow-y: auto; padding-right: 4px;">
                             <!-- Populated with real listing cards -->
                         </div>
-                        <div id="listings-pagination-bar" style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--color-graphite); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                            <span class="mono" style="font-size: 11px; color: var(--color-fog);" id="pagination-status">Showing 0 of 0 listings</span>
-                            <button id="btn-load-more" class="btn-outline-graphite" style="font-size: 11px; padding: 6px 14px;" onclick="loadMoreListings()">Load More (+30 Units) ↓</button>
+                        <div id="listings-pagination-bar"
+                            style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--color-pebble); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                            <span class="mono" style="font-size: 11px; color: var(--color-fog);"
+                                id="pagination-status">Showing 0 of 0 listings</span>
+                            <button id="btn-load-more" class="btn-outline-graphite"
+                                style="font-size: 11px; padding: 7px 16px;" onclick="loadMoreListings()">Load More (+30
+                                Units) ↓</button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Benchmarks & Commercial Advisory Right -->
                 <div>
-                    <div class="panel-card" style="margin-bottom: 20px;">
+                    <div class="panel-card" style="margin-bottom: 24px;">
                         <div class="panel-header">
                             <span>Regional Rate Benchmark per M²</span>
                             <span class="mono" style="font-size: 11px; color: var(--color-fog);">Basis: IDR/m²</span>
@@ -1085,33 +289,44 @@
                         </div>
                     </div>
 
-                    <div class="panel-card" style="background-color: var(--color-obsidian); border-color: var(--color-graphite);">
-                        <div class="panel-header" style="color: var(--color-paper); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                    <div class="panel-card" style="background-color: var(--color-newsprint-gray);">
+                        <div class="panel-header"
+                            style="margin-bottom: 14px; display: flex; align-items: center; gap: 6px;">
                             <span>💼 Commercial Renter & Investor Advisory</span>
                         </div>
-                        <div style="font-size: 12px; color: var(--color-fog); line-height: 1.65;">
-                            <div style="margin-bottom: 12px;">
-                                <strong style="color: var(--color-mist);">1. Building Maintenance & IPL Fee Audit</strong>
-                                <div style="color: var(--color-ash); margin-top: 2px;">
-                                    Always verify whether building maintenance charges (IPL) and sinking fund fees (typically IDR 15,000–35,000/m²/month in Jabodetabek) are bundled into the asking rent or billed separately to the tenant.
+                        <div style="font-size: 13px; color: var(--color-carbon-ink); line-height: 1.6;">
+                            <div style="margin-bottom: 14px;">
+                                <strong style="color: var(--color-carbon-ink);">1. Building Maintenance & IPL Fee
+                                    Audit</strong>
+                                <div style="color: var(--color-fog); margin-top: 2px;">
+                                    Always verify whether building maintenance charges (IPL) and sinking fund fees
+                                    (typically IDR 15,000–35,000/m²/month in Jabodetabek) are bundled into the asking
+                                    rent or billed separately to the tenant.
                                 </div>
                             </div>
-                            <div style="margin-bottom: 12px;">
-                                <strong style="color: var(--color-mist);">2. Model Fair Rent as Negotiation Anchor</strong>
-                                <div style="color: var(--color-ash); margin-top: 2px;">
-                                    Use the hedonic AVM valuation range as an objective baseline for counter-offers before scheduling on-site visits or negotiating with leasing brokers.
+                            <div style="margin-bottom: 14px;">
+                                <strong style="color: var(--color-carbon-ink);">2. Model Fair Rent as Negotiation
+                                    Anchor</strong>
+                                <div style="color: var(--color-fog); margin-top: 2px;">
+                                    Use the hedonic AVM valuation range as an objective baseline for counter-offers
+                                    before scheduling on-site visits or negotiating with leasing brokers.
                                 </div>
                             </div>
-                            <div style="margin-bottom: 12px;">
-                                <strong style="color: var(--color-mist);">3. Furnishing & Appliance Condition Check</strong>
-                                <div style="color: var(--color-ash); margin-top: 2px;">
-                                    For units advertised as Full Furnished, inspect active condition of high-draw appliances (inverter AC, water heater, kitchen appliances) to avoid unexpected move-in maintenance costs.
+                            <div style="margin-bottom: 14px;">
+                                <strong style="color: var(--color-carbon-ink);">3. Furnishing & Appliance Condition
+                                    Check</strong>
+                                <div style="color: var(--color-fog); margin-top: 2px;">
+                                    For units advertised as Full Furnished, inspect active condition of high-draw
+                                    appliances (inverter AC, water heater, kitchen appliances) to avoid unexpected
+                                    move-in maintenance costs.
                                 </div>
                             </div>
                             <div>
-                                <strong style="color: var(--color-mist);">4. Payment Terms & Annual Lease Discount</strong>
-                                <div style="color: var(--color-ash); margin-top: 2px;">
-                                    Full 1-year advance payments typically command an additional 5%–10% bargaining discount compared to semi-annual or quarterly payment terms.
+                                <strong style="color: var(--color-carbon-ink);">4. Payment Terms & Annual Lease
+                                    Discount</strong>
+                                <div style="color: var(--color-fog); margin-top: 2px;">
+                                    Full 1-year advance payments typically command an additional 5%–10% bargaining
+                                    discount compared to semi-annual or quarterly payment terms.
                                 </div>
                             </div>
                         </div>
@@ -1121,13 +336,15 @@
         </div>
 
         <!-- =========================================================
-             TAB 3: KALKULATOR SEWA PINTAR (CEK HARGA WAJAR)
+             TAB 2: KALKULATOR SEWA PINTAR (CEK HARGA WAJAR)
         ========================================================= -->
         <div id="tab-simulator" class="tab-content">
-            <div style="margin-bottom: 20px;">
-                <h2>Smart Rent Valuation Simulator (Hedonic AVM)</h2>
-                <div style="font-size: 13px; color: var(--color-fog); margin-top: 4px;">
-                    Cek apakah harga sewa sebuah unit kemahalan atau kemurahan berdasarkan ukuran fisik, letak strategis, dan kelengkapan fasilitas.
+            <div style="margin-bottom: 24px;">
+                <div class="eyebrow-tag">Valuation Engine // Hedonic AVM</div>
+                <h2 style="font-size: 22px; margin-bottom: 4px;">02 // Smart Rent Valuation Simulator (Hedonic AVM)</h2>
+                <div style="font-size: 14px; color: var(--color-fog);">
+                    Cek apakah harga sewa sebuah unit kemahalan atau kemurahan berdasarkan ukuran fisik, letak
+                    strategis, dan kelengkapan fasilitas.
                 </div>
             </div>
 
@@ -1136,8 +353,10 @@
                 <div class="panel-card">
                     <div class="panel-header">Unit Specifications & Attributes</div>
 
-                    <div style="background-color: var(--color-obsidian); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--color-graphite); margin-bottom: 14px; font-size: 12px; color: var(--color-mist);">
-                        <span>💡 <strong>Prospective Tenant Guide:</strong> Input verified unit specifications obtained from property inspections or broker chats below to evaluate fair market value.</span>
+                    <div
+                        style="background-color: var(--color-newsprint-gray); padding: 12px 16px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble); margin-bottom: 16px; font-size: 13px; color: var(--color-carbon-ink); line-height: 1.5;">
+                        <span>💡 <strong>Panduan Calon Penyewa:</strong> Masukkan spesifikasi unit yang didapat dari
+                            survei atau chat agen untuk mengevaluasi estimasi harga wajar pasar.</span>
                     </div>
 
                     <div class="form-row-2col">
@@ -1164,12 +383,15 @@
                         </div>
                     </div>
 
-                    <div id="sim-subdistrict-baseline" style="display: none; background-color: rgba(228, 242, 34, 0.05); border: 1px solid rgba(228, 242, 34, 0.2); border-radius: 6px; padding: 8px 12px; margin-bottom: 12px; font-size: 11px; color: var(--color-acid-lime);"></div>
+                    <div id="sim-subdistrict-baseline"
+                        style="display: none; background-color: var(--color-newsprint-gray); border: 1px solid var(--color-carbon-ink); border-radius: var(--radius-buttons); padding: 10px 14px; margin-bottom: 14px; font-size: 12px; color: var(--color-carbon-ink);">
+                    </div>
 
                     <div class="form-row-2col">
                         <div class="form-group">
                             <label class="form-label">Floor Size (m²)</label>
-                            <input type="number" id="sim-size" class="text-input mono" value="45" min="15" max="300" onchange="runSimulation()">
+                            <input type="number" id="sim-size" class="text-input mono" value="45" min="15" max="300"
+                                onchange="runSimulation()">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Status Interior</label>
@@ -1205,11 +427,13 @@
                     <div class="form-row-2col">
                         <div class="form-group">
                             <label class="form-label">Distance to Sudirman CBD (km)</label>
-                            <input type="number" id="sim-cbd" class="text-input mono" value="8.5" min="0.5" max="60" step="0.5" onchange="runSimulation()">
+                            <input type="number" id="sim-cbd" class="text-input mono" value="8.5" min="0.5" max="60"
+                                step="0.5" onchange="runSimulation()">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Jarak ke Stasiun Terdekat (km)</label>
-                            <input type="number" id="sim-transit" class="text-input mono" value="1.2" min="0.1" max="15" step="0.1" onchange="runSimulation()">
+                            <input type="number" id="sim-transit" class="text-input mono" value="1.2" min="0.1" max="15"
+                                step="0.1" onchange="runSimulation()">
                         </div>
                     </div>
 
@@ -1217,7 +441,7 @@
                     <div class="checkbox-grid-2col">
                         <label class="checkbox-label">
                             <input type="checkbox" id="sim-ff" checked onchange="runSimulation()">
-                            <span style="color: var(--color-acid-lime); font-weight: 500;">Lengkap Perabot (Full Furnished)</span>
+                            <span style="font-weight: 600;">Lengkap Perabot (Full Furnished)</span>
                         </label>
                         <label class="checkbox-label">
                             <input type="checkbox" id="sim-ac" checked onchange="runSimulation()">
@@ -1246,13 +470,16 @@
                 <div>
                     <div class="calc-result-box">
                         <div class="metric-label">Estimated Fair Market Rent</div>
-                        <div style="font-size: 38px; font-weight: 500; color: var(--color-acid-lime); letter-spacing: -0.02em;" class="mono" id="sim-output-rent">
+                        <div style="font-size: 38px; font-weight: 600; color: var(--color-carbon-ink); letter-spacing: -0.02em; margin: 8px 0;"
+                            class="mono" id="sim-output-rent">
                             Rp 7,850,000 / bln
                         </div>
-                        <div class="mono" style="font-size: 13px; color: var(--color-fog); margin-top: 8px;" id="sim-output-ci">
+                        <div class="mono" style="font-size: 13px; color: var(--color-fog); margin-top: 8px;"
+                            id="sim-output-ci">
                             Rentang Toleransi Pasar: Rp 7.0 Jt - Rp 8.6 Jt / bulan
                         </div>
-                        <div class="mono" style="font-size: 12px; color: var(--color-ash); margin-top: 4px;" id="sim-output-rate">
+                        <div class="mono" style="font-size: 12px; color: var(--color-fog); margin-top: 4px;"
+                            id="sim-output-rate">
                             Tarif Efektif Ruang: Rp 174,444 / m²
                         </div>
                     </div>
@@ -1260,13 +487,16 @@
                     <div class="panel-card">
                         <div class="panel-header">
                             <span>Panduan Negosiasi Penyewa</span>
-                            <span class="mono" style="font-size: 11px; color: var(--color-pulse-green);">Rekomendasi</span>
+                            <span class="mono badge-acid" style="font-size: 10px;">Rekomendasi</span>
                         </div>
-                        <p style="font-size: 13px; color: var(--color-fog); line-height: 1.6; margin-bottom: 12px;">
-                            Jika pemilik unit memasang harga <strong>di atas rentang toleransi</strong>, kamu punya ruang negosiasi yang kuat dengan menunjukkan rata-rata sewa per meter di kawasan ini.
+                        <p style="font-size: 13px; color: var(--color-fog); line-height: 1.6; margin-bottom: 14px;">
+                            Jika pemilik unit memasang harga <strong>di atas rentang toleransi</strong>, kamu punya
+                            ruang negosiasi yang kuat dengan menunjukkan rata-rata sewa per meter di kawasan ini.
                         </p>
-                        <div style="background-color: var(--color-obsidian); padding: 14px; border-radius: 8px; border: 1px solid var(--color-graphite); font-size: 12px;">
-                            💡 <strong>Commuter Insight:</strong> Units located within &lt;1.5 km of rail transit hubs consistently demonstrate 15% higher rental occupancy stability.
+                        <div
+                            style="background-color: var(--color-newsprint-gray); padding: 14px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble); font-size: 13px; color: var(--color-carbon-ink); line-height: 1.5;">
+                            💡 <strong>Commuter Insight:</strong> Unit hunian dalam radius &lt;1.5 km dari simpul
+                            transit rel (KRL/MRT/LRT) secara konsisten memiliki stabilitas okupansi 15% lebih tinggi.
                         </div>
                     </div>
                 </div>
@@ -1274,19 +504,23 @@
         </div>
 
         <!-- =========================================================
-             TAB 4: PORTAL INVESTOR & ANALITIK PRO (BU SARAH)
+             TAB 3: PORTAL INVESTOR & ANALITIK PRO (BU SARAH)
         ========================================================= -->
         <div id="tab-investor" class="tab-content">
             <!-- If Locked (Not Logged in as Investor) -->
             <div id="investor-locked-view" class="locked-investor-card">
+                <div class="eyebrow-tag" style="margin-bottom: 16px;">Restricted Access // Pro Persona</div>
                 <div style="font-size: 40px; margin-bottom: 12px;">🏢 🔒</div>
-                <h2 style="font-size: 22px; margin-bottom: 8px;">Portal Eksklusif Investor & Pemilik Properti</h2>
-                <p style="color: var(--color-fog); font-size: 14px; max-width: 520px; margin: 0 auto 24px auto;">
-                    Halaman ini dikhususkan bagi pemilik unit dan investor (Persona Bu Sarah) untuk menghitung potensi keuntungan sewa, masa balik modal renovasi interior, dan analisis data pasar spasial.
+                <h2 style="font-size: 24px; margin-bottom: 8px;">Portal Eksklusif Investor & Pemilik Properti</h2>
+                <p
+                    style="color: var(--color-fog); font-size: 14px; max-width: 540px; margin: 0 auto 24px auto; line-height: 1.6;">
+                    Halaman ini dikhususkan bagi pemilik unit dan investor (Persona Bu Sarah) untuk menghitung potensi
+                    keuntungan sewa, masa balik modal renovasi interior, dan analisis data pasar spasial.
                 </p>
-                <div style="display: flex; gap: 12px; justify-content: center;">
-                    <button class="btn-action-lime" onclick="demoLoginInvestor()">
-                        ⚡ Switch to Investor Mode (Demo Bu Sarah)
+                <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn-action-dark" onclick="demoLoginInvestor()">
+                        <span>Switch to Investor Mode (Demo Bu Sarah)</span>
+                        <span class="btn-bubble-icon">⚡</span>
                     </button>
                     <button class="btn-outline-graphite" onclick="switchTab('tab-map')">
                         Return to Map View
@@ -1296,11 +530,15 @@
 
             <!-- If Unlocked (Logged in as Bu Sarah) -->
             <div id="investor-unlocked-view" style="display: none;">
-                <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+                <div
+                    style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
                     <div>
-                        <h2>Pro Investor Portal & Yield Analysis (Bu Sarah)</h2>
-                        <div style="font-size: 13px; color: var(--color-fog); margin-top: 4px;">
-                            Dasbor evaluasi investasi properti sewa, simulasi payback period interior fit-out, dan pemodelan sebaran spasial.
+                        <div class="eyebrow-tag">Capital Allocation // Pro Yield Analytics</div>
+                        <h2 style="font-size: 22px; margin-bottom: 4px;">03 // Pro Investor Portal & Yield Analysis (Bu
+                            Sarah)</h2>
+                        <div style="font-size: 14px; color: var(--color-fog);">
+                            Dasbor evaluasi investasi properti sewa, simulasi payback period interior fit-out, dan
+                            pemodelan sebaran spasial.
                         </div>
                     </div>
                     <div class="user-profile-badge">
@@ -1317,32 +555,45 @@
                     </div>
 
                     <p style="font-size: 13px; color: var(--color-fog); margin-bottom: 16px;">
-                        Hitung apakah renovasi unit menjadi <strong>Full Furnished</strong> sepadan dengan biaya modal yang dikeluarkan dibandingkan dibiarkan kosongan (unfurnished).
+                        Hitung apakah renovasi unit menjadi <strong>Full Furnished</strong> sepadan dengan biaya modal
+                        yang dikeluarkan dibandingkan dibiarkan kosongan (unfurnished).
                     </p>
 
                     <div class="fitout-grid">
-                        <div style="background-color: var(--color-obsidian); padding: 14px; border-radius: 8px; border: 1px solid var(--color-graphite);">
+                        <div
+                            style="background-color: var(--color-newsprint-gray); padding: 16px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble);">
                             <div class="metric-label">Monthly Rental Uplift</div>
-                            <div class="mono" style="font-size: 18px; color: var(--color-paper);" id="pro-roi-monthly">—</div>
-                            <div style="font-size: 11px; color: var(--color-ash); margin-top: 4px;">Selisih vs Kosongan</div>
+                            <div class="mono" style="font-size: 18px; color: var(--color-carbon-ink); font-weight: 600;"
+                                id="pro-roi-monthly">—</div>
+                            <div style="font-size: 11px; color: var(--color-fog); margin-top: 4px;">Selisih vs Kosongan
+                            </div>
                         </div>
 
-                        <div style="background-color: var(--color-obsidian); padding: 14px; border-radius: 8px; border: 1px solid var(--color-graphite);">
+                        <div
+                            style="background-color: var(--color-newsprint-gray); padding: 16px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble);">
                             <div class="metric-label">Tambahan Omset / Tahun</div>
-                            <div class="mono" style="font-size: 18px; color: var(--color-acid-lime);" id="pro-roi-annual">—</div>
-                            <div style="font-size: 11px; color: var(--color-ash); margin-top: 4px;">Arus Kas Tambahan</div>
+                            <div class="mono" style="font-size: 18px; color: var(--color-carbon-ink); font-weight: 600;"
+                                id="pro-roi-annual">—</div>
+                            <div style="font-size: 11px; color: var(--color-fog); margin-top: 4px;">Arus Kas Tambahan
+                            </div>
                         </div>
 
-                        <div style="background-color: var(--color-obsidian); padding: 14px; border-radius: 8px; border: 1px solid var(--color-graphite);">
+                        <div
+                            style="background-color: var(--color-newsprint-gray); padding: 16px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble);">
                             <div class="metric-label">Est. Fit-Out Capital</div>
-                            <div class="mono" style="font-size: 18px; color: var(--color-mist);" id="pro-roi-cost">—</div>
-                            <div style="font-size: 11px; color: var(--color-ash); margin-top: 4px;">Standar Fit-Out 45 m²</div>
+                            <div class="mono" style="font-size: 18px; color: var(--color-carbon-ink); font-weight: 600;"
+                                id="pro-roi-cost">—</div>
+                            <div style="font-size: 11px; color: var(--color-fog); margin-top: 4px;">Standar Fit-Out 45
+                                m²</div>
                         </div>
 
-                        <div style="background-color: var(--color-obsidian); padding: 14px; border-radius: 8px; border: 1px solid var(--color-graphite);">
+                        <div
+                            style="background-color: var(--color-newsprint-gray); padding: 16px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble);">
                             <div class="metric-label">Masa Balik Modal (BEP)</div>
-                            <div class="mono" style="font-size: 18px; color: var(--color-pulse-green);" id="pro-roi-payback">—</div>
-                            <div style="font-size: 11px; color: var(--color-ash); margin-top: 4px;">Break-even Cepat</div>
+                            <div class="mono" style="font-size: 18px; color: var(--color-carbon-ink); font-weight: 600;"
+                                id="pro-roi-payback">—</div>
+                            <div style="font-size: 11px; color: var(--color-fog); margin-top: 4px;">Break-even Cepat
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1352,7 +603,8 @@
                     <div class="panel-card">
                         <div class="panel-header">
                             <span>Gradien Penurunan Tarif vs Jarak ke Sudirman CBD</span>
-                            <span class="mono" style="font-size: 11px; color: var(--color-fog);">Alonso-Muth-Mills Model</span>
+                            <span class="mono" style="font-size: 11px; color: var(--color-fog);">Alonso-Muth-Mills
+                                Model</span>
                         </div>
                         <div class="chart-container">
                             <canvas id="decayChart"></canvas>
@@ -1383,31 +635,39 @@
                 </div>
 
                 <!-- Investor Section 3: Data Science Model Telemetry -->
-                <div class="panel-card" style="margin-top: 20px;">
+                <div class="panel-card" style="margin-top: 24px;">
                     <div class="panel-header">
                         <span>Automated Valuation Model (AVM) Telemetry</span>
-                        <span class="mono" style="font-size: 11px; color: var(--color-acid-lime);" id="avm-badge">R² out-of-fold = —</span>
+                        <span class="mono badge-acid" id="avm-badge">R² out-of-fold = —</span>
                     </div>
                     <div class="telemetry-grid">
-                        <div style="background-color: var(--color-obsidian); padding: 12px; border-radius: 6px;">
+                        <div
+                            style="background-color: var(--color-newsprint-gray); padding: 14px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble);">
                             <div class="metric-label">R² Out-of-Fold</div>
-                            <div class="mono" id="avm-r2" style="color: var(--color-paper); font-size: 15px;">—</div>
-                            <div id="avm-r2-sub" style="color: var(--color-ash); margin-top: 2px;">KFold 5×3</div>
+                            <div class="mono" id="avm-r2"
+                                style="color: var(--color-carbon-ink); font-size: 15px; font-weight: 600;">—</div>
+                            <div id="avm-r2-sub" style="color: var(--color-fog); margin-top: 2px;">KFold 5×3</div>
                         </div>
-                        <div style="background-color: var(--color-obsidian); padding: 12px; border-radius: 6px;">
+                        <div
+                            style="background-color: var(--color-newsprint-gray); padding: 14px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble);">
                             <div class="metric-label">Rata-rata Margin Error</div>
-                            <div class="mono" id="avm-mae" style="color: var(--color-paper); font-size: 15px;">—</div>
-                            <div style="color: var(--color-ash); margin-top: 2px;">MAE out-of-fold</div>
+                            <div class="mono" id="avm-mae"
+                                style="color: var(--color-carbon-ink); font-size: 15px; font-weight: 600;">—</div>
+                            <div style="color: var(--color-fog); margin-top: 2px;">MAE out-of-fold</div>
                         </div>
-                        <div style="background-color: var(--color-obsidian); padding: 12px; border-radius: 6px;">
+                        <div
+                            style="background-color: var(--color-newsprint-gray); padding: 14px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble);">
                             <div class="metric-label">Error Persentase (MAPE)</div>
-                            <div class="mono" id="avm-mape" style="color: var(--color-paper); font-size: 15px;">—</div>
-                            <div id="avm-mape-sub" style="color: var(--color-ash); margin-top: 2px;">—</div>
+                            <div class="mono" id="avm-mape"
+                                style="color: var(--color-carbon-ink); font-size: 15px; font-weight: 600;">—</div>
+                            <div id="avm-mape-sub" style="color: var(--color-fog); margin-top: 2px;">—</div>
                         </div>
-                        <div style="background-color: var(--color-obsidian); padding: 12px; border-radius: 6px;">
+                        <div
+                            style="background-color: var(--color-newsprint-gray); padding: 14px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble);">
                             <div class="metric-label">Fitur Terpenting (GB)</div>
-                            <div class="mono" id="avm-f1" style="color: var(--color-paper); font-size: 15px;">—</div>
-                            <div id="avm-f2" style="color: var(--color-ash); margin-top: 2px;">—</div>
+                            <div class="mono" id="avm-f1"
+                                style="color: var(--color-carbon-ink); font-size: 15px; font-weight: 600;">—</div>
+                            <div id="avm-f2" style="color: var(--color-fog); margin-top: 2px;">—</div>
                         </div>
                     </div>
                 </div>
@@ -1416,9 +676,11 @@
         </div>
 
         <!-- FOOTER -->
-        <footer style="margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--color-graphite); display: flex; justify-content: space-between; font-size: 11px; color: var(--color-ash);" class="mono">
+        <footer
+            style="margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--color-pebble); display: flex; justify-content: space-between; font-size: 12px; color: var(--color-fog);"
+            class="mono">
             <div>HOUSEHOLD INTELLIGENCE // PANDUAN SEWA PROPERTI JABODETABEK</div>
-            <div>AFIATTA ILHAN SALEH • PORTOFOLIO DATA ANALYTICS</div>
+            <div>AFIATTA ILHAN SALEH • DATA ANALYTICS & HEDONIC PRICING</div>
         </footer>
 
     </div>
@@ -1429,781 +691,55 @@
     <div id="login-modal" class="modal-overlay">
         <div class="modal-card">
             <button class="modal-close" onclick="closeLoginModal()">&times;</button>
-            <h3 style="font-size: 18px; margin-bottom: 6px;">Sign In to Household Intelligence</h3>
+            <h3 style="font-size: 20px; margin-bottom: 6px;">Sign In to Household Intelligence</h3>
             <p style="color: var(--color-fog); font-size: 13px; margin-bottom: 20px;">
                 Pilih profil akses yang sesuai dengan tujuan kamu menggunakan platform ini.
             </p>
 
             <div class="persona-choice-card" onclick="selectPersonaOption('renter')">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                    <strong style="color: var(--color-paper); font-size: 14px;">🔍 Public Tenant / Commuter (Rian)</strong>
+                    <strong style="color: var(--color-carbon-ink); font-size: 14px;">🔍 Public Tenant / Commuter
+                        (Rian)</strong>
                     <span class="badge-acid">GRATIS</span>
                 </div>
                 <div style="font-size: 12px; color: var(--color-fog);">
-                    Cari unit apartemen murah dekat stasiun, cek kewajaran harga sewa, dan filter unit terbaik di 10 kota Jabodetabek.
+                    Cari unit apartemen murah dekat stasiun, cek kewajaran harga sewa, dan filter unit terbaik di 10
+                    kota Jabodetabek.
                 </div>
             </div>
 
             <div class="persona-choice-card selected" onclick="selectPersonaOption('investor')">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                    <strong style="color: var(--color-acid-lime); font-size: 14px;">🏢 Pemilik Properti & Investor (Bu Sarah)</strong>
+                    <strong style="color: var(--color-carbon-ink); font-size: 14px;">🏢 Pemilik Properti & Investor (Bu
+                        Sarah)</strong>
                     <span class="badge-acid">PRO ACCESS</span>
                 </div>
                 <div style="font-size: 12px; color: var(--color-fog);">
-                    Akses kalkulator balik modal renovasi interior (fit-out), analisis tarif sewa per meter, dan data statistik ekonometrika.
+                    Akses kalkulator balik modal renovasi interior (fit-out), analisis tarif sewa per meter, dan data
+                    statistik ekonometrika.
                 </div>
             </div>
 
-            <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 8px;">
-                <button class="btn-action-lime" style="width: 100%; justify-content: center;" onclick="confirmLoginSelection()">
+            <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 10px;">
+                <button class="btn-action-dark" style="width: 100%; justify-content: center; padding: 12px;"
+                    onclick="confirmLoginSelection()">
                     Continue to Platform ↗
                 </button>
-                <button class="btn-outline-graphite" style="width: 100%;" onclick="closeLoginModal()">
+                <button class="btn-outline-graphite" style="width: 100%; padding: 10px;" onclick="closeLoginModal()">
                     Batal
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT APPLICATION LOGIC -->
-    <script>
-        // State variables
-        let allListings = [];
-        let allDistricts = [];
-        let allBenchmarks = {};
-        let decayData = {};
-        let currentUserRole = 'guest'; // 'guest', 'renter', 'investor'
-        let selectedModalRole = 'investor';
-        let currentInventoryMode = 'all'; // 'all' or 'deals'
-        let currentDealTier = 'all'; // 'all', 'deep', 'good'
-        let decayChartInstance = null;
-        let visibleListingsCount = 60;
-        let currentFilteredListings = [];
-        let searchDebounceTimer = null;
-
-        // Initialize Application (Parallelized Fetching via Promise.all)
-        async function initApp() {
-            try {
-                await Promise.all([
-                    fetchTelemetry(),
-                    fetchBenchmarks(),
-                    fetchDistricts(),
-                    fetchListings(),
-                    fetchDistanceDecay()
-                ]);
-            } catch (err) {
-                console.error("Initialization error:", err);
-            }
-            updateSimSubdistricts();
-            runSimulation();
-
-            // Check localStorage auth state
-            const savedRole = localStorage.getItem('hi_user_role');
-            if (savedRole === 'investor') {
-                setInvestorRole(true);
-            }
-        }
-
-        // Mode and Tier Toggles
-        function setInventoryMode(mode) {
-            currentInventoryMode = mode;
-            const btnAll = document.getElementById('mode-btn-all');
-            const btnDeals = document.getElementById('mode-btn-deals');
-            const tierFilters = document.getElementById('deal-tier-filters');
-
-            if (btnAll) btnAll.classList.toggle('active', mode === 'all');
-            if (btnDeals) btnDeals.classList.toggle('active', mode === 'deals');
-            if (tierFilters) tierFilters.style.display = (mode === 'deals') ? 'flex' : 'none';
-
-            applyFilters();
-        }
-
-        function setDealTier(tier) {
-            currentDealTier = tier;
-            ['all', 'deep', 'good'].forEach(t => {
-                const el = document.getElementById('tier-pill-' + t);
-                if (el) el.classList.toggle('active', t === tier);
-            });
-            applyFilters();
-        }
-        window.filterDealsTier = setDealTier;
-
-        // Fetch District Summary Data
-        async function fetchDistricts() {
-            try {
-                const res = await fetch('/api/districts');
-                const data = await res.json();
-                allDistricts = data.districts || [];
-                populateFilterSubdistricts();
-                renderDistrictsGrid();
-            } catch (err) {
-                console.error("Failed to load district data", err);
-            }
-        }
-
-        function populateFilterSubdistricts() {
-            const city = document.getElementById('filter-city').value;
-            const sel = document.getElementById('filter-subdistrict');
-            if (!sel) return;
-            const currentVal = sel.value;
-            sel.innerHTML = '<option value="All">All Districts in this City</option>';
-            
-            const matched = allDistricts.filter(d => city === 'All' || d.target_city === city);
-            matched.forEach(d => {
-                const opt = document.createElement('option');
-                opt.value = d.subdistrict;
-                opt.innerText = `${d.subdistrict} (${d.unit_count} units)`;
-                sel.appendChild(opt);
-            });
-            if (matched.some(d => d.subdistrict === currentVal)) {
-                sel.value = currentVal;
-            }
-        }
-
-        function onCityFilterChange() {
-            populateFilterSubdistricts();
-            applyFilters();
-        }
-
-        function renderDistrictsGrid() {
-            const container = document.getElementById('districts-grid-container');
-            const badge = document.getElementById('districts-count-badge');
-            if (!container) return;
-
-            const selectedCity = document.getElementById('filter-city').value;
-            const subdistrictEl = document.getElementById('filter-subdistrict');
-            const selectedSub = subdistrictEl ? subdistrictEl.value : 'All';
-
-            let matched = allDistricts.filter(d => selectedCity === 'All' || d.target_city === selectedCity);
-            if (currentInventoryMode === 'deals') {
-                matched = matched.filter(d => d.deals_count > 0);
-            }
-
-            if (badge) {
-                badge.innerText = `${matched.length} Districts ${currentInventoryMode === 'deals' ? 'with Deals' : 'Monitored'}`;
-            }
-
-            if (matched.length === 0) {
-                container.innerHTML = '<div style="color: var(--color-fog); padding: 16px; font-size: 12px;">No districts match the selected criteria.</div>';
-                return;
-            }
-
-            const cardsHtml = matched.map(d => {
-                const isActive = (selectedSub !== 'All' && d.subdistrict === selectedSub);
-                const safeSub = d.subdistrict.replace(/'/g, "\\'");
-                const safeCity = d.target_city.replace(/'/g, "\\'");
-                return `
-                    <div class="district-card ${isActive ? 'active' : ''}" onclick="selectDistrict('${safeSub}', '${safeCity}')">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
-                            <div>
-                                <div class="mono" style="font-size: 9px; color: var(--color-fog); text-transform: uppercase;">${d.target_city}</div>
-                                <div style="font-size: 13px; font-weight: 600; color: var(--color-paper);">${d.subdistrict}</div>
-                            </div>
-                            <span class="mono" style="font-size: 10px; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 4px; color: var(--color-mist);">${d.unit_count}</span>
-                        </div>
-                        <div style="border-top: 1px solid var(--color-graphite); padding-top: 6px; margin-top: 6px; display: flex; justify-content: space-between; align-items: baseline;">
-                            <div class="mono" style="font-size: 12px; color: var(--color-acid-lime); font-weight: 500;">
-                                IDR ${(d.median_rent_idr/1e6).toFixed(1)}M <span style="font-size: 9px; color: var(--color-fog);">/ mo</span>
-                            </div>
-                            <div class="mono" style="font-size: 10px; color: var(--color-fog);">
-                                IDR ${Math.round(d.median_price_per_m2_idr/1000)}k/m²
-                            </div>
-                        </div>
-                        ${d.deals_count > 0 ? `<div style="font-size: 10px; color: var(--color-acid-lime); margin-top: 4px; font-weight: 500;">⚡ ${d.deals_count} Deals</div>` : ''}
-                    </div>
-                `;
-            }).join('');
-
-            container.innerHTML = cardsHtml;
-        }
-
-        function selectDistrict(subdistrict, city) {
-            const cityEl = document.getElementById('filter-city');
-            if (cityEl && cityEl.value !== city && cityEl.value !== 'All') {
-                cityEl.value = city;
-            }
-            populateFilterSubdistricts();
-            const subEl = document.getElementById('filter-subdistrict');
-            if (subEl) {
-                if (subEl.value === subdistrict) {
-                    subEl.value = 'All';
-                } else {
-                    subEl.value = subdistrict;
-                }
-            }
-            applyFilters();
-        }
-        window.selectDistrictFromMap = selectDistrict;
-
-        function resetAllFilters() {
-            document.getElementById('filter-city').value = 'All';
-            populateFilterSubdistricts();
-            const sub = document.getElementById('filter-subdistrict');
-            if (sub) sub.value = 'All';
-            document.getElementById('filter-layout').value = 'All';
-            document.getElementById('filter-budget').value = 100000000;
-            updateBudgetLabel(100000000);
-            document.getElementById('filter-furnished').checked = false;
-            const searchEl = document.getElementById('filter-search');
-            if (searchEl) searchEl.value = '';
-            const sortEl = document.getElementById('filter-sort');
-            if (sortEl) sortEl.value = 'default';
-            visibleListingsCount = 60;
-            setInventoryMode('all');
-            setDealTier('all');
-            applyFilters();
-        }
-
-        function onSearchInput() {
-            clearTimeout(searchDebounceTimer);
-            searchDebounceTimer = setTimeout(() => {
-                visibleListingsCount = 60;
-                applyFilters();
-            }, 200);
-        }
-
-        function loadMoreListings() {
-            visibleListingsCount += 30;
-            renderListingsCards(currentFilteredListings);
-        }
-
-        // Fetch Global Telemetry
-        async function fetchTelemetry() {
-            try {
-                const res = await fetch('/api/telemetry');
-                const data = await res.json();
-                if (document.getElementById('kpi-units')) {
-                    document.getElementById('kpi-units').innerText = (data.audited_units || 728).toLocaleString() + ' Units';
-                }
-                if (document.getElementById('kpi-rent') && data.median_rent_idr) {
-                    document.getElementById('kpi-rent').innerText = 'IDR ' + (data.median_rent_idr / 1e6).toFixed(1) + 'M';
-                }
-                if (document.getElementById('kpi-m2') && data.median_price_per_m2_idr) {
-                    document.getElementById('kpi-m2').innerText = 'IDR ' + Math.round(data.median_price_per_m2_idr / 1000) + 'k';
-                }
-                if (document.getElementById('kpi-bargains')) {
-                    const count = data.bargains_detected !== undefined ? data.bargains_detected : (data.deals ? data.deals.below_estimate_total : 139);
-                    document.getElementById('kpi-bargains').innerText = count + ' Units';
-                }
-                if (document.getElementById('topbar-status-text')) {
-                    document.getElementById('topbar-status-text').innerText = (data.audited_units || 728).toLocaleString() + ' MONITORED UNITS';
-                }
-                if (document.getElementById('count-all-badge')) {
-                    document.getElementById('count-all-badge').innerText = (data.audited_units || 728).toLocaleString();
-                }
-                if (document.getElementById('count-deals-badge')) {
-                    const count = data.bargains_detected !== undefined ? data.bargains_detected : 139;
-                    document.getElementById('count-deals-badge').innerText = count.toLocaleString();
-                }
-                if (document.getElementById('badge-furnish-premium')) {
-                    const prem = typeof data.furnishing_premium_adjusted_pct === 'number' ? data.furnishing_premium_adjusted_pct : 13.9;
-                    document.getElementById('badge-furnish-premium').innerText = 'FURNISHED PREMIUM +' + prem + '%';
-                }
-                const m = data.model;
-                if (m) {
-                    const fname = (f) => ({ log_floor_size: 'Floor Area', distance_to_cbd_km: 'Distance to CBD', distance_to_transit_km: 'Distance to Transit', bedrooms: 'Bedrooms', bathrooms: 'Bathrooms', is_full_furnished: 'Full Furnished' }[f] || f.replace('city_', 'City: '));
-                    if (document.getElementById('avm-badge')) document.getElementById('avm-badge').innerText = 'Out-of-fold R² = ' + (m.r2 * 100).toFixed(1) + '%';
-                    if (document.getElementById('avm-r2')) document.getElementById('avm-r2').innerText = (m.r2 * 100).toFixed(1) + '% R²';
-                    if (document.getElementById('avm-r2-sub')) document.getElementById('avm-r2-sub').innerText = 'Naive baseline ' + (m.baseline_naive_r2 * 100).toFixed(1) + '% · unseen subdistricts ' + (m.unseen_subdistrict_r2 * 100).toFixed(1) + '%';
-                    if (document.getElementById('avm-mae')) document.getElementById('avm-mae').innerText = 'IDR ' + (m.mae_idr / 1e6).toFixed(2) + 'M';
-                    if (document.getElementById('avm-mape')) document.getElementById('avm-mape').innerText = m.mape_pct.toFixed(1) + '% MAPE';
-                    if (document.getElementById('avm-mape-sub')) document.getElementById('avm-mape-sub').innerText = 'Median APE ' + m.median_ape_pct.toFixed(1) + '% (typical listing)';
-                    if (m.top_features && m.top_features.length >= 2) {
-                        if (document.getElementById('avm-f1')) document.getElementById('avm-f1').innerText = fname(m.top_features[0].feature) + ' (' + (m.top_features[0].importance * 100).toFixed(1) + '%)';
-                        if (document.getElementById('avm-f2')) document.getElementById('avm-f2').innerText = 'Then ' + fname(m.top_features[1].feature) + ' (' + (m.top_features[1].importance * 100).toFixed(1) + '%)';
-                    }
-                }
-            } catch (err) {
-                console.error("Telemetry load failed", err);
-            }
-        }
-
-        // Fetch District Benchmarks
-        async function fetchBenchmarks() {
-            try {
-                const res = await fetch('/api/benchmarks');
-                allBenchmarks = await res.json();
-                renderBenchmarkTable(allBenchmarks.cities);
-            } catch (err) {
-                console.error("Failed to load benchmarks", err);
-            }
-        }
-
-        function renderBenchmarkTable(cities) {
-            const tbody = document.getElementById('benchmark-tbody');
-            if (!tbody) return;
-            tbody.innerHTML = '';
-            cities.forEach(c => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td style="font-weight: 500; color: var(--color-paper);">${c.target_city}</td>
-                    <td class="mono" style="color: var(--color-fog);">${c.sample_size}</td>
-                    <td class="mono">IDR ${(c.median_rent_idr / 1e6).toFixed(1)}M</td>
-                    <td class="mono" style="color: var(--color-acid-lime);">IDR ${Math.round(c.median_price_per_m2_idr/1000)}k</td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        // Fetch Listings & Render
-        async function fetchListings() {
-            try {
-                const res = await fetch('/api/listings?limit=800');
-                const data = await res.json();
-                allListings = data.data || data.listings || [];
-                applyFilters();
-            } catch (err) {
-                console.error("Failed to load listings", err);
-            }
-        }
-
-        // Apply Client-Side Reactive Filters
-        function applyFilters() {
-            const selectedCity = document.getElementById('filter-city').value;
-            const subdistrictEl = document.getElementById('filter-subdistrict');
-            const selectedSubdistrict = subdistrictEl ? subdistrictEl.value : 'All';
-            const selectedLayout = document.getElementById('filter-layout').value;
-            const maxBudget = parseFloat(document.getElementById('filter-budget').value);
-            const furnishedOnly = document.getElementById('filter-furnished').checked;
-            const searchEl = document.getElementById('filter-search');
-            const searchQuery = searchEl ? searchEl.value.trim().toLowerCase() : '';
-            const sortOrder = document.getElementById('filter-sort') ? document.getElementById('filter-sort').value : 'default';
-
-            let filtered = allListings.filter(item => {
-                if (selectedCity !== 'All' && item.target_city !== selectedCity) return false;
-                if (selectedSubdistrict !== 'All' && item.subdistrict !== selectedSubdistrict) return false;
-                if (selectedLayout !== 'All' && item.layout_category !== selectedLayout) return false;
-                if (maxBudget < 100000000 && item.price_monthly_idr > maxBudget) return false;
-                if (furnishedOnly && !item.is_full_furnished) return false;
-
-                if (currentInventoryMode === 'deals') {
-                    if (item.deal_score_z > -0.75) return false;
-                    if (currentDealTier === 'deep' && !(item.deal_tier === 'Deep Value' || item.deal_score_z <= -1.2)) return false;
-                    if (currentDealTier === 'good' && !(item.deal_tier === 'Good Deal' || (item.deal_score_z > -1.2 && item.deal_score_z <= -0.75))) return false;
-                }
-
-                if (searchQuery) {
-                    const titleMatch = item.title && item.title.toLowerCase().includes(searchQuery);
-                    const subMatch = item.subdistrict && item.subdistrict.toLowerCase().includes(searchQuery);
-                    const cityMatch = item.target_city && item.target_city.toLowerCase().includes(searchQuery);
-                    if (!titleMatch && !subMatch && !cityMatch) return false;
-                }
-                return true;
-            });
-
-            // Sorting
-            if (sortOrder === 'price-asc') {
-                filtered.sort((a, b) => a.price_monthly_idr - b.price_monthly_idr);
-            } else if (sortOrder === 'price-desc') {
-                filtered.sort((a, b) => b.price_monthly_idr - a.price_monthly_idr);
-            } else if (sortOrder === 'deal-desc') {
-                filtered.sort((a, b) => a.deal_score_z - b.deal_score_z);
-            } else if (sortOrder === 'm2-asc') {
-                filtered.sort((a, b) => a.price_per_m2_idr - b.price_per_m2_idr);
-            } else if (sortOrder === 'size-desc') {
-                filtered.sort((a, b) => b.floor_size_m2 - a.floor_size_m2);
-            }
-
-            currentFilteredListings = filtered;
-
-            document.getElementById('count-filtered').innerText = `${filtered.length} Units Displayed`;
-            renderDistrictsGrid();
-
-            const subLabel = document.getElementById('tab1-subdistrict-label');
-            if (subLabel) {
-                const modePrefix = currentInventoryMode === 'deals' ? '⚡ Deals in ' : '';
-                subLabel.innerText = selectedSubdistrict !== 'All' 
-                    ? `${modePrefix}${selectedSubdistrict} (${filtered.length} units)` 
-                    : (selectedCity !== 'All' ? `${modePrefix}${selectedCity} (${filtered.length} units)` : `${modePrefix}Greater Jakarta (${filtered.length} units)`);
-            }
-
-            renderListingsCards(filtered);
-        }
-
-        function renderListingsCards(filtered) {
-            const tab1Container = document.getElementById('tab1-listings-container');
-            const paginationStatus = document.getElementById('pagination-status');
-            const btnLoadMore = document.getElementById('btn-load-more');
-            if (!tab1Container) return;
-
-            if (filtered.length === 0) {
-                tab1Container.innerHTML = '<div style="color: var(--color-fog); padding: 36px; text-align: center; font-size: 13px; grid-column: 1 / -1;">No listings match the selected filter criteria.</div>';
-                if (paginationStatus) paginationStatus.innerText = 'Showing 0 of 0 listings';
-                if (btnLoadMore) btnLoadMore.style.display = 'none';
-                return;
-            }
-
-            const visibleSlice = filtered.slice(0, visibleListingsCount);
-            if (paginationStatus) {
-                paginationStatus.innerText = `Showing ${visibleSlice.length} of ${filtered.length} listings`;
-            }
-            if (btnLoadMore) {
-                btnLoadMore.style.display = (visibleListingsCount >= filtered.length) ? 'none' : 'inline-block';
-            }
-
-            const cardsHtml = visibleSlice.map(item => {
-                const cleanUrl = item.url.startsWith('http') ? item.url : `https://www.rumah123.com${item.url}`;
-                const isDeal = (item.deal_score_z <= -0.75);
-                const isDeep = (item.deal_score_z <= -1.2 || item.deal_tier === 'Deep Value');
-
-                let dealPricingBlock = '';
-                if (isDeal) {
-                    const fairEst = item.fair_market_rent_idr || (item.price_monthly_idr * (1 + (item.discount_pct || 20) / 100));
-                    const savings = Math.max(0, fairEst - item.price_monthly_idr);
-                    const discount = item.discount_pct ? Math.round(item.discount_pct) : Math.round((savings / fairEst) * 100);
-                    dealPricingBlock = `
-                        <div class="deal-pricing-block">
-                            <div>
-                                <div style="font-size: 9px; color: var(--color-fog); text-transform: uppercase;">Asking Rent</div>
-                                <div class="mono" style="font-size: 13px; color: var(--color-paper); font-weight: 600;">IDR ${(item.price_monthly_idr/1e6).toFixed(1)}M</div>
-                            </div>
-                            <div>
-                                <div style="font-size: 9px; color: var(--color-fog); text-transform: uppercase;">Fair Est.</div>
-                                <div class="mono" style="font-size: 13px; color: var(--color-fog); font-weight: 500;">IDR ${(fairEst/1e6).toFixed(1)}M</div>
-                            </div>
-                            <div>
-                                <div style="font-size: 9px; color: var(--color-acid-lime); text-transform: uppercase;">Savings</div>
-                                <div class="mono" style="font-size: 13px; color: var(--color-acid-lime); font-weight: 600;">-${discount}%</div>
-                            </div>
-                        </div>
-                    `;
-                }
-
-                return `
-                    <div class="listing-card${isDeal ? ' is-deal' : ''}">
-                        <div>
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
-                                <div class="mono" style="font-size: 10px; color: var(--color-fog); text-transform: uppercase;">
-                                    ${item.target_city} • ${item.subdistrict}
-                                </div>
-                                ${isDeal ? `<span class="mono" style="font-size: 9px; background: ${isDeep ? 'rgba(228, 242, 34, 0.2)' : 'rgba(100, 100, 255, 0.15)'}; color: ${isDeep ? 'var(--color-acid-lime)' : 'var(--color-paper)'}; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${isDeep ? '🔥 DEEP VALUE' : '✨ GOOD DEAL'}</span>` : ''}
-                            </div>
-                            <h4 style="font-size: 13px; font-weight: 500; color: var(--color-paper); margin-bottom: 8px; line-height: 1.35;">${item.title}</h4>
-                            <div style="font-size: 11px; color: var(--color-fog); margin-bottom: 8px; display: flex; flex-wrap: wrap; gap: 6px;">
-                                <span class="mono" style="background: rgba(255,255,255,0.04); padding: 2px 6px; border-radius: 4px;">📐 ${item.floor_size_m2} m²</span>
-                                <span class="mono" style="background: rgba(255,255,255,0.04); padding: 2px 6px; border-radius: 4px;">🛏️ ${item.layout_category}</span>
-                                <span style="background: rgba(255,255,255,0.04); padding: 2px 6px; border-radius: 4px;">🛋️ ${item.is_full_furnished ? 'Furnished' : (item.is_semi_furnished ? 'Semi' : 'Unfurnished')}</span>
-                            </div>
-                            ${dealPricingBlock}
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-graphite); padding-top: 10px; margin-top: 6px;">
-                            <div>
-                                ${!isDeal ? `
-                                <div style="font-size: 9px; color: var(--color-fog); text-transform: uppercase;">Asking Rent</div>
-                                <div class="mono" style="font-size: 15px; color: var(--color-paper); font-weight: 600;">
-                                    IDR ${(item.price_monthly_idr/1e6).toFixed(1)}M <span style="font-size: 10px; color: var(--color-fog); font-weight: 400;">/ mo</span>
-                                </div>
-                                ` : `
-                                <div class="mono" style="font-size: 10px; color: var(--color-fog);">
-                                    IDR ${Math.round(item.price_per_m2_idr/1000)}k/m²
-                                </div>
-                                `}
-                            </div>
-                            <a href="${cleanUrl}" target="_blank" class="btn-action-lime" style="padding: 6px 12px; font-size: 11px; text-decoration: none;">
-                                View Listing ↗
-                            </a>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            tab1Container.innerHTML = cardsHtml;
-        }
-
-        // -------------------------------------------------------------
-        // HEDONIC SIMULATOR & URBAN DECAY FUNCTIONS (RESTORED)
-        // -------------------------------------------------------------
-        function updateSimSubdistricts() {
-            const city = document.getElementById('sim-city').value;
-            const sel = document.getElementById('sim-subdistrict');
-            if (!sel) return;
-            const currentVal = sel.value;
-            sel.innerHTML = '<option value="">All Districts (City Median)</option>';
-
-            const matched = allDistricts.filter(d => d.target_city === city);
-            matched.forEach(d => {
-                const opt = document.createElement('option');
-                opt.value = d.subdistrict;
-                opt.innerText = `${d.subdistrict} (Median: Rp ${Math.round(d.median_price_per_m2_idr).toLocaleString()}/m²)`;
-                sel.appendChild(opt);
-            });
-            if (matched.some(d => d.subdistrict === currentVal)) {
-                sel.value = currentVal;
-            }
-            onSimSubdistrictChange();
-        }
-
-        function onSimCityChange() {
-            updateSimSubdistricts();
-        }
-
-        function onSimSubdistrictChange() {
-            const city = document.getElementById('sim-city').value;
-            const sub = document.getElementById('sim-subdistrict').value;
-            const found = allDistricts.find(d => d.target_city === city && d.subdistrict === sub);
-
-            const baselineBox = document.getElementById('sim-subdistrict-baseline');
-            if (found && baselineBox) {
-                baselineBox.style.display = 'block';
-                baselineBox.innerHTML = `📍 <strong>Data Pasaran ${found.subdistrict}:</strong> Median tarif pasaran <strong>Rp ${Math.round(found.median_price_per_m2_idr).toLocaleString()} / m²</strong> (${found.unit_count} listing terdata di kawasan ini).`;
-            } else if (baselineBox) {
-                baselineBox.style.display = 'none';
-            }
-            runSimulation();
-        }
-
-        function onFurnishSelectChange() {
-            const type = document.getElementById('sim-furnish-type').value;
-            const ffBox = document.getElementById('sim-ff');
-            if (ffBox) {
-                ffBox.checked = (type === 'full');
-            }
-            runSimulation();
-        }
-
-        // Run Hedonic Valuation Simulator (API Call)
-        async function runSimulation() {
-            const subVal = document.getElementById('sim-subdistrict') ? document.getElementById('sim-subdistrict').value : '';
-            const cbdInput = document.getElementById('sim-cbd');
-            const transitInput = document.getElementById('sim-transit');
-
-            const payload = {
-                city: document.getElementById('sim-city').value,
-                subdistrict: subVal || null,
-                floor_size_m2: parseFloat(document.getElementById('sim-size').value) || 45,
-                bedrooms: parseInt(document.getElementById('sim-beds').value) || 2,
-                bathrooms: parseInt(document.getElementById('sim-baths').value) || 1,
-                distance_to_cbd_km: (cbdInput && cbdInput.value) ? parseFloat(cbdInput.value) : null,
-                distance_to_transit_km: (transitInput && transitInput.value) ? parseFloat(transitInput.value) : null,
-                is_full_furnished: document.getElementById('sim-ff').checked,
-                has_ac: document.getElementById('sim-ac').checked,
-                has_pool: document.getElementById('sim-pool').checked,
-                has_gym: document.getElementById('sim-gym').checked,
-                has_balcony: document.getElementById('sim-balcony').checked,
-                has_kitchen: document.getElementById('sim-kitchen').checked
-            };
-
-            try {
-                const res = await fetch('/api/simulate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const result = await res.json();
-
-                if (document.getElementById('sim-output-rent')) {
-                    document.getElementById('sim-output-rent').innerText = 'IDR ' + result.fair_market_rent_idr.toLocaleString() + ' / mo';
-                }
-                if (document.getElementById('sim-output-ci')) {
-                    document.getElementById('sim-output-ci').innerText = `Rentang empiris ${result.interval_level_pct}%: IDR ${(result.ci_lower_idr/1e6).toFixed(1)}M - IDR ${(result.ci_upper_idr/1e6).toFixed(1)}M / month`;
-                }
-                if (document.getElementById('sim-output-rate')) {
-                    document.getElementById('sim-output-rate').innerText = `Effective Space Rate: IDR ${result.implicit_rate_per_m2_idr.toLocaleString()} / m²`;
-                }
-
-                // Update Bu Sarah Section if open
-                if (result.furnishing_analysis) {
-                    const fa = result.furnishing_analysis;
-                    if (document.getElementById('pro-roi-monthly')) document.getElementById('pro-roi-monthly').innerText = '+IDR ' + fa.monthly_extra_cashflow_idr.toLocaleString();
-                    if (document.getElementById('pro-roi-annual')) document.getElementById('pro-roi-annual').innerText = '+IDR ' + (fa.annual_extra_cashflow_idr / 1e6).toFixed(1) + 'M';
-                    if (document.getElementById('pro-roi-cost')) document.getElementById('pro-roi-cost').innerText = 'IDR ' + fa.estimated_fitout_cost_idr.toLocaleString();
-                    if (document.getElementById('pro-roi-payback')) document.getElementById('pro-roi-payback').innerText = fa.payback_period_months === null ? 'Tidak ada premi dari model' : `${fa.payback_period_years} Years (${fa.payback_period_months} Months)`;
-                }
-
-            } catch (err) {
-                console.error("Simulation error", err);
-            }
-        }
-
-        // Fetch Distance Decay Analytics & Render Chart
-        async function fetchDistanceDecay() {
-            try {
-                const res = await fetch('/api/distance-decay');
-                decayData = await res.json();
-                renderDecayChart(decayData.points);
-                renderZonesTable(decayData.zones);
-            } catch (err) {
-                console.error("Gagal memuat distance decay", err);
-            }
-        }
-
-        function renderDecayChart(points) {
-            const chartCanvas = document.getElementById('decayChart');
-            if (!chartCanvas || typeof Chart === 'undefined') return;
-            const ctx = chartCanvas.getContext('2d');
-            const scatterData = (points || []).map(p => ({
-                x: p.distance_to_cbd_km,
-                y: p.price_per_m2_idr
-            }));
-
-            if (decayChartInstance) {
-                decayChartInstance.destroy();
-            }
-
-            decayChartInstance = new Chart(ctx, {
-                type: 'scatter',
-                data: {
-                    datasets: [{
-                        label: 'Tarif Sewa (Rp/m² vs Jarak CBD)',
-                        data: scatterData,
-                        backgroundColor: '#e4f222',
-                        borderColor: '#e4f222',
-                        pointRadius: 2.5,
-                        pointHoverRadius: 5
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            title: { display: true, text: 'Jarak ke Sudirman CBD (km)', color: '#8a8f98' },
-                            grid: { color: '#23252a' },
-                            ticks: { color: '#8a8f98' }
-                        },
-                        y: {
-                            title: { display: true, text: 'Tarif per m² (Rp)', color: '#8a8f98' },
-                            grid: { color: '#23252a' },
-                            ticks: { 
-                                color: '#8a8f98',
-                                callback: val => 'Rp ' + (val / 1000) + 'k'
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: { display: false }
-                    }
-                }
-            });
-        }
-
-        function renderZonesTable(zones) {
-            const tbody = document.getElementById('zones-tbody');
-            if (!tbody || !zones) return;
-            tbody.innerHTML = '';
-            zones.forEach(z => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td style="font-weight: 500; color: var(--color-paper);">${z.urban_zone}</td>
-                    <td class="mono" style="color: var(--color-fog);">${z.sample_units} Units</td>
-                    <td class="mono" style="color: var(--color-acid-lime);">Rp ${Math.round(z.median_price_per_m2).toLocaleString()}</td>
-                    <td class="mono">Rp ${Math.round(z.mean_price_per_m2).toLocaleString()}</td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        // Tab Switcher
-        function switchTab(tabId) {
-            if (tabId === 'tab-deals') {
-                tabId = 'tab-map';
-                setInventoryMode('deals');
-            }
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            
-            const targetEl = document.getElementById(tabId);
-            if (targetEl) targetEl.classList.add('active');
-
-            if (tabId === 'tab-map') {
-                const btn = document.getElementById('tab-btn-map');
-                if (btn) btn.classList.add('active');
-            } else if (tabId === 'tab-simulator') {
-                const btn = document.getElementById('tab-btn-simulator');
-                if (btn) btn.classList.add('active');
-            } else if (tabId === 'tab-investor') {
-                const btn = document.getElementById('tab-btn-investor');
-                if (btn) btn.classList.add('active');
-                if (decayChartInstance) {
-                    setTimeout(() => decayChartInstance.resize(), 50);
-                }
-            }
-        }
-
-        // -------------------------------------------------------------
-        // AUTHENTICATION & PERSONA MANAGEMENT (LOGIN MODAL)
-        // -------------------------------------------------------------
-        function openLoginModal() {
-            document.getElementById('login-modal').classList.add('active');
-        }
-
-        function closeLoginModal() {
-            document.getElementById('login-modal').classList.remove('active');
-        }
-
-        function selectPersonaOption(role) {
-            selectedModalRole = role;
-            const cards = document.querySelectorAll('.persona-choice-card');
-            cards[0].classList.toggle('selected', role === 'renter');
-            cards[1].classList.toggle('selected', role === 'investor');
-        }
-
-        function confirmLoginSelection() {
-            closeLoginModal();
-            if (selectedModalRole === 'investor') {
-                setInvestorRole(true);
-                switchTab('tab-investor');
-            } else {
-                setInvestorRole(false);
-                switchTab('tab-map');
-            }
-        }
-
-        function demoLoginInvestor() {
-            setInvestorRole(true);
-            switchTab('tab-investor');
-        }
-
-        function logoutInvestor() {
-            setInvestorRole(false);
-            switchTab('tab-map');
-        }
-
-        function setInvestorRole(isInvestor) {
-            currentUserRole = isInvestor ? 'investor' : 'guest';
-            localStorage.setItem('hi_user_role', currentUserRole);
-
-            const authContainer = document.getElementById('auth-container');
-            const lockedView = document.getElementById('investor-locked-view');
-            const unlockedView = document.getElementById('investor-unlocked-view');
-            const lockBadge = document.getElementById('investor-lock-badge');
-
-            if (isInvestor) {
-                authContainer.innerHTML = `
-                    <div class="user-profile-badge">
-                        <span>🏢 Bu Sarah (Investor)</span>
-                        <button class="btn-logout" onclick="logoutInvestor()">Sign Out</button>
-                    </div>
-                `;
-                lockedView.style.display = 'none';
-                unlockedView.style.display = 'block';
-                lockBadge.innerText = 'TERBUKA';
-                lockBadge.style.color = 'var(--color-pulse-green)';
-                lockBadge.style.borderColor = 'rgba(39, 166, 68, 0.4)';
-            } else {
-                authContainer.innerHTML = `
-                    <button class="btn-nav-login" onclick="openLoginModal()">Sign In / Pro Investor Access ↗</button>
-                `;
-                lockedView.style.display = 'block';
-                unlockedView.style.display = 'none';
-                lockBadge.innerText = 'PRO';
-                lockBadge.style.color = 'var(--color-acid-lime)';
-                lockBadge.style.borderColor = 'rgba(228, 242, 34, 0.2)';
-            }
-        }
-
-        function updateBudgetLabel(val) {
-            const num = parseFloat(val);
-            if (num >= 100000000) {
-                document.getElementById('budget-label').innerText = 'All Budgets (No Limit)';
-            } else {
-                const jt = (num / 1e6).toFixed(1);
-                document.getElementById('budget-label').innerText = 'IDR ' + jt + 'M / mo';
-            }
-        }
-
-        // Start on Page Load
-        window.addEventListener('DOMContentLoaded', initApp);
-    </script>
+    <!-- MODULAR JAVASCRIPT LOGIC -->
+    <script src="/static/js/state.js"></script>
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/explorer.js"></script>
+    <script src="/static/js/simulator.js"></script>
+    <script src="/static/js/investor.js"></script>
+    <script src="/static/js/auth.js"></script>
+    <script src="/static/js/app.js"></script>
 </body>
+
 </html>

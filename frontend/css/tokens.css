@@ -1,0 +1,87 @@
+/* ---------------------------------------------------------
+   AIRBNB.ORG EDITORIAL LUXURY DESIGN SYSTEM (taste-skill + soft-skill)
+   "Editorial masthead on white paper — the page speaks through
+   scale, micro-tension, and silence, not ornament."
+--------------------------------------------------------- */
+:root {
+    /* Achromatic & Refined Editorial Palette */
+    --color-carbon-ink: #1c1c1e;
+    --color-carbon-soft: #2c2c2e;
+    --color-paper-white: #ffffff;
+    --color-newsprint-gray: #f8f8f9;
+    --color-pebble: #eaeaea;
+    --color-pebble-light: #f2f2f3;
+    --color-fog: #6e6e73;
+    --color-ash: #98989d;
+    --color-brand: #b30057;
+    /* Wordmark accent only */
+
+    /* Compatibility Aliases */
+    --color-void: var(--color-paper-white);
+    --color-carbon: var(--color-paper-white);
+    --color-obsidian: var(--color-newsprint-gray);
+    --color-graphite: var(--color-pebble);
+    --color-smoke: var(--color-pebble);
+    --color-paper: var(--color-carbon-ink);
+    --color-mist: var(--color-carbon-ink);
+    --color-acid-lime: var(--color-carbon-ink);
+    --color-pulse-green: var(--color-carbon-ink);
+
+    /* Typography Families */
+    --font-ui: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Berkeley Mono', ui-monospace, monospace;
+
+    /* Type Scale & Letter-Spacing (Negative tracking at scale) */
+    --text-caption: 13px;
+    --leading-caption: 1.45;
+    --text-body-sm: 15px;
+    --leading-body-sm: 1.55;
+    --text-body: 17px;
+    --leading-body: 1.6;
+    --text-subheading: 22px;
+    --leading-subheading: 1.3;
+    --tracking-subheading: -0.015em;
+    --text-heading-sm: 26px;
+    --leading-heading-sm: 1.25;
+    --tracking-heading-sm: -0.02em;
+    --text-heading: 44px;
+    --leading-heading: 1.15;
+    --tracking-heading: -0.025em;
+    --text-display: 64px;
+    --leading-display: 1.1;
+    --tracking-display: -0.035em;
+
+    /* Spacing Units */
+    --spacing-4: 4px;
+    --spacing-8: 8px;
+    --spacing-12: 12px;
+    --spacing-16: 16px;
+    --spacing-20: 20px;
+    --spacing-24: 24px;
+    --spacing-32: 32px;
+    --spacing-40: 40px;
+    --spacing-48: 48px;
+    --spacing-64: 64px;
+
+    /* Radii Geometry (Concentric inner/outer curves) */
+    --radius-cards: 14px;
+    --radius-cards-inner: 10px;
+    --radius-buttons: 9999px;
+    /* Pill CTAs per soft-skill */
+    --radius-inputs: 10px;
+    --radius-links: 6px;
+
+    /* Shadows & Ambient Depth */
+    --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.02), 0 4px 12px rgba(0, 0, 0, 0.025);
+    --shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.05), 0 1px 4px rgba(0, 0, 0, 0.02);
+    --shadow-modal: 0 24px 48px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04);
+
+    /* Physics & Motion Curves (custom cubic-bezier) */
+    --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-fast: 0.18s var(--ease-spring);
+    --transition-normal: 0.28s var(--ease-spring);
+    --transition-slow: 0.45s var(--ease-spring);
+
+    /* Layout Constraints */
+    --page-max-width: 1240px;
+}
