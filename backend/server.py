@@ -293,6 +293,18 @@ def simulate_rent(req: SimulationRequest):
     transit_km = req.distance_to_transit_km if req.distance_to_transit_km is not None else _area_default(req, "distance_to_transit_km", 1.5)
 
     fair = float(np.exp(MODEL.predict(_feature_row(req, cbd_km, transit_km))[0]))
+
+    # Enforce hedonic monotonicity guardrail:
+    # Under ceteris paribus (same city, size, distance, and amenities),
+    # an apartment with more bedrooms/bathrooms cannot be valued lower than a smaller-room unit.
+    if req.bedrooms > 0:
+        for lower_b in range(0, req.bedrooms):
+            for lower_ba in range(1, req.bathrooms + 1):
+                lower_req = req.model_copy(update={"bedrooms": lower_b, "bathrooms": lower_ba})
+                lower_fair = float(np.exp(MODEL.predict(_feature_row(lower_req, cbd_km, transit_km))[0]))
+                if lower_fair > fair:
+                    fair = lower_fair
+
     est_fair_rent = round(fair / 50_000) * 50_000
     ci_lower = round(fair * INTERVAL["lower_factor"] / 50_000) * 50_000
     ci_upper = round(fair * INTERVAL["upper_factor"] / 50_000) * 50_000

@@ -3,6 +3,61 @@
  * Tab 2: Smart Rent Valuation Simulator (Hedonic AVM)
  */
 
+const BEDROOM_PRESETS = {
+    0: { typicalSize: 28, typicalBaths: 1, minRealisticSize: 18, maxRealisticSize: 45, labelId: '20–35 m²', labelEn: '20–35 m²' },
+    1: { typicalSize: 45, typicalBaths: 1, minRealisticSize: 28, maxRealisticSize: 70, labelId: '35–55 m²', labelEn: '35–55 m²' },
+    2: { typicalSize: 70, typicalBaths: 1, minRealisticSize: 48, maxRealisticSize: 110, labelId: '55–90 m²', labelEn: '55–90 m²' },
+    3: { typicalSize: 120, typicalBaths: 2, minRealisticSize: 85, maxRealisticSize: 180, labelId: '95–160 m²', labelEn: '95–160 m²' },
+    4: { typicalSize: 200, typicalBaths: 3, minRealisticSize: 140, maxRealisticSize: 320, labelId: '170–280 m²', labelEn: '170–280 m²' }
+};
+
+function onSimBedsChange() {
+    const beds = parseInt(document.getElementById('sim-beds').value);
+    const preset = BEDROOM_PRESETS[beds] || BEDROOM_PRESETS[2];
+    const sizeInput = document.getElementById('sim-size');
+    const bathsSelect = document.getElementById('sim-baths');
+
+    if (sizeInput) {
+        sizeInput.value = preset.typicalSize;
+    }
+    if (bathsSelect) {
+        bathsSelect.value = preset.typicalBaths;
+    }
+    updateSizeHint();
+    runSimulation();
+}
+window.onSimBedsChange = onSimBedsChange;
+
+function updateSizeHint() {
+    const bedsEl = document.getElementById('sim-beds');
+    if (!bedsEl) return;
+    const beds = parseInt(bedsEl.value);
+    const preset = BEDROOM_PRESETS[beds] || BEDROOM_PRESETS[2];
+    const isEn = (AppState.currentLanguage === 'en');
+    const hintEl = document.getElementById('sim-size-hint');
+    const warnEl = document.getElementById('sim-size-warning');
+    const currentSize = parseFloat(document.getElementById('sim-size')?.value) || preset.typicalSize;
+
+    if (hintEl) {
+        const hintText = isEn 
+            ? `Standard market size: <strong>${preset.labelEn}</strong>`
+            : `Standar tipikal pasar: <strong>${preset.labelId}</strong>`;
+        hintEl.innerHTML = hintText;
+    }
+
+    if (warnEl) {
+        if (currentSize < preset.minRealisticSize) {
+            warnEl.style.display = 'block';
+            warnEl.innerHTML = isEn
+                ? `⚠️ <strong>Note:</strong> ${currentSize} m² is unusually compact for a ${beds}-bedroom apartment in Greater Jakarta (typical: ${preset.labelEn}). Hedonic pricing models evaluate rent based on effective usable space.`
+                : `⚠️ <strong>Catatan arsitektur:</strong> Luas ${currentSize} m² sangat sempit untuk unit ${beds} kamar tidur di Jabodetabek (standar pasar: ${preset.labelId}). Valuasi hedonik mengevaluasi harga berbasis efisiensi ruang efektif.`;
+        } else {
+            warnEl.style.display = 'none';
+        }
+    }
+}
+window.updateSizeHint = updateSizeHint;
+
 function updateSimSubdistricts() {
     const city = document.getElementById('sim-city').value;
     const sel = document.getElementById('sim-subdistrict');
@@ -61,6 +116,7 @@ function onFurnishSelectChange() {
 window.onFurnishSelectChange = onFurnishSelectChange;
 
 async function runSimulation() {
+    updateSizeHint();
     const subVal = document.getElementById('sim-subdistrict') ? document.getElementById('sim-subdistrict').value : '';
     const cbdInput = document.getElementById('sim-cbd');
     const transitInput = document.getElementById('sim-transit');

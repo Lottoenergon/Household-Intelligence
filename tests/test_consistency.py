@@ -59,6 +59,19 @@ def test_simulate_uses_model_bigger_unit_costs_more_and_range_is_ordered():
         assert r["interval_level_pct"] == 80
 
 
+def test_simulate_monotonic_bedrooms_and_realistic_presets():
+    """Memastikan unit 4BR tidak pernah lebih murah dari 2BR baik pada luas tetap maupun tipikal pasar."""
+    # 1. Pada luas tetap (misal 120 m2) di kota yang sama: 4BR >= 2BR
+    r2_same = client.post("/api/simulate", json={"city": "Jakarta Selatan", "floor_size_m2": 120, "bedrooms": 2, "bathrooms": 2}).json()
+    r4_same = client.post("/api/simulate", json={"city": "Jakarta Selatan", "floor_size_m2": 120, "bedrooms": 4, "bathrooms": 3}).json()
+    assert r4_same["fair_market_rent_idr"] >= r2_same["fair_market_rent_idr"]
+
+    # 2. Pada preset tipikal pasar (2BR 70 m2 vs 4BR 200 m2): 4BR jauh lebih mahal
+    r2_preset = client.post("/api/simulate", json={"city": "Jakarta Selatan", "floor_size_m2": 70, "bedrooms": 2, "bathrooms": 1}).json()
+    r4_preset = client.post("/api/simulate", json={"city": "Jakarta Selatan", "floor_size_m2": 200, "bedrooms": 4, "bathrooms": 3}).json()
+    assert r4_preset["fair_market_rent_idr"] > r2_preset["fair_market_rent_idr"] * 1.5
+
+
 def test_simulate_rejects_unknown_city_and_out_of_range_size():
     assert client.post("/api/simulate", json={"city": "Surabaya"}).status_code == 400
     assert client.post("/api/simulate", json={"floor_size_m2": 900}).status_code == 400

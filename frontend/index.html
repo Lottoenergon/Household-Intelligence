@@ -391,8 +391,9 @@
                     <div class="form-row-2col">
                         <div class="form-group">
                             <label class="form-label" data-i18n="sim_size_label">Luas bangunan bersih (m²)</label>
-                            <input type="number" id="sim-size" class="text-input mono" value="45" min="15" max="300"
-                                onchange="runSimulation()">
+                            <input type="number" id="sim-size" class="text-input mono" value="70" min="15" max="350"
+                                oninput="runSimulation()" onchange="runSimulation()">
+                            <div id="sim-size-hint" style="font-size: 11px; color: var(--color-fog); margin-top: 4px;">Standar tipikal pasar: 55–90 m²</div>
                         </div>
                         <div class="form-group">
                             <label class="form-label" data-i18n="sim_furnish_label">Kondisi perabot interior</label>
@@ -407,7 +408,7 @@
                     <div class="form-row-2col">
                         <div class="form-group">
                             <label class="form-label" data-i18n="sim_beds_label">Jumlah kamar tidur</label>
-                            <select id="sim-beds" class="select-input" onchange="runSimulation()">
+                            <select id="sim-beds" class="select-input" onchange="onSimBedsChange()">
                                 <option value="0">Tipe studio (0 BR)</option>
                                 <option value="1">1 kamar tidur</option>
                                 <option value="2" selected>2 kamar tidur</option>
@@ -424,6 +425,8 @@
                             </select>
                         </div>
                     </div>
+
+                    <div id="sim-size-warning" style="display: none; background-color: rgba(224, 36, 106, 0.08); border: 1px solid var(--color-brand); border-radius: var(--radius-buttons); padding: 8px 12px; margin-bottom: 14px; font-size: 11.5px; color: var(--color-carbon-ink); line-height: 1.45;"></div>
 
                     <div class="form-row-2col">
                         <div class="form-group">
