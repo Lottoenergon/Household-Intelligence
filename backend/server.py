@@ -151,7 +151,25 @@ def get_listings(
     if layout and layout != "All":
         layouts = [l.strip() for l in layout.split(",") if l.strip()]
         if layouts:
-            filtered = filtered[filtered["layout_category"].isin(layouts)]
+            conds = []
+            for l in layouts:
+                if l.upper() == "STUDIO":
+                    conds.append(filtered["bedrooms"] == 0)
+                elif l.upper() == "1BR":
+                    conds.append(filtered["bedrooms"] == 1)
+                elif l.upper() == "2BR":
+                    conds.append((filtered["bedrooms"] == 2) | (filtered["layout_category"] == "2 Bedroom"))
+                elif l.upper() == "3BR":
+                    conds.append((filtered["bedrooms"] == 3) | (filtered["layout_category"] == "3 Bedroom"))
+                elif l.upper() in ["4BR+", "4BR"]:
+                    conds.append((filtered["bedrooms"] >= 4) | (filtered["layout_category"] == "4+ Bedroom"))
+                else:
+                    conds.append(filtered["layout_category"] == l)
+            if conds:
+                combined_cond = conds[0]
+                for c in conds[1:]:
+                    combined_cond = combined_cond | c
+                filtered = filtered[combined_cond]
     if min_price is not None:
         filtered = filtered[filtered["price_monthly_idr"] >= min_price]
     if max_price is not None:

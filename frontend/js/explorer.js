@@ -175,7 +175,28 @@ function applyFilters() {
     let filtered = AppState.allListings.filter(item => {
         if (selectedCity !== 'All' && item.target_city !== selectedCity) return false;
         if (selectedSubdistrict !== 'All' && item.subdistrict !== selectedSubdistrict) return false;
-        if (selectedLayout !== 'All' && item.layout_category !== selectedLayout) return false;
+        
+        // Robust Layout / Bedroom filtering matching backend data model
+        if (selectedLayout !== 'All') {
+            const beds = parseInt(item.bedrooms);
+            const cat = item.layout_category || '';
+            let layoutMatch = false;
+            if (selectedLayout === 'Studio') {
+                layoutMatch = (beds === 0);
+            } else if (selectedLayout === '1BR') {
+                layoutMatch = (beds === 1);
+            } else if (selectedLayout === '2BR') {
+                layoutMatch = (beds === 2);
+            } else if (selectedLayout === '3BR') {
+                layoutMatch = (beds === 3);
+            } else if (selectedLayout === '4BR+') {
+                layoutMatch = (beds >= 4);
+            } else {
+                layoutMatch = (cat === selectedLayout);
+            }
+            if (!layoutMatch) return false;
+        }
+
         if (maxBudget < 100000000 && item.price_monthly_idr > maxBudget) return false;
         if (furnishedOnly && !item.is_full_furnished) return false;
 
