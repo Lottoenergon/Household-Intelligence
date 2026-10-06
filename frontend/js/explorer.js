@@ -33,13 +33,15 @@ function populateFilterSubdistricts() {
     const sel = document.getElementById('filter-subdistrict');
     if (!sel) return;
     const currentVal = sel.value;
-    sel.innerHTML = '<option value="All">All Districts in this City</option>';
+    const defaultLabel = typeof t === 'function' ? t('filter_subdistrict_all', 'Semua distrik di kota ini') : 'Semua distrik di kota ini';
+    sel.innerHTML = `<option value="All">${defaultLabel}</option>`;
 
+    const unitWord = typeof t === 'function' ? t('units_count', 'unit') : 'unit';
     const matched = AppState.allDistricts.filter(d => city === 'All' || d.target_city === city);
     matched.forEach(d => {
         const opt = document.createElement('option');
         opt.value = d.subdistrict;
-        opt.innerText = `${d.subdistrict} (${d.unit_count} units)`;
+        opt.innerText = `${d.subdistrict} (${d.unit_count} ${unitWord})`;
         sel.appendChild(opt);
     });
     if (matched.some(d => d.subdistrict === currentVal)) {
@@ -68,12 +70,18 @@ function renderDistrictsGrid() {
         matched = matched.filter(d => d.deals_count > 0);
     }
 
+    const distWord = typeof t === 'function' ? t('districts_count', 'distrik') : 'distrik';
+    const withDealsWord = typeof t === 'function' ? t('with_deals', 'dengan unit hemat') : 'dengan unit hemat';
+    const monWord = typeof t === 'function' ? t('monitored', 'dipantau') : 'dipantau';
+    const dealsWord = typeof t === 'function' ? t('deals_available', 'unit hemat') : 'unit hemat';
+    const perMonth = typeof t === 'function' ? t('per_month', '/ bln') : '/ bln';
+
     if (badge) {
-        badge.innerText = `${matched.length} Districts ${AppState.currentInventoryMode === 'deals' ? 'with Deals' : 'Monitored'}`;
+        badge.innerText = `${matched.length} ${distWord} ${AppState.currentInventoryMode === 'deals' ? withDealsWord : monWord}`;
     }
 
     if (matched.length === 0) {
-        container.innerHTML = '<div style="color: var(--color-fog); padding: 16px; font-size: 12px;">No districts match the selected criteria.</div>';
+        container.innerHTML = `<div style="color: var(--color-fog); padding: 16px; font-size: 12px;">${typeof t === 'function' ? t('no_districts_found', 'Tidak ada distrik yang cocok dengan kriteria filter.') : 'Tidak ada distrik yang cocok dengan kriteria filter.'}</div>`;
         return;
     }
 
@@ -85,20 +93,20 @@ function renderDistrictsGrid() {
             <div class="district-card ${isActive ? 'active' : ''}" onclick="selectDistrict('${safeSub}', '${safeCity}')">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
                     <div>
-                        <div class="mono" style="font-size: 10px; color: var(--color-fog); text-transform: uppercase;">${d.target_city}</div>
+                        <div class="mono" style="font-size: 10px; color: var(--color-fog);">${d.target_city}</div>
                         <div style="font-size: 13px; font-weight: 600; color: var(--color-carbon-ink);">${d.subdistrict}</div>
                     </div>
                     <span class="mono" style="font-size: 10px; background: var(--color-newsprint-gray); border: 1px solid var(--color-pebble); padding: 1px 6px; border-radius: 4px; color: var(--color-carbon-ink); font-weight: 500;">${d.unit_count}</span>
                 </div>
                 <div style="border-top: 1px solid var(--color-pebble); padding-top: 6px; margin-top: 6px; display: flex; justify-content: space-between; align-items: baseline;">
                     <div class="mono" style="font-size: 12px; color: var(--color-carbon-ink); font-weight: 600;">
-                        IDR ${(d.median_rent_idr / 1e6).toFixed(1)}M <span style="font-size: 10px; color: var(--color-fog); font-weight: 400;">/ mo</span>
+                        Rp ${(d.median_rent_idr / 1e6).toFixed(1)} jt <span style="font-size: 10px; color: var(--color-fog); font-weight: 400;">${perMonth}</span>
                     </div>
                     <div class="mono" style="font-size: 10px; color: var(--color-fog);">
-                        IDR ${Math.round(d.median_price_per_m2_idr / 1000)}k/m²
+                        Rp ${Math.round(d.median_price_per_m2_idr / 1000)} rb/m²
                     </div>
                 </div>
-                ${d.deals_count > 0 ? `<div style="font-size: 10px; color: var(--color-carbon-ink); margin-top: 4px; font-weight: 600;">⚡ ${d.deals_count} Deals Available</div>` : ''}
+                ${d.deals_count > 0 ? `<div style="font-size: 10px; color: var(--color-carbon-ink); margin-top: 4px; font-weight: 600;">⚡ ${d.deals_count} ${dealsWord}</div>` : ''}
             </div>
         `;
     }).join('');
@@ -231,17 +239,20 @@ function applyFilters() {
     AppState.currentFilteredListings = filtered;
 
     const countFilteredEl = document.getElementById('count-filtered');
+    const unitWord = typeof t === 'function' ? t('units_count', 'unit') : 'unit';
+    const isEn = (AppState.currentLanguage === 'en');
     if (countFilteredEl) {
-        countFilteredEl.innerText = `${filtered.length} Units Displayed`;
+        countFilteredEl.innerText = isEn ? `${filtered.length} ${unitWord} displayed` : `${filtered.length} ${unitWord} ditampilkan`;
     }
     renderDistrictsGrid();
 
     const subLabel = document.getElementById('tab1-subdistrict-label');
     if (subLabel) {
-        const modePrefix = AppState.currentInventoryMode === 'deals' ? '⚡ Deals in ' : '';
+        const modePrefix = AppState.currentInventoryMode === 'deals' ? (isEn ? '⚡ Deals in ' : '⚡ Unit hemat di ') : '';
+        const regionDefault = isEn ? 'Greater Jakarta' : 'Jabodetabek';
         subLabel.innerText = selectedSubdistrict !== 'All'
-            ? `${modePrefix}${selectedSubdistrict} (${filtered.length} units)`
-            : (selectedCity !== 'All' ? `${modePrefix}${selectedCity} (${filtered.length} units)` : `${modePrefix}Greater Jakarta (${filtered.length} units)`);
+            ? `${modePrefix}${selectedSubdistrict} (${filtered.length} ${unitWord})`
+            : (selectedCity !== 'All' ? `${modePrefix}${selectedCity} (${filtered.length} ${unitWord})` : `${modePrefix}${regionDefault} (${filtered.length} ${unitWord})`);
     }
 
     renderListingsCards(filtered);
@@ -272,19 +283,28 @@ function renderListingsCards(filtered) {
     if (!tab1Container) return;
 
     if (filtered.length === 0) {
-        tab1Container.innerHTML = '<div style="color: var(--color-fog); padding: 36px; text-align: center; font-size: 13px; grid-column: 1 / -1;">No listings match the selected filter criteria.</div>';
-        if (paginationStatus) paginationStatus.innerText = 'Showing 0 of 0 listings';
+        tab1Container.innerHTML = `<div style="color: var(--color-fog); padding: 36px; text-align: center; font-size: 13px; grid-column: 1 / -1;">${typeof t === 'function' ? t('no_listings_found', 'Tidak ada unit yang cocok dengan kriteria filter.') : 'Tidak ada unit yang cocok dengan kriteria filter.'}</div>`;
+        if (paginationStatus) paginationStatus.innerText = typeof t === 'function' ? t('showing_units', 'Menampilkan 0 dari 0 unit').replace('{visible}', '0').replace('{total}', '0') : 'Menampilkan 0 dari 0 unit';
         if (btnLoadMore) btnLoadMore.style.display = 'none';
         return;
     }
 
     const visibleSlice = filtered.slice(0, AppState.visibleListingsCount);
     if (paginationStatus) {
-        paginationStatus.innerText = `Showing ${visibleSlice.length} of ${filtered.length} listings`;
+        const statusPattern = typeof t === 'function' ? t('showing_units', 'Menampilkan {visible} dari {total} unit') : 'Menampilkan {visible} dari {total} unit';
+        paginationStatus.innerText = statusPattern.replace('{visible}', visibleSlice.length).replace('{total}', filtered.length);
     }
     if (btnLoadMore) {
         btnLoadMore.style.display = (AppState.visibleListingsCount >= filtered.length) ? 'none' : 'inline-block';
     }
+
+    const askingText = typeof t === 'function' ? t('card_asking_rent', 'Harga sewa') : 'Harga sewa';
+    const fairEstText = typeof t === 'function' ? t('card_fair_est', 'Estimasi wajar') : 'Estimasi wajar';
+    const savingsText = typeof t === 'function' ? t('card_savings', 'Hemat') : 'Hemat';
+    const viewText = typeof t === 'function' ? t('card_view_listing', 'Lihat listing') : 'Lihat listing';
+    const deepBadge = typeof t === 'function' ? t('deal_deep_badge', '🔥 Nilai tinggi') : '🔥 Nilai tinggi';
+    const goodBadge = typeof t === 'function' ? t('deal_good_badge', '✨ Hemat') : '✨ Hemat';
+    const perMonth = typeof t === 'function' ? t('per_month', '/ bln') : '/ bln';
 
     const cardsHtml = visibleSlice.map(item => {
         const cleanUrl = item.url.startsWith('http') ? item.url : `https://www.rumah123.com${item.url}`;
@@ -300,15 +320,15 @@ function renderListingsCards(filtered) {
             dealPricingBlock = `
                 <div class="deal-pricing-block">
                     <div>
-                        <div style="font-size: 10px; color: var(--color-fog); text-transform: uppercase;">Asking Rent</div>
-                        <div class="mono" style="font-size: 13px; color: var(--color-carbon-ink); font-weight: 600;">IDR ${(item.price_monthly_idr / 1e6).toFixed(1)}M</div>
+                        <div style="font-size: 10px; color: var(--color-fog);">${askingText}</div>
+                        <div class="mono" style="font-size: 13px; color: var(--color-carbon-ink); font-weight: 600;">Rp ${(item.price_monthly_idr / 1e6).toFixed(1)} jt</div>
                     </div>
                     <div>
-                        <div style="font-size: 10px; color: var(--color-fog); text-transform: uppercase;">Fair Est.</div>
-                        <div class="mono" style="font-size: 13px; color: var(--color-fog); font-weight: 500;">IDR ${(fairEst / 1e6).toFixed(1)}M</div>
+                        <div style="font-size: 10px; color: var(--color-fog);">${fairEstText}</div>
+                        <div class="mono" style="font-size: 13px; color: var(--color-fog); font-weight: 500;">Rp ${(fairEst / 1e6).toFixed(1)} jt</div>
                     </div>
                     <div>
-                        <div style="font-size: 10px; color: var(--color-carbon-ink); text-transform: uppercase; font-weight: 600;">Savings</div>
+                        <div style="font-size: 10px; color: var(--color-carbon-ink); font-weight: 600;">${savingsText}</div>
                         <div class="mono" style="font-size: 13px; color: var(--color-carbon-ink); font-weight: 700;">-${discount}%</div>
                     </div>
                 </div>
@@ -319,10 +339,10 @@ function renderListingsCards(filtered) {
             <div class="listing-card${isDeal ? ' is-deal' : ''}">
                 <div>
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                        <div class="mono" style="font-size: 10px; color: var(--color-fog); text-transform: uppercase;">
+                        <div class="mono" style="font-size: 10px; color: var(--color-fog);">
                             ${item.target_city} • ${item.subdistrict}
                         </div>
-                        ${isDeal ? `<span class="mono" style="font-size: 10px; ${isDeep ? 'background: var(--color-carbon-ink); color: #ffffff;' : 'background: var(--color-newsprint-gray); color: var(--color-carbon-ink); border: 1px solid var(--color-pebble);'} padding: 3px 8px; border-radius: var(--radius-pills); font-weight: 600; letter-spacing: 0.02em;">${isDeep ? '🔥 DEEP VALUE' : '✨ GOOD DEAL'}</span>` : ''}
+                        ${isDeal ? `<span class="mono" style="font-size: 10px; ${isDeep ? 'background: var(--color-carbon-ink); color: #ffffff;' : 'background: var(--color-newsprint-gray); color: var(--color-carbon-ink); border: 1px solid var(--color-pebble);'} padding: 3px 8px; border-radius: var(--radius-pills); font-weight: 600; letter-spacing: 0.02em;">${isDeep ? deepBadge : goodBadge}</span>` : ''}
                     </div>
                     <h4 style="font-size: 14px; font-weight: 600; color: var(--color-carbon-ink); margin-bottom: 8px; line-height: 1.4;">${displayTitle}</h4>
                     <div style="font-size: 11px; color: var(--color-fog); margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 6px;">
@@ -335,18 +355,18 @@ function renderListingsCards(filtered) {
                 <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-pebble); padding-top: 12px; margin-top: 8px;">
                     <div>
                         ${!isDeal ? `
-                        <div style="font-size: 9px; color: var(--color-fog); text-transform: uppercase;">Asking Rent</div>
+                        <div style="font-size: 9px; color: var(--color-fog);">${askingText}</div>
                         <div class="mono" style="font-size: 15px; color: var(--color-carbon-ink); font-weight: 600;">
-                            IDR ${(item.price_monthly_idr / 1e6).toFixed(1)}M <span style="font-size: 10px; color: var(--color-fog); font-weight: 400;">/ mo</span>
+                            Rp ${(item.price_monthly_idr / 1e6).toFixed(1)} jt <span style="font-size: 10px; color: var(--color-fog); font-weight: 400;">${perMonth}</span>
                         </div>
                         ` : `
                         <div class="mono" style="font-size: 11px; color: var(--color-fog);">
-                            IDR ${Math.round(item.price_per_m2_idr / 1000)}k/m²
+                            Rp ${Math.round(item.price_per_m2_idr / 1000)} rb/m²
                         </div>
                         `}
                     </div>
                     <a href="${cleanUrl}" target="_blank" class="btn-action-dark" style="padding: 6px 12px; font-size: 12px; text-decoration: none;">
-                        <span>View Listing</span>
+                        <span>${viewText}</span>
                         <span class="btn-bubble-icon">↗</span>
                     </a>
                 </div>

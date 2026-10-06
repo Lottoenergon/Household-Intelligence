@@ -85,3 +85,23 @@
     /* Layout Constraints */
     --page-max-width: 1240px;
 }
+
+/* ---------------------------------------------------------
+   LUXURY MATTE DARK MODE (Deep Charcoal & OLED Tone)
+--------------------------------------------------------- */
+[data-theme="dark"] {
+    --color-carbon-ink: #f4f4f6;
+    --color-carbon-soft: #dcdce2;
+    --color-paper-white: #0e0e11;
+    --color-newsprint-gray: #17171b;
+    --color-pebble: #26262b;
+    --color-pebble-light: #1f1f24;
+    --color-fog: #a1a1aa;
+    --color-ash: #71717a;
+    --color-brand: #e0246a;
+
+    /* Ambient Depth for Dark Surface */
+    --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.35);
+    --shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.55), 0 1px 4px rgba(0, 0, 0, 0.35);
+    --shadow-modal: 0 24px 48px rgba(0, 0, 0, 0.75), 0 4px 16px rgba(0, 0, 0, 0.45);
+}

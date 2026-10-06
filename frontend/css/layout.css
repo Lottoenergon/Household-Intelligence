@@ -42,10 +42,9 @@ p {
 }
 
 .eyebrow-tag {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
     color: var(--color-fog);
     display: inline-flex;
     align-items: center;
@@ -375,16 +374,49 @@ p {
 
 @media (max-width: 480px) {
     .app-container {
-        padding: 14px 12px 48px 12px;
+        padding: 14px 10px 48px 10px;
     }
 
     .topbar {
-        padding: 0 12px;
+        padding: 0 10px;
         height: 52px;
     }
 
     .brand-title {
-        font-size: 12px;
+        font-size: 11.5px;
+        letter-spacing: -0.02em;
+    }
+
+    .brand-glyph {
+        width: 10px;
+        height: 10px;
+    }
+
+    .header-controls {
+        gap: 3px;
+    }
+
+    .toggle-pill-group {
+        padding: 2px !important;
+        gap: 1px !important;
+    }
+
+    .toggle-pill-btn {
+        padding: 2px 5px !important;
+        font-size: 9.5px !important;
+    }
+
+    .theme-toggle-btn {
+        width: 26px !important;
+        height: 26px !important;
+        font-size: 11px !important;
+    }
+
+    .btn-nav-login {
+        padding: 4px 8px !important;
+        font-size: 10px !important;
+        height: 26px !important;
+        gap: 4px !important;
     }
 
     .metric-ribbon {

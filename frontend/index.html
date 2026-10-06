@@ -14,12 +14,18 @@
         rel="stylesheet">
 
     <!-- Modular CSS Stylesheets (Airbnb.org Editorial Light System) -->
-    <link rel="stylesheet" href="/static/css/tokens.css?v=2">
-    <link rel="stylesheet" href="/static/css/components.css?v=2">
-    <link rel="stylesheet" href="/static/css/layout.css?v=2">
+    <link rel="stylesheet" href="/static/css/tokens.css?v=3">
+    <link rel="stylesheet" href="/static/css/components.css?v=3">
+    <link rel="stylesheet" href="/static/css/layout.css?v=3">
 
     <!-- Chart.js for Minimalist Urban Decay Analytics (Deferred to prevent render-blocking) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+
+    <!-- Theme Initializer (Prevents Theme Flash) -->
+    <script src="/static/js/theme.js"></script>
+    <script>
+        if (typeof initTheme === 'function') initTheme();
+    </script>
 </head>
 
 <body>
@@ -32,20 +38,31 @@
                 <div class="brand-title">
                     <span class="brand-accent">HOUSEHOLD</span><span class="brand-name">.INTELLIGENCE</span>
                 </div>
-                <span class="mono brand-sub">// PANDUAN SEWA & RADAR PROPERTI</span>
+                <span class="mono brand-sub" data-i18n="brand_tagline">// Panduan sewa & radar properti Jabodetabek</span>
             </div>
 
             <div class="user-auth-area">
                 <div class="status-pill mono">
                     <div class="status-dot"></div>
-                    <span id="topbar-status-text">— UNIT AKTIF DIPANTAU</span>
+                    <span id="topbar-status-text">— Unit aktif dipantau</span>
+                </div>
+
+                <!-- Language Toggle & Theme Switcher Controls -->
+                <div class="header-controls">
+                    <div class="toggle-pill-group">
+                        <button id="lang-btn-id" class="toggle-pill-btn active" onclick="setLanguage('id')">ID</button>
+                        <button id="lang-btn-en" class="toggle-pill-btn" onclick="setLanguage('en')">EN</button>
+                    </div>
+                    <button id="theme-toggle-btn" class="theme-toggle-btn" onclick="toggleTheme()" title="Mode gelap / Dark mode">
+                        <span id="theme-icon">🌙</span>
+                    </button>
                 </div>
 
                 <!-- Login or User Profile Badge -->
                 <div id="auth-container">
                     <button class="btn-nav-login" onclick="openLoginModal()">
-                        <span class="auth-btn-text-full">Sign In / Pro Investor Access</span>
-                        <span class="auth-btn-text-mobile">Investor Sign In</span>
+                        <span class="auth-btn-text-full" data-i18n="topbar_login_full">Masuk / Akses investor pro</span>
+                        <span class="auth-btn-text-mobile" data-i18n="topbar_login_mobile">Akses pro</span>
                         <span class="btn-bubble-icon">↗</span>
                     </button>
                 </div>
@@ -58,38 +75,38 @@
         <!-- 4-COLUMN METRIC RIBBON (CLEAR & ACCURATE) -->
         <div class="metric-ribbon">
             <div class="metric-card">
-                <div class="metric-label">Total Monitored Units</div>
+                <div class="metric-label" data-i18n="kpi_units_label">Total unit dipantau</div>
                 <div class="metric-value" id="kpi-units">—</div>
-                <div class="metric-delta">10 Jabodetabek Cities</div>
+                <div class="metric-delta" data-i18n="kpi_units_delta">10 wilayah di Jabodetabek</div>
             </div>
             <div class="metric-card">
-                <div class="metric-label">Median Monthly Rent</div>
+                <div class="metric-label" data-i18n="kpi_rent_label">Median sewa bulanan</div>
                 <div class="metric-value" id="kpi-rent">—</div>
-                <div class="metric-delta">Market Benchmark</div>
+                <div class="metric-delta" data-i18n="kpi_rent_delta">Benchmark pasar terkini</div>
             </div>
             <div class="metric-card">
-                <div class="metric-label">Median Rate per m²</div>
+                <div class="metric-label" data-i18n="kpi_m2_label">Tarif median per m²</div>
                 <div class="metric-value" id="kpi-m2">—</div>
-                <div class="metric-delta">Effective Space Cost</div>
+                <div class="metric-delta" data-i18n="kpi_m2_delta">Biaya efektif ruang</div>
             </div>
             <div class="metric-card">
-                <div class="metric-label">Bargain Deals Detected</div>
+                <div class="metric-label" data-i18n="kpi_bargains_label">Peluang unit hemat</div>
                 <div class="metric-value" id="kpi-bargains">—</div>
-                <div class="metric-delta">Statistically Below Fair Rent</div>
+                <div class="metric-delta" data-i18n="kpi_bargains_delta">Di bawah estimasi wajar model</div>
             </div>
         </div>
 
         <!-- TAB NAVIGATION -->
         <div class="tab-bar">
-            <button class="tab-btn active" id="tab-btn-map" onclick="switchTab('tab-map')">
-                01 // Rental Market & Deal Explorer
+            <button class="tab-btn active" id="tab-btn-map" onclick="switchTab('tab-map')" data-i18n="tab_map">
+                01 // Radar pasar & explorer listing
             </button>
-            <button class="tab-btn" id="tab-btn-simulator" onclick="switchTab('tab-simulator')">
-                02 // Smart Rent Valuation Simulator
+            <button class="tab-btn" id="tab-btn-simulator" onclick="switchTab('tab-simulator')" data-i18n="tab_simulator">
+                02 // Simulator valuasi sewa pintar
             </button>
             <button class="tab-btn tab-pro" id="tab-btn-investor" onclick="switchTab('tab-investor')">
-                03 // Pro Investor Portal (Bu Sarah)
-                <span class="lock-tag" id="investor-lock-badge">PRO</span>
+                <span data-i18n="tab_investor">03 // Portal investor pro (Bu Sarah)</span>
+                <span class="lock-tag" id="investor-lock-badge" data-i18n="badge_locked">Pro</span>
             </button>
         </div>
 
@@ -98,11 +115,10 @@
         ========================================================= -->
         <div id="tab-map" class="tab-content active">
             <div style="margin-bottom: 24px;">
-                <div class="eyebrow-tag">Market Radar // Live Feed</div>
-                <h2 style="font-size: 22px; margin-bottom: 4px;">01 // Rental Market & Deal Explorer</h2>
+                <div class="eyebrow-tag">Market Radar // Live feed</div>
+                <h2 style="font-size: 22px; margin-bottom: 4px;">01 // Radar pasar sewa & explorer listing</h2>
                 <div style="font-size: 14px; color: var(--color-fog);">
-                    Comprehensive rental housing directory and algorithmic deal hunter across 10 Greater Jakarta
-                    administrative jurisdictions.
+                    Direktori hunian sewa dan radar unit hemat algoritma di 10 wilayah administratif Jabodetabek.
                 </div>
             </div>
 
@@ -113,58 +129,55 @@
                     style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
                     <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
                         <span
-                            style="font-size: 11px; color: var(--color-fog); text-transform: uppercase; font-weight: 600;">Feed
-                            Mode:</span>
+                            style="font-size: 11px; color: var(--color-fog); font-weight: 500;" data-i18n="filter_mode_label">Mode feed:</span>
                         <button class="btn-outline-graphite active" id="mode-btn-all"
                             style="font-size: 11px; padding: 6px 12px;" onclick="setInventoryMode('all')">
-                            All Monitored Listings (<span id="count-all-badge">728</span>)
+                            <span data-i18n="filter_mode_all">Semua unit aktif</span> (<span id="count-all-badge">728</span>)
                         </button>
                         <button class="btn-outline-graphite" id="mode-btn-deals"
                             style="font-size: 11px; padding: 6px 12px;" onclick="setInventoryMode('deals')">
-                            ⚡ Bargain Deals Radar (<span id="count-deals-badge">139</span>)
+                            <span data-i18n="filter_mode_deals">⚡ Radar unit hemat</span> (<span id="count-deals-badge">139</span>)
                         </button>
                         <div id="deal-tier-filters"
                             style="display: none; gap: 6px; align-items: center; margin-left: 6px;">
                             <button class="btn-outline-graphite active" id="tier-pill-all"
-                                style="font-size: 10px; padding: 5px 8px;" onclick="setDealTier('all')">All
-                                Deals</button>
+                                style="font-size: 10px; padding: 5px 8px;" onclick="setDealTier('all')" data-i18n="deal_tier_all">Semua deal</button>
                             <button class="btn-outline-graphite" id="tier-pill-deep"
-                                style="font-size: 10px; padding: 5px 8px;" onclick="setDealTier('deep')">🔥 Deep Value
-                                (&gt;25%)</button>
+                                style="font-size: 10px; padding: 5px 8px;" onclick="setDealTier('deep')" data-i18n="deal_tier_deep">🔥 Nilai tinggi (&gt;25%)</button>
                             <button class="btn-outline-graphite" id="tier-pill-good"
-                                style="font-size: 10px; padding: 5px 8px;" onclick="setDealTier('good')">✨ Good Deals
-                                (15-25%)</button>
+                                style="font-size: 10px; padding: 5px 8px;" onclick="setDealTier('good')" data-i18n="deal_tier_good">✨ Hemat (15-25%)</button>
                         </div>
                     </div>
                     <span class="mono" style="font-size: 12px; color: var(--color-carbon-ink); font-weight: 600;"
-                        id="count-filtered">728 Units Displayed</span>
+                        id="count-filtered">728 unit ditampilkan</span>
                 </div>
 
                 <!-- Row 2: Search, Sort & Dimensional Filters -->
                 <div
                     style="display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; align-items: flex-end;">
                     <div class="form-group" style="margin-bottom: 0;">
-                        <label class="form-label">Search Property Name</label>
+                        <label class="form-label" data-i18n="filter_search_placeholder">Cari nama properti atau area</label>
                         <input type="text" id="filter-search" class="text-input"
-                            placeholder="e.g. Sudirman, Kalibata, Bassura..." oninput="onSearchInput()">
+                            data-i18n-placeholder="filter_search_placeholder"
+                            placeholder="Contoh: Sudirman, Kalibata, Bassura..." oninput="onSearchInput()">
                     </div>
 
                     <div class="form-group" style="margin-bottom: 0;">
-                        <label class="form-label">Sort Listings By</label>
+                        <label class="form-label" data-i18n="sort_default">Urutkan listing</label>
                         <select id="filter-sort" class="select-input" onchange="applyFilters()">
-                            <option value="default">Default (Curated Feed)</option>
-                            <option value="price-asc">Rent: Lowest to Highest</option>
-                            <option value="price-desc">Rent: Highest to Lowest</option>
-                            <option value="deal-desc">Best Deal / Discount First</option>
-                            <option value="m2-asc">Effective Rate: Lowest / m²</option>
-                            <option value="size-desc">Floor Area: Largest First</option>
+                            <option value="default" data-i18n="sort_default">Rekomendasi default</option>
+                            <option value="price-asc" data-i18n="sort_price_asc">Harga sewa: terendah ke tertinggi</option>
+                            <option value="price-desc" data-i18n="sort_price_desc">Harga sewa: tertinggi ke terendah</option>
+                            <option value="deal-desc" data-i18n="sort_deal_desc">Diskon terbesar / paling hemat</option>
+                            <option value="m2-asc" data-i18n="sort_m2_asc">Tarif per m²: terendah</option>
+                            <option value="size-desc" data-i18n="sort_size_desc">Luas bangunan: terluas</option>
                         </select>
                     </div>
 
                     <div class="form-group" style="margin-bottom: 0;">
-                        <label class="form-label">City Jurisdiction</label>
+                        <label class="form-label" data-i18n="filter_city_label">Wilayah kota</label>
                         <select id="filter-city" class="select-input" onchange="onCityFilterChange()">
-                            <option value="All">All 10 Cities (Greater Jakarta)</option>
+                            <option value="All" data-i18n="filter_city_all">Semua 10 kota (Jabodetabek)</option>
                             <option value="Jakarta Selatan">Jakarta Selatan</option>
                             <option value="Jakarta Pusat">Jakarta Pusat</option>
                             <option value="Jakarta Barat">Jakarta Barat</option>
@@ -179,30 +192,30 @@
                     </div>
 
                     <div class="form-group" style="margin-bottom: 0;">
-                        <label class="form-label">Specific District / Subdistrict</label>
+                        <label class="form-label" data-i18n="filter_subdistrict_label">Kecamatan atau distrik</label>
                         <select id="filter-subdistrict" class="select-input" onchange="applyFilters()">
-                            <option value="All">All Districts in this City</option>
+                            <option value="All" data-i18n="filter_subdistrict_all">Semua kecamatan di kota ini</option>
                         </select>
                     </div>
 
                     <div class="form-group" style="margin-bottom: 0;">
-                        <label class="form-label">Layout / Bedrooms</label>
+                        <label class="form-label" data-i18n="filter_layout_label">Tipe kamar tidur</label>
                         <select id="filter-layout" class="select-input" onchange="applyFilters()">
-                            <option value="All">All Layout Types</option>
-                            <option value="Studio">Studio Layout</option>
-                            <option value="1BR">1 Bedroom (1BR)</option>
-                            <option value="2BR">2 Bedrooms (2BR)</option>
-                            <option value="3BR">3 Bedrooms (3BR)</option>
-                            <option value="4BR+">4+ Bedrooms (4BR+)</option>
+                            <option value="All" data-i18n="filter_layout_all">Semua tipe layout</option>
+                            <option value="Studio">Tipe studio</option>
+                            <option value="1BR">1 kamar tidur (1BR)</option>
+                            <option value="2BR">2 kamar tidur (2BR)</option>
+                            <option value="3BR">3 kamar tidur (3BR)</option>
+                            <option value="4BR+">4+ kamar tidur (4BR+)</option>
                         </select>
                     </div>
 
                     <div class="form-group" style="margin-bottom: 0;">
                         <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                            <label class="form-label">Maximum Monthly Budget</label>
+                            <label class="form-label" data-i18n="filter_budget_label">Batas anggaran bulanan</label>
                             <span class="mono"
                                 style="font-size: 11px; color: var(--color-carbon-ink); font-weight: 600;"
-                                id="budget-label">All Budgets (No Limit)</span>
+                                id="budget-label" data-i18n="budget_no_limit">Semua anggaran (tanpa batas)</span>
                         </div>
                         <input type="range" id="filter-budget" class="range-slider" min="1000000" max="100000000"
                             step="1000000" value="100000000" oninput="updateBudgetLabel(this.value)"
@@ -216,11 +229,11 @@
                     <div class="checkbox-group" style="margin: 0; display: flex; gap: 20px;">
                         <label class="checkbox-label">
                             <input type="checkbox" id="filter-furnished" onchange="applyFilters()">
-                            <span>Full Furnished Only</span>
+                            <span data-i18n="filter_furnished_label">Hanya unit full furnished</span>
                         </label>
                     </div>
                     <button class="btn-outline-graphite" style="font-size: 11px; padding: 6px 14px;"
-                        onclick="resetAllFilters()">Reset Filters ↺</button>
+                        onclick="resetAllFilters()" data-i18n="btn_reset_filters">Reset filter ↺</button>
                 </div>
             </div>
 
@@ -228,9 +241,9 @@
             <div class="panel-card" style="margin-bottom: 24px;">
                 <div class="panel-header"
                     style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <span>Subdistrict Benchmarks & Hotspots (Click to Filter)</span>
+                    <span data-i18n="districts_title">Benchmark kecamatan & kawasan populer (klik untuk filter)</span>
                     <span class="mono" style="font-size: 11px; color: var(--color-fog);" id="districts-count-badge">100
-                        Districts Monitored</span>
+                        distrik dipantau</span>
                 </div>
                 <div id="districts-grid-container"
                     style="display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; max-height: 220px; overflow-y: auto; padding-right: 4px;">
@@ -245,22 +258,21 @@
                     <div class="panel-card">
                         <div class="panel-header"
                             style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                            <span>Monitored Rental Listings Feed</span>
+                            <span data-i18n="listings_title">Daftar listing sewa aktif</span>
                             <span class="mono"
                                 style="font-size: 11px; color: var(--color-carbon-ink); font-weight: 600;"
-                                id="tab1-subdistrict-label">Greater Jakarta Region</span>
+                                id="tab1-subdistrict-label">Kawasan Jabodetabek</span>
                         </div>
                         <div id="tab1-listings-container"
                             style="display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px; max-height: 720px; overflow-y: auto; padding-right: 4px;">
                             <!-- Populated with real listing cards -->
                         </div>
                         <div id="listings-pagination-bar"
-                            style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--color-pebble); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                            style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--color-pebble); display: flex; justify-content: space-between; align-items: center; flex-wrap: gap: 10px;">
                             <span class="mono" style="font-size: 11px; color: var(--color-fog);"
-                                id="pagination-status">Showing 0 of 0 listings</span>
+                                id="pagination-status">Menampilkan 0 dari 0 unit</span>
                             <button id="btn-load-more" class="btn-outline-graphite"
-                                style="font-size: 11px; padding: 7px 16px;" onclick="loadMoreListings()">Load More (+30
-                                Units) ↓</button>
+                                style="font-size: 11px; padding: 7px 16px;" onclick="loadMoreListings()" data-i18n="load_more">Muat lebih banyak (+30 unit) ↓</button>
                         </div>
                     </div>
                 </div>
@@ -269,17 +281,17 @@
                 <div>
                     <div class="panel-card" style="margin-bottom: 24px;">
                         <div class="panel-header">
-                            <span>Regional Rate Benchmark per M²</span>
-                            <span class="mono" style="font-size: 11px; color: var(--color-fog);">Basis: IDR/m²</span>
+                            <span data-i18n="benchmark_table_title">Benchmark tarif sewa per m² wilayah</span>
+                            <span class="mono" style="font-size: 11px; color: var(--color-fog);">Basis: Rp/m²</span>
                         </div>
                         <div class="table-container">
                             <table class="data-table">
                                 <thead>
                                     <tr>
-                                        <th>Jurisdiction</th>
-                                        <th>Inventory</th>
-                                        <th>Median Rent</th>
-                                        <th>Rate / m²</th>
+                                        <th data-i18n="th_city">Wilayah</th>
+                                        <th data-i18n="th_sample">Sampel unit</th>
+                                        <th data-i18n="th_median_rent">Median sewa</th>
+                                        <th data-i18n="th_rate_m2">Tarif / m²</th>
                                     </tr>
                                 </thead>
                                 <tbody id="benchmark-tbody">
@@ -292,41 +304,31 @@
                     <div class="panel-card" style="background-color: var(--color-newsprint-gray);">
                         <div class="panel-header"
                             style="margin-bottom: 14px; display: flex; align-items: center; gap: 6px;">
-                            <span>💼 Commercial Renter & Investor Advisory</span>
+                            <span>💼 Panduan & strategi negosiasi sewa</span>
                         </div>
                         <div style="font-size: 13px; color: var(--color-carbon-ink); line-height: 1.6;">
                             <div style="margin-bottom: 14px;">
-                                <strong style="color: var(--color-carbon-ink);">1. Building Maintenance & IPL Fee
-                                    Audit</strong>
+                                <strong style="color: var(--color-carbon-ink);">1. Audit biaya IPL dan iuran pengelolaan gedung</strong>
                                 <div style="color: var(--color-fog); margin-top: 2px;">
-                                    Always verify whether building maintenance charges (IPL) and sinking fund fees
-                                    (typically IDR 15,000–35,000/m²/month in Jabodetabek) are bundled into the asking
-                                    rent or billed separately to the tenant.
+                                    Pastikan apakah iuran pemeliharaan lingkungan (IPL) dan sinking fund (rata-rata Rp 15.000–35.000/m²/bulan di Jabodetabek) sudah termasuk di harga sewa atau ditagihkan terpisah.
                                 </div>
                             </div>
                             <div style="margin-bottom: 14px;">
-                                <strong style="color: var(--color-carbon-ink);">2. Model Fair Rent as Negotiation
-                                    Anchor</strong>
+                                <strong style="color: var(--color-carbon-ink);">2. Gunakan estimasi harga wajar sebagai patokan tawar</strong>
                                 <div style="color: var(--color-fog); margin-top: 2px;">
-                                    Use the hedonic AVM valuation range as an objective baseline for counter-offers
-                                    before scheduling on-site visits or negotiating with leasing brokers.
+                                    Gunakan rentang estimasi model hedonik AVM sebagai dasar objektif untuk menawar harga sebelum membuat janji temu survei unit dengan pemilik atau agen.
                                 </div>
                             </div>
                             <div style="margin-bottom: 14px;">
-                                <strong style="color: var(--color-carbon-ink);">3. Furnishing & Appliance Condition
-                                    Check</strong>
+                                <strong style="color: var(--color-carbon-ink);">3. Cek kondisi riil perabot & elektronik utama</strong>
                                 <div style="color: var(--color-fog); margin-top: 2px;">
-                                    For units advertised as Full Furnished, inspect active condition of high-draw
-                                    appliances (inverter AC, water heater, kitchen appliances) to avoid unexpected
-                                    move-in maintenance costs.
+                                    Untuk unit full furnished, periksa fungsi AC inverter, water heater, dan kelistrikan agar tidak menghadapi biaya perbaikan tak terduga saat mulai menempati unit.
                                 </div>
                             </div>
                             <div>
-                                <strong style="color: var(--color-carbon-ink);">4. Payment Terms & Annual Lease
-                                    Discount</strong>
+                                <strong style="color: var(--color-carbon-ink);">4. Manfaatkan diskon sewa bayar 1 tahun di muka</strong>
                                 <div style="color: var(--color-fog); margin-top: 2px;">
-                                    Full 1-year advance payments typically command an additional 5%–10% bargaining
-                                    discount compared to semi-annual or quarterly payment terms.
+                                    Pembayaran sewa tahunan penuh di awal biasanya memberikan ruang negosiasi diskon ekstra 5%–10% dibandingkan opsi sewa semesteran atau triwulanan.
                                 </div>
                             </div>
                         </div>
@@ -341,8 +343,8 @@
         <div id="tab-simulator" class="tab-content">
             <div style="margin-bottom: 24px;">
                 <div class="eyebrow-tag">Valuation Engine // Hedonic AVM</div>
-                <h2 style="font-size: 22px; margin-bottom: 4px;">02 // Smart Rent Valuation Simulator (Hedonic AVM)</h2>
-                <div style="font-size: 14px; color: var(--color-fog);">
+                <h2 style="font-size: 22px; margin-bottom: 4px;" data-i18n="sim_header_title">02 // Smart Rent Valuation Simulator (Hedonic AVM)</h2>
+                <div style="font-size: 14px; color: var(--color-fog);" data-i18n="sim_header_sub">
                     Cek apakah harga sewa sebuah unit kemahalan atau kemurahan berdasarkan ukuran fisik, letak
                     strategis, dan kelengkapan fasilitas.
                 </div>
@@ -351,17 +353,16 @@
             <div class="split-view">
                 <!-- Input Panel -->
                 <div class="panel-card">
-                    <div class="panel-header">Unit Specifications & Attributes</div>
+                    <div class="panel-header" data-i18n="sim_spec_title">Spesifikasi unit & atribut fisik</div>
 
                     <div
                         style="background-color: var(--color-newsprint-gray); padding: 12px 16px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble); margin-bottom: 16px; font-size: 13px; color: var(--color-carbon-ink); line-height: 1.5;">
-                        <span>💡 <strong>Panduan Calon Penyewa:</strong> Masukkan spesifikasi unit yang didapat dari
-                            survei atau chat agen untuk mengevaluasi estimasi harga wajar pasar.</span>
+                        <span>💡 <strong>Panduan calon penyewa:</strong> Masukkan spesifikasi unit yang didapat dari survei atau chat agen untuk mengevaluasi estimasi harga wajar pasar.</span>
                     </div>
 
                     <div class="form-row-2col">
                         <div class="form-group">
-                            <label class="form-label">Wilayah Kota</label>
+                            <label class="form-label" data-i18n="sim_city_label">Wilayah kota</label>
                             <select id="sim-city" class="select-input" onchange="onSimCityChange()">
                                 <option value="Jakarta Selatan">Jakarta Selatan</option>
                                 <option value="Jakarta Pusat">Jakarta Pusat</option>
@@ -376,9 +377,9 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Target District / Subdistrict</label>
+                            <label class="form-label" data-i18n="sim_subdistrict_label">Target kecamatan atau distrik</label>
                             <select id="sim-subdistrict" class="select-input" onchange="onSimSubdistrictChange()">
-                                <option value="">All Districts (City Median)</option>
+                                <option value="" data-i18n="sim_subdistrict_default">Semua kecamatan (median kota)</option>
                             </select>
                         </div>
                     </div>
@@ -389,79 +390,79 @@
 
                     <div class="form-row-2col">
                         <div class="form-group">
-                            <label class="form-label">Floor Size (m²)</label>
+                            <label class="form-label" data-i18n="sim_size_label">Luas bangunan bersih (m²)</label>
                             <input type="number" id="sim-size" class="text-input mono" value="45" min="15" max="300"
                                 onchange="runSimulation()">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Status Interior</label>
+                            <label class="form-label" data-i18n="sim_furnish_label">Kondisi perabot interior</label>
                             <select id="sim-furnish-type" class="select-input" onchange="onFurnishSelectChange()">
-                                <option value="full" selected>Lengkap Perabot (Full Furnished)</option>
-                                <option value="semi">Semi Furnished</option>
-                                <option value="unfurnished">Unfurnished</option>
+                                <option value="full" selected data-i18n="sim_furnish_full">Lengkap perabot (full furnished)</option>
+                                <option value="semi">Semi furnished (ada AC / kitchen set)</option>
+                                <option value="unfurnished" data-i18n="sim_furnish_un">Unfurnished (kosongan)</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-row-2col">
                         <div class="form-group">
-                            <label class="form-label">Bedrooms</label>
+                            <label class="form-label" data-i18n="sim_beds_label">Jumlah kamar tidur</label>
                             <select id="sim-beds" class="select-input" onchange="runSimulation()">
-                                <option value="0">Studio (0 BR)</option>
-                                <option value="1">1 Bedroom</option>
-                                <option value="2" selected>2 Bedrooms</option>
-                                <option value="3">3 Bedrooms</option>
-                                <option value="4">4+ Bedrooms</option>
+                                <option value="0">Tipe studio (0 BR)</option>
+                                <option value="1">1 kamar tidur</option>
+                                <option value="2" selected>2 kamar tidur</option>
+                                <option value="3">3 kamar tidur</option>
+                                <option value="4">4+ kamar tidur</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Bathrooms</label>
+                            <label class="form-label" data-i18n="sim_baths_label">Jumlah kamar mandi</label>
                             <select id="sim-baths" class="select-input" onchange="runSimulation()">
-                                <option value="1" selected>1 Bathroom</option>
-                                <option value="2">2 Bathrooms</option>
-                                <option value="3">3+ Bathrooms</option>
+                                <option value="1" selected>1 kamar mandi</option>
+                                <option value="2">2 kamar mandi</option>
+                                <option value="3">3+ kamar mandi</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-row-2col">
                         <div class="form-group">
-                            <label class="form-label">Distance to Sudirman CBD (km)</label>
+                            <label class="form-label" data-i18n="sim_cbd_label">Jarak ke Sudirman CBD (km)</label>
                             <input type="number" id="sim-cbd" class="text-input mono" value="8.5" min="0.5" max="60"
                                 step="0.5" onchange="runSimulation()">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Jarak ke Stasiun Terdekat (km)</label>
+                            <label class="form-label" data-i18n="sim_transit_label">Jarak ke stasiun transit terdekat (km)</label>
                             <input type="number" id="sim-transit" class="text-input mono" value="1.2" min="0.1" max="15"
                                 step="0.1" onchange="runSimulation()">
                         </div>
                     </div>
 
-                    <label class="form-label" style="margin-top: 8px;">Paket Fasilitas Tambahan</label>
+                    <label class="form-label" style="margin-top: 8px;" data-i18n="sim_amenities_title">Paket fasilitas & amenitas tambahan</label>
                     <div class="checkbox-grid-2col">
                         <label class="checkbox-label">
                             <input type="checkbox" id="sim-ff" checked onchange="runSimulation()">
-                            <span style="font-weight: 600;">Lengkap Perabot (Full Furnished)</span>
+                            <span style="font-weight: 600;" data-i18n="sim_amenity_ff">Lengkap perabot (full furnished)</span>
                         </label>
                         <label class="checkbox-label">
                             <input type="checkbox" id="sim-ac" checked onchange="runSimulation()">
-                            <span>Pendingin Udara (AC)</span>
+                            <span data-i18n="sim_amenity_ac">Pendingin udara (AC)</span>
                         </label>
                         <label class="checkbox-label">
                             <input type="checkbox" id="sim-pool" checked onchange="runSimulation()">
-                            <span>Kolam Renang</span>
+                            <span data-i18n="sim_amenity_pool">Kolam renang apartemen</span>
                         </label>
                         <label class="checkbox-label">
                             <input type="checkbox" id="sim-gym" onchange="runSimulation()">
-                            <span>Gym / Fitness Center</span>
+                            <span data-i18n="sim_amenity_gym">Pusat kebugaran (gym)</span>
                         </label>
                         <label class="checkbox-label">
                             <input type="checkbox" id="sim-balcony" onchange="runSimulation()">
-                            <span>Private Balcony</span>
+                            <span data-i18n="sim_amenity_balcony">Balkon privat</span>
                         </label>
                         <label class="checkbox-label">
                             <input type="checkbox" id="sim-kitchen" checked onchange="runSimulation()">
-                            <span>Kitchen Set Siap Pakai</span>
+                            <span data-i18n="sim_amenity_kitchen">Kitchen set siap pakai</span>
                         </label>
                     </div>
                 </div>
@@ -469,25 +470,25 @@
                 <!-- Simulation Output -->
                 <div>
                     <div class="calc-result-box">
-                        <div class="metric-label">Estimated Fair Market Rent</div>
+                        <div class="metric-label" data-i18n="sim_result_title">Estimasi harga sewa wajar pasar</div>
                         <div style="font-size: 38px; font-weight: 600; color: var(--color-carbon-ink); letter-spacing: -0.02em; margin: 8px 0;"
                             class="mono" id="sim-output-rent">
                             Rp 7,850,000 / bln
                         </div>
                         <div class="mono" style="font-size: 13px; color: var(--color-fog); margin-top: 8px;"
                             id="sim-output-ci">
-                            Rentang Toleransi Pasar: Rp 7.0 Jt - Rp 8.6 Jt / bulan
+                            Rentang toleransi pasar: Rp 7.0 Jt - Rp 8.6 Jt / bulan
                         </div>
                         <div class="mono" style="font-size: 12px; color: var(--color-fog); margin-top: 4px;"
                             id="sim-output-rate">
-                            Tarif Efektif Ruang: Rp 174,444 / m²
+                            Tarif efektif ruang: Rp 174,444 / m²
                         </div>
                     </div>
 
                     <div class="panel-card">
                         <div class="panel-header">
-                            <span>Panduan Negosiasi Penyewa</span>
-                            <span class="mono badge-acid" style="font-size: 10px;">Rekomendasi</span>
+                            <span>Panduan negosiasi penyewa</span>
+                            <span class="mono badge-acid" style="font-size: 10px;">Rekomendasi model</span>
                         </div>
                         <p style="font-size: 13px; color: var(--color-fog); line-height: 1.6; margin-bottom: 14px;">
                             Jika pemilik unit memasang harga <strong>di atas rentang toleransi</strong>, kamu punya
@@ -509,21 +510,21 @@
         <div id="tab-investor" class="tab-content">
             <!-- If Locked (Not Logged in as Investor) -->
             <div id="investor-locked-view" class="locked-investor-card">
-                <div class="eyebrow-tag" style="margin-bottom: 16px;">Restricted Access // Pro Persona</div>
+                <div class="eyebrow-tag" style="margin-bottom: 16px;">Akses terbatas // Persona pro</div>
                 <div style="font-size: 40px; margin-bottom: 12px;">🏢 🔒</div>
-                <h2 style="font-size: 24px; margin-bottom: 8px;">Portal Eksklusif Investor & Pemilik Properti</h2>
+                <h2 style="font-size: 24px; margin-bottom: 8px;" data-i18n="inv_locked_title">Portal eksklusif investor & pemilik properti</h2>
                 <p
-                    style="color: var(--color-fog); font-size: 14px; max-width: 540px; margin: 0 auto 24px auto; line-height: 1.6;">
-                    Halaman ini dikhususkan bagi pemilik unit dan investor (Persona Bu Sarah) untuk menghitung potensi
+                    style="color: var(--color-fog); font-size: 14px; max-width: 540px; margin: 0 auto 24px auto; line-height: 1.6;" data-i18n="inv_locked_desc">
+                    Halaman ini dikhususkan bagi pemilik unit dan investor (persona Bu Sarah) untuk menghitung potensi
                     keuntungan sewa, masa balik modal renovasi interior, dan analisis data pasar spasial.
                 </p>
                 <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
                     <button class="btn-action-dark" onclick="demoLoginInvestor()">
-                        <span>Switch to Investor Mode (Demo Bu Sarah)</span>
+                        <span data-i18n="inv_locked_btn_demo">Beralih ke mode investor (demo Bu Sarah)</span>
                         <span class="btn-bubble-icon">⚡</span>
                     </button>
-                    <button class="btn-outline-graphite" onclick="switchTab('tab-map')">
-                        Return to Map View
+                    <button class="btn-outline-graphite" onclick="switchTab('tab-map')" data-i18n="inv_locked_btn_return">
+                        Kembali ke radar pasar
                     </button>
                 </div>
             </div>
@@ -533,66 +534,65 @@
                 <div
                     style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
                     <div>
-                        <div class="eyebrow-tag">Capital Allocation // Pro Yield Analytics</div>
-                        <h2 style="font-size: 22px; margin-bottom: 4px;">03 // Pro Investor Portal & Yield Analysis (Bu
-                            Sarah)</h2>
-                        <div style="font-size: 14px; color: var(--color-fog);">
+                        <div class="eyebrow-tag">Alokasi modal // Analisis yield pro</div>
+                        <h2 style="font-size: 22px; margin-bottom: 4px;" data-i18n="inv_unlocked_title">03 // Portal investor & analisis imbal hasil (Bu Sarah)</h2>
+                        <div style="font-size: 14px; color: var(--color-fog);" data-i18n="inv_unlocked_desc">
                             Dasbor evaluasi investasi properti sewa, simulasi payback period interior fit-out, dan
                             pemodelan sebaran spasial.
                         </div>
                     </div>
                     <div class="user-profile-badge">
-                        <span>🏢 Profil Aktif: <strong>Bu Sarah (Investor Pro)</strong></span>
-                        <button class="btn-logout" onclick="logoutInvestor()">Sign Out Pro Mode</button>
+                        <span>🏢 Profil aktif: <strong>Bu Sarah (investor pro)</strong></span>
+                        <button class="btn-logout" onclick="logoutInvestor()" data-i18n="inv_signout_btn">Keluar mode pro</button>
                     </div>
                 </div>
 
                 <!-- Investor Section 1: Fit-Out Payback Tool -->
                 <div class="panel-card" style="margin-bottom: 24px;">
                     <div class="panel-header">
-                        <span>Interior Fit-Out Payback & ROI Analysis</span>
-                        <span class="badge-acid" id="badge-furnish-premium">PREMI FURNISHED —</span>
+                        <span data-i18n="fitout_title">Analisis payback renovasi interior (fit-out)</span>
+                        <span class="badge-acid" id="badge-furnish-premium">Premi furnished —</span>
                     </div>
 
                     <p style="font-size: 13px; color: var(--color-fog); margin-bottom: 16px;">
-                        Hitung apakah renovasi unit menjadi <strong>Full Furnished</strong> sepadan dengan biaya modal
+                        Hitung apakah renovasi unit menjadi <strong>full furnished</strong> sepadan dengan biaya modal
                         yang dikeluarkan dibandingkan dibiarkan kosongan (unfurnished).
                     </p>
 
                     <div class="fitout-grid">
                         <div
                             style="background-color: var(--color-newsprint-gray); padding: 16px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble);">
-                            <div class="metric-label">Monthly Rental Uplift</div>
+                            <div class="metric-label" data-i18n="fitout_kpi_monthly">Tambahan sewa per bulan</div>
                             <div class="mono" style="font-size: 18px; color: var(--color-carbon-ink); font-weight: 600;"
                                 id="pro-roi-monthly">—</div>
-                            <div style="font-size: 11px; color: var(--color-fog); margin-top: 4px;">Selisih vs Kosongan
+                            <div style="font-size: 11px; color: var(--color-fog); margin-top: 4px;" data-i18n="fitout_kpi_monthly_sub">Selisih vs kosongan
                             </div>
                         </div>
 
                         <div
                             style="background-color: var(--color-newsprint-gray); padding: 16px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble);">
-                            <div class="metric-label">Tambahan Omset / Tahun</div>
+                            <div class="metric-label" data-i18n="fitout_kpi_annual">Tambahan omset per tahun</div>
                             <div class="mono" style="font-size: 18px; color: var(--color-carbon-ink); font-weight: 600;"
                                 id="pro-roi-annual">—</div>
-                            <div style="font-size: 11px; color: var(--color-fog); margin-top: 4px;">Arus Kas Tambahan
+                            <div style="font-size: 11px; color: var(--color-fog); margin-top: 4px;" data-i18n="fitout_kpi_annual_sub">Arus kas tambahan
                             </div>
                         </div>
 
                         <div
                             style="background-color: var(--color-newsprint-gray); padding: 16px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble);">
-                            <div class="metric-label">Est. Fit-Out Capital</div>
+                            <div class="metric-label" data-i18n="fitout_kpi_cost">Estimasi modal renovasi</div>
                             <div class="mono" style="font-size: 18px; color: var(--color-carbon-ink); font-weight: 600;"
                                 id="pro-roi-cost">—</div>
-                            <div style="font-size: 11px; color: var(--color-fog); margin-top: 4px;">Standar Fit-Out 45
+                            <div style="font-size: 11px; color: var(--color-fog); margin-top: 4px;" data-i18n="fitout_kpi_cost_sub">Standar renovasi unit 45
                                 m²</div>
                         </div>
 
                         <div
                             style="background-color: var(--color-newsprint-gray); padding: 16px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble);">
-                            <div class="metric-label">Masa Balik Modal (BEP)</div>
+                            <div class="metric-label" data-i18n="fitout_kpi_bep">Masa balik modal (BEP)</div>
                             <div class="mono" style="font-size: 18px; color: var(--color-carbon-ink); font-weight: 600;"
                                 id="pro-roi-payback">—</div>
-                            <div style="font-size: 11px; color: var(--color-fog); margin-top: 4px;">Break-even Cepat
+                            <div style="font-size: 11px; color: var(--color-fog); margin-top: 4px;" data-i18n="fitout_kpi_bep_sub">Estimasi titik impas
                             </div>
                         </div>
                     </div>
@@ -602,9 +602,8 @@
                 <div class="split-view">
                     <div class="panel-card">
                         <div class="panel-header">
-                            <span>Gradien Penurunan Tarif vs Jarak ke Sudirman CBD</span>
-                            <span class="mono" style="font-size: 11px; color: var(--color-fog);">Alonso-Muth-Mills
-                                Model</span>
+                            <span>Gradien penurunan tarif vs jarak ke Sudirman CBD</span>
+                            <span class="mono" style="font-size: 11px; color: var(--color-fog);">Model Alonso-Muth-Mills</span>
                         </div>
                         <div class="chart-container">
                             <canvas id="decayChart"></canvas>
@@ -613,15 +612,15 @@
 
                     <div class="panel-card">
                         <div class="panel-header">
-                            <span>Imbal Hasil per Ring Wilayah Konsentris</span>
-                            <span class="mono" style="font-size: 11px; color: var(--color-fog);">Zonasi Urban</span>
+                            <span>Imbal hasil per ring wilayah konsentris</span>
+                            <span class="mono" style="font-size: 11px; color: var(--color-fog);">Zonasi konsentris perkotaan</span>
                         </div>
                         <div class="table-container">
                             <table class="data-table">
                                 <thead>
                                     <tr>
-                                        <th>Ring Perkotaan</th>
-                                        <th>Inventory</th>
+                                        <th>Ring perkotaan</th>
+                                        <th>Sampel unit</th>
                                         <th>Median Rp/m²</th>
                                         <th>Rata-rata Rp/m²</th>
                                     </tr>
@@ -637,34 +636,34 @@
                 <!-- Investor Section 3: Data Science Model Telemetry -->
                 <div class="panel-card" style="margin-top: 24px;">
                     <div class="panel-header">
-                        <span>Automated Valuation Model (AVM) Telemetry</span>
+                        <span data-i18n="telemetry_title">Telemetri model valuasi otomatis (AVM)</span>
                         <span class="mono badge-acid" id="avm-badge">R² out-of-fold = —</span>
                     </div>
                     <div class="telemetry-grid">
                         <div
                             style="background-color: var(--color-newsprint-gray); padding: 14px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble);">
-                            <div class="metric-label">R² Out-of-Fold</div>
+                            <div class="metric-label" data-i18n="telemetry_r2_label">R² out-of-fold</div>
                             <div class="mono" id="avm-r2"
                                 style="color: var(--color-carbon-ink); font-size: 15px; font-weight: 600;">—</div>
                             <div id="avm-r2-sub" style="color: var(--color-fog); margin-top: 2px;">KFold 5×3</div>
                         </div>
                         <div
                             style="background-color: var(--color-newsprint-gray); padding: 14px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble);">
-                            <div class="metric-label">Rata-rata Margin Error</div>
+                            <div class="metric-label" data-i18n="telemetry_mae_label">Rata-rata margin error (MAE)</div>
                             <div class="mono" id="avm-mae"
                                 style="color: var(--color-carbon-ink); font-size: 15px; font-weight: 600;">—</div>
                             <div style="color: var(--color-fog); margin-top: 2px;">MAE out-of-fold</div>
                         </div>
                         <div
                             style="background-color: var(--color-newsprint-gray); padding: 14px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble);">
-                            <div class="metric-label">Error Persentase (MAPE)</div>
+                            <div class="metric-label" data-i18n="telemetry_mape_label">Error persentase wajar (MAPE)</div>
                             <div class="mono" id="avm-mape"
                                 style="color: var(--color-carbon-ink); font-size: 15px; font-weight: 600;">—</div>
                             <div id="avm-mape-sub" style="color: var(--color-fog); margin-top: 2px;">—</div>
                         </div>
                         <div
                             style="background-color: var(--color-newsprint-gray); padding: 14px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble);">
-                            <div class="metric-label">Fitur Terpenting (GB)</div>
+                            <div class="metric-label" data-i18n="telemetry_top_label">Fitur paling berpengaruh (GB)</div>
                             <div class="mono" id="avm-f1"
                                 style="color: var(--color-carbon-ink); font-size: 15px; font-weight: 600;">—</div>
                             <div id="avm-f2" style="color: var(--color-fog); margin-top: 2px;">—</div>
@@ -679,8 +678,8 @@
         <footer
             style="margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--color-pebble); display: flex; justify-content: space-between; font-size: 12px; color: var(--color-fog);"
             class="mono">
-            <div>HOUSEHOLD INTELLIGENCE // PANDUAN SEWA PROPERTI JABODETABEK</div>
-            <div>AFIATTA ILHAN SALEH • DATA ANALYTICS & HEDONIC PRICING</div>
+            <div data-i18n="footer_left">HOUSEHOLD INTELLIGENCE // PANDUAN SEWA PROPERTI JABODETABEK</div>
+            <div data-i18n="footer_right">AFIATTA ILHAN SALEH • ANALITIK DATA & HEDONIC PRICING</div>
         </footer>
 
     </div>
@@ -691,18 +690,17 @@
     <div id="login-modal" class="modal-overlay">
         <div class="modal-card">
             <button class="modal-close" onclick="closeLoginModal()">&times;</button>
-            <h3 style="font-size: 20px; margin-bottom: 6px;">Sign In to Household Intelligence</h3>
-            <p style="color: var(--color-fog); font-size: 13px; margin-bottom: 20px;">
+            <h3 style="font-size: 20px; margin-bottom: 6px;" data-i18n="modal_title">Masuk ke Household Intelligence</h3>
+            <p style="color: var(--color-fog); font-size: 13px; margin-bottom: 20px;" data-i18n="modal_desc">
                 Pilih profil akses yang sesuai dengan tujuan kamu menggunakan platform ini.
             </p>
 
             <div class="persona-choice-card" onclick="selectPersonaOption('renter')">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                    <strong style="color: var(--color-carbon-ink); font-size: 14px;">🔍 Public Tenant / Commuter
-                        (Rian)</strong>
-                    <span class="badge-acid">GRATIS</span>
+                    <strong style="color: var(--color-carbon-ink); font-size: 14px;" data-i18n="persona_renter_title">🔍 Pencari hunian sewa (Rian)</strong>
+                    <span class="badge-acid" data-i18n="persona_renter_badge">Gratis</span>
                 </div>
-                <div style="font-size: 12px; color: var(--color-fog);">
+                <div style="font-size: 12px; color: var(--color-fog);" data-i18n="persona_renter_desc">
                     Cari unit apartemen murah dekat stasiun, cek kewajaran harga sewa, dan filter unit terbaik di 10
                     kota Jabodetabek.
                 </div>
@@ -710,11 +708,10 @@
 
             <div class="persona-choice-card selected" onclick="selectPersonaOption('investor')">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                    <strong style="color: var(--color-carbon-ink); font-size: 14px;">🏢 Pemilik Properti & Investor (Bu
-                        Sarah)</strong>
-                    <span class="badge-acid">PRO ACCESS</span>
+                    <strong style="color: var(--color-carbon-ink); font-size: 14px;" data-i18n="persona_investor_title">🏢 Pemilik properti & investor (Bu Sarah)</strong>
+                    <span class="badge-acid" data-i18n="persona_investor_badge">Akses pro</span>
                 </div>
-                <div style="font-size: 12px; color: var(--color-fog);">
+                <div style="font-size: 12px; color: var(--color-fog);" data-i18n="persona_investor_desc">
                     Akses kalkulator balik modal renovasi interior (fit-out), analisis tarif sewa per meter, dan data
                     statistik ekonometrika.
                 </div>
@@ -722,10 +719,10 @@
 
             <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 10px;">
                 <button class="btn-action-dark" style="width: 100%; justify-content: center; padding: 12px;"
-                    onclick="confirmLoginSelection()">
-                    Continue to Platform ↗
+                    onclick="confirmLoginSelection()" data-i18n="modal_btn_continue">
+                    Lanjutkan ke platform ↗
                 </button>
-                <button class="btn-outline-graphite" style="width: 100%; padding: 10px;" onclick="closeLoginModal()">
+                <button class="btn-outline-graphite" style="width: 100%; padding: 10px;" onclick="closeLoginModal()" data-i18n="modal_btn_cancel">
                     Batal
                 </button>
             </div>
@@ -733,13 +730,15 @@
     </div>
 
     <!-- MODULAR JAVASCRIPT LOGIC -->
-    <script src="/static/js/state.js?v=2"></script>
-    <script src="/static/js/api.js?v=2"></script>
-    <script src="/static/js/explorer.js?v=2"></script>
-    <script src="/static/js/simulator.js?v=2"></script>
-    <script src="/static/js/investor.js?v=2"></script>
-    <script src="/static/js/auth.js?v=2"></script>
-    <script src="/static/js/app.js?v=2"></script>
+    <script src="/static/js/state.js?v=3"></script>
+    <script src="/static/js/theme.js?v=3"></script>
+    <script src="/static/js/i18n.js?v=3"></script>
+    <script src="/static/js/api.js?v=3"></script>
+    <script src="/static/js/explorer.js?v=3"></script>
+    <script src="/static/js/simulator.js?v=3"></script>
+    <script src="/static/js/investor.js?v=3"></script>
+    <script src="/static/js/auth.js?v=3"></script>
+    <script src="/static/js/app.js?v=3"></script>
 </body>
 
 </html>

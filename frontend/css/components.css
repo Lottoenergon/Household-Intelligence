@@ -110,12 +110,11 @@
 }
 
 .metric-label {
-    font-size: 11px;
+    font-size: 12px;
     color: var(--color-fog);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 8px;
-    font-weight: 600;
+    margin-bottom: 6px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
 }
 
 .metric-value {
@@ -313,9 +312,8 @@
     background-color: var(--color-newsprint-gray);
     color: var(--color-fog);
     font-weight: 600;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    font-size: 12px;
+    letter-spacing: -0.005em;
 }
 
 .data-table td {
@@ -518,8 +516,13 @@
 }
 
 @keyframes modalOverlayFade {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .modal-overlay.active {
@@ -543,6 +546,7 @@
         opacity: 0;
         transform: scale(0.96) translateY(8px);
     }
+
     to {
         opacity: 1;
         transform: scale(1) translateY(0);
@@ -584,4 +588,106 @@
     border-color: var(--color-carbon-ink);
     background-color: var(--color-newsprint-gray);
     box-shadow: 0 0 0 1px var(--color-carbon-ink);
+}
+
+/* ---------------------------------------------------------
+   LANGUAGE TOGGLE & THEME SWITCHER CONTROLS
+--------------------------------------------------------- */
+.header-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.toggle-pill-group {
+    display: inline-flex;
+    background-color: var(--color-newsprint-gray);
+    border: 1px solid var(--color-pebble);
+    border-radius: 9999px;
+    padding: 3px;
+    gap: 2px;
+    align-items: center;
+}
+
+.toggle-pill-btn {
+    border: none;
+    background: transparent;
+    color: var(--color-fog);
+    font-size: 11px;
+    font-weight: 700;
+    font-family: var(--font-ui);
+    padding: 3px 9px;
+    border-radius: 9999px;
+    cursor: pointer;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    transition: all var(--transition-fast);
+}
+
+.toggle-pill-btn:hover {
+    color: var(--color-carbon-ink);
+}
+
+.toggle-pill-btn.active {
+    background-color: var(--color-carbon-ink);
+    color: var(--color-paper-white);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.theme-toggle-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--color-newsprint-gray);
+    border: 1px solid var(--color-pebble);
+    color: var(--color-carbon-ink);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-subtle);
+}
+
+.theme-toggle-btn:hover {
+    border-color: var(--color-carbon-ink);
+    transform: scale(1.06);
+    box-shadow: var(--shadow-hover);
+}
+
+.theme-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+/* ---------------------------------------------------------
+   DARK MODE COMPONENT ADJUSTMENTS
+--------------------------------------------------------- */
+[data-theme="dark"] .topbar-wrapper {
+    background-color: rgba(14, 14, 17, 0.9);
+}
+
+[data-theme="dark"] .btn-action-dark:hover,
+[data-theme="dark"] .btn-nav-login:hover {
+    background-color: #ffffff;
+    color: #0e0e11;
+}
+
+[data-theme="dark"] .btn-bubble-icon {
+    background: rgba(0, 0, 0, 0.25);
+    color: currentColor;
+}
+
+[data-theme="dark"] select option {
+    background-color: #17171b;
+    color: #f4f4f6;
+}
+
+[data-theme="dark"] .data-table th {
+    background-color: #141418;
+}
+
+[data-theme="dark"] .modal-overlay {
+    background-color: rgba(0, 0, 0, 0.65);
 }

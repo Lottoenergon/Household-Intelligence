@@ -15,7 +15,10 @@ const AppState = {
     decayChartInstance: null,
     visibleListingsCount: 60,
     currentFilteredListings: [],
-    searchDebounceTimer: null
+    searchDebounceTimer: null,
+    currentLanguage: localStorage.getItem('hi_lang') || 'id',
+    currentTheme: localStorage.getItem('hi_theme') || 'light',
+    lastTelemetryData: null
 };
 
 // Window-level references for cross-module compatibility

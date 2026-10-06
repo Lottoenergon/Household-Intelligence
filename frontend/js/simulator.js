@@ -8,7 +8,8 @@ function updateSimSubdistricts() {
     const sel = document.getElementById('sim-subdistrict');
     if (!sel) return;
     const currentVal = sel.value;
-    sel.innerHTML = '<option value="">All Districts (City Median)</option>';
+    const defaultLabel = typeof t === 'function' ? t('sim_subdistrict_default', 'Semua distrik (median kota)') : 'Semua distrik (median kota)';
+    sel.innerHTML = `<option value="">${defaultLabel}</option>`;
 
     const matched = AppState.allDistricts.filter(d => d.target_city === city);
     matched.forEach(d => {
@@ -33,11 +34,15 @@ function onSimSubdistrictChange() {
     const city = document.getElementById('sim-city').value;
     const sub = document.getElementById('sim-subdistrict').value;
     const found = AppState.allDistricts.find(d => d.target_city === city && d.subdistrict === sub);
+    const isEn = (AppState.currentLanguage === 'en');
+    const unitWord = typeof t === 'function' ? t('units_count', 'unit') : 'unit';
 
     const baselineBox = document.getElementById('sim-subdistrict-baseline');
     if (found && baselineBox) {
         baselineBox.style.display = 'block';
-        baselineBox.innerHTML = `📍 <strong>Data Pasaran ${found.subdistrict}:</strong> Median tarif pasaran <strong>Rp ${Math.round(found.median_price_per_m2_idr).toLocaleString()} / m²</strong> (${found.unit_count} listing terdata di kawasan ini).`;
+        const titleText = isEn ? `📍 <strong>Market benchmark for ${found.subdistrict}:</strong> Median rate <strong>Rp ${Math.round(found.median_price_per_m2_idr).toLocaleString()} / m²</strong> (${found.unit_count} ${unitWord} recorded in this area).`
+                               : `📍 <strong>Data pasaran ${found.subdistrict}:</strong> Median tarif pasaran <strong>Rp ${Math.round(found.median_price_per_m2_idr).toLocaleString()} / m²</strong> (${found.unit_count} ${unitWord} terdata di kawasan ini).`;
+        baselineBox.innerHTML = titleText;
     } else if (baselineBox) {
         baselineBox.style.display = 'none';
     }
@@ -79,23 +84,34 @@ async function runSimulation() {
     const result = await API.simulateRent(payload);
     if (!result) return;
 
+    const isEn = (AppState.currentLanguage === 'en');
+    const perMonth = typeof t === 'function' ? t('per_month', '/ bln') : '/ bln';
+
     if (document.getElementById('sim-output-rent')) {
-        document.getElementById('sim-output-rent').innerText = 'IDR ' + result.fair_market_rent_idr.toLocaleString() + ' / mo';
+        document.getElementById('sim-output-rent').innerText = 'Rp ' + result.fair_market_rent_idr.toLocaleString() + ' ' + perMonth;
     }
     if (document.getElementById('sim-output-ci')) {
-        document.getElementById('sim-output-ci').innerText = `Rentang empiris ${result.interval_level_pct}%: IDR ${(result.ci_lower_idr / 1e6).toFixed(1)}M - IDR ${(result.ci_upper_idr / 1e6).toFixed(1)}M / month`;
+        const ciLabel = isEn ? `Market tolerance range ${result.interval_level_pct}%` : `Rentang toleransi pasar ${result.interval_level_pct}%`;
+        const jtWord = isEn ? 'M' : 'jt';
+        document.getElementById('sim-output-ci').innerText = `${ciLabel}: Rp ${(result.ci_lower_idr / 1e6).toFixed(1)} ${jtWord} – Rp ${(result.ci_upper_idr / 1e6).toFixed(1)} ${jtWord} ${perMonth}`;
     }
     if (document.getElementById('sim-output-rate')) {
-        document.getElementById('sim-output-rate').innerText = `Effective Space Rate: IDR ${result.implicit_rate_per_m2_idr.toLocaleString()} / m²`;
+        const rateLabel = typeof t === 'function' ? t('sim_rate_label', 'Tarif efektif ruang:') : 'Tarif efektif ruang:';
+        document.getElementById('sim-output-rate').innerText = `${rateLabel} Rp ${result.implicit_rate_per_m2_idr.toLocaleString()} / m²`;
     }
 
     // Update Bu Sarah Section if open
     if (result.furnishing_analysis) {
         const fa = result.furnishing_analysis;
-        if (document.getElementById('pro-roi-monthly')) document.getElementById('pro-roi-monthly').innerText = '+IDR ' + fa.monthly_extra_cashflow_idr.toLocaleString();
-        if (document.getElementById('pro-roi-annual')) document.getElementById('pro-roi-annual').innerText = '+IDR ' + (fa.annual_extra_cashflow_idr / 1e6).toFixed(1) + 'M';
-        if (document.getElementById('pro-roi-cost')) document.getElementById('pro-roi-cost').innerText = 'IDR ' + fa.estimated_fitout_cost_idr.toLocaleString();
-        if (document.getElementById('pro-roi-payback')) document.getElementById('pro-roi-payback').innerText = fa.payback_period_months === null ? 'Tidak ada premi dari model' : `${fa.payback_period_years} Years (${fa.payback_period_months} Months)`;
+        const jtWord = isEn ? 'M' : 'jt';
+        if (document.getElementById('pro-roi-monthly')) document.getElementById('pro-roi-monthly').innerText = '+Rp ' + fa.monthly_extra_cashflow_idr.toLocaleString();
+        if (document.getElementById('pro-roi-annual')) document.getElementById('pro-roi-annual').innerText = '+Rp ' + (fa.annual_extra_cashflow_idr / 1e6).toFixed(1) + ' ' + jtWord;
+        if (document.getElementById('pro-roi-cost')) document.getElementById('pro-roi-cost').innerText = 'Rp ' + fa.estimated_fitout_cost_idr.toLocaleString();
+        if (document.getElementById('pro-roi-payback')) {
+            const noPrem = isEn ? 'No model premium detected' : 'Tidak ada premi dari model';
+            const bepText = isEn ? `${fa.payback_period_years} years (${fa.payback_period_months} months)` : `${fa.payback_period_years} tahun (${fa.payback_period_months} bulan)`;
+            document.getElementById('pro-roi-payback').innerText = fa.payback_period_months === null ? noPrem : bepText;
+        }
     }
 }
 window.runSimulation = runSimulation;
