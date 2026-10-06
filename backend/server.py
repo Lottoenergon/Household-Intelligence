@@ -309,6 +309,12 @@ def get_distance_decay():
         "zones": zones
     }
 
+@app.get("/apartemen")
+def fallback_tutorial_apartemen():
+    """Fallback endpoint for backward compatibility with learning tutorial tabs."""
+    sample = df[["listing_id", "title", "price_monthly_idr"]].head(10).to_dict(orient="records")
+    return {"status": "sukses", "total": len(sample), "data": sample}
+
 # Mount static frontend
 if os.path.exists(FRONTEND_DIR):
     app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
