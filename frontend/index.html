@@ -428,17 +428,9 @@
 
                     <div id="sim-size-warning" style="display: none; background-color: rgba(224, 36, 106, 0.08); border: 1px solid var(--color-brand); border-radius: var(--radius-buttons); padding: 8px 12px; margin-bottom: 14px; font-size: 11.5px; color: var(--color-carbon-ink); line-height: 1.45;"></div>
 
-                    <div class="form-row-2col">
-                        <div class="form-group">
-                            <label class="form-label" data-i18n="sim_cbd_label">Jarak ke Sudirman CBD (km)</label>
-                            <input type="number" id="sim-cbd" class="text-input mono" value="8.5" min="0.5" max="60"
-                                step="0.5" onchange="runSimulation()">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" data-i18n="sim_transit_label">Jarak ke stasiun transit terdekat (km)</label>
-                            <input type="number" id="sim-transit" class="text-input mono" value="1.2" min="0.1" max="15"
-                                step="0.1" onchange="runSimulation()">
-                        </div>
+                    <div style="margin-bottom: 14px; padding: 10px 12px; background: var(--color-warm-pearl); border: 1px solid var(--color-hairline); border-radius: var(--radius-buttons); display: flex; align-items: center; gap: 8px;">
+                        <span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background-color: var(--color-emerald); flex-shrink: 0;"></span>
+                        <span style="font-size: 11px; color: var(--color-fog);" data-i18n="sim_geo_note">Valuasi berbasis indeks mikromarket kawasan & benchmark historis 728 unit.</span>
                     </div>
 
                     <label class="form-label" style="margin-top: 8px;" data-i18n="sim_amenities_title">Paket fasilitas & amenitas tambahan</label>
@@ -450,6 +442,14 @@
                         <label class="checkbox-label">
                             <input type="checkbox" id="sim-ac" checked onchange="runSimulation()">
                             <span data-i18n="sim_amenity_ac">Pendingin udara (AC)</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="sim-kitchen" checked onchange="runSimulation()">
+                            <span data-i18n="sim_amenity_kitchen">Kitchen set siap pakai</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="sim-near-transit" onchange="runSimulation()">
+                            <span data-i18n="sim_amenity_transit">Akses dekat transit rel (MRT/KRL/LRT < 1.5 km)</span>
                         </label>
                         <label class="checkbox-label">
                             <input type="checkbox" id="sim-pool" checked onchange="runSimulation()">
@@ -464,8 +464,8 @@
                             <span data-i18n="sim_amenity_balcony">Balkon privat</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" id="sim-kitchen" checked onchange="runSimulation()">
-                            <span data-i18n="sim_amenity_kitchen">Kitchen set siap pakai</span>
+                            <input type="checkbox" id="sim-parking" onchange="runSimulation()">
+                            <span data-i18n="sim_amenity_parking">Slot parkir kendaraan terdedikasi</span>
                         </label>
                     </div>
                 </div>

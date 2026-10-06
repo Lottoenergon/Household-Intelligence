@@ -72,6 +72,37 @@ def test_simulate_monotonic_bedrooms_and_realistic_presets():
     assert r4_preset["fair_market_rent_idr"] > r2_preset["fair_market_rent_idr"] * 1.5
 
 
+def test_simulate_monotonic_amenities_never_decrease_rent():
+    """Fasilitas fisik (AC, Kitchen, Pool, Gym, Balcony, Near Transit) tidak boleh menurunkan estimasi sewa."""
+    base_payload = {
+        "city": "Jakarta Selatan",
+        "subdistrict": "Kemang",
+        "floor_size_m2": 70,
+        "bedrooms": 2,
+        "bathrooms": 1,
+        "has_ac": False,
+        "has_kitchen": False,
+        "has_pool": False,
+        "has_gym": False,
+        "has_balcony": False,
+        "near_transit": False
+    }
+    base_rent = client.post("/api/simulate", json=base_payload).json()["fair_market_rent_idr"]
+
+    for amenity in ["has_ac", "has_kitchen", "has_pool", "has_gym", "has_balcony", "near_transit"]:
+        amenity_payload = dict(base_payload)
+        amenity_payload[amenity] = True
+        amenity_rent = client.post("/api/simulate", json=amenity_payload).json()["fair_market_rent_idr"]
+        assert amenity_rent >= base_rent, f"{amenity} seharusnya menambah atau mempertahankan nilai sewa"
+
+
+def test_simulate_subdistrict_micromarket_sanity():
+    """Kawasan prime di dalam satu kota secara objektif memiliki valuasi lebih tinggi dibanding kawasan industri mass-market."""
+    pekayon = client.post("/api/simulate", json={"city": "Bekasi", "subdistrict": "Pekayon", "floor_size_m2": 60}).json()
+    cikarang = client.post("/api/simulate", json={"city": "Bekasi", "subdistrict": "Cikarang", "floor_size_m2": 60}).json()
+    assert pekayon["fair_market_rent_idr"] > cikarang["fair_market_rent_idr"]
+
+
 def test_simulate_rejects_unknown_city_and_out_of_range_size():
     assert client.post("/api/simulate", json={"city": "Surabaya"}).status_code == 400
     assert client.post("/api/simulate", json={"floor_size_m2": 900}).status_code == 400

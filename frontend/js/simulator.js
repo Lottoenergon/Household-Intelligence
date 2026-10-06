@@ -118,23 +118,23 @@ window.onFurnishSelectChange = onFurnishSelectChange;
 async function runSimulation() {
     updateSizeHint();
     const subVal = document.getElementById('sim-subdistrict') ? document.getElementById('sim-subdistrict').value : '';
-    const cbdInput = document.getElementById('sim-cbd');
-    const transitInput = document.getElementById('sim-transit');
 
     const payload = {
         city: document.getElementById('sim-city').value,
         subdistrict: subVal || null,
-        floor_size_m2: parseFloat(document.getElementById('sim-size').value) || 45,
+        floor_size_m2: parseFloat(document.getElementById('sim-size').value) || 70,
         bedrooms: parseInt(document.getElementById('sim-beds').value) || 2,
         bathrooms: parseInt(document.getElementById('sim-baths').value) || 1,
-        distance_to_cbd_km: (cbdInput && cbdInput.value) ? parseFloat(cbdInput.value) : null,
-        distance_to_transit_km: (transitInput && transitInput.value) ? parseFloat(transitInput.value) : null,
-        is_full_furnished: document.getElementById('sim-ff').checked,
-        has_ac: document.getElementById('sim-ac').checked,
-        has_pool: document.getElementById('sim-pool').checked,
-        has_gym: document.getElementById('sim-gym').checked,
-        has_balcony: document.getElementById('sim-balcony').checked,
-        has_kitchen: document.getElementById('sim-kitchen').checked
+        distance_to_cbd_km: null,
+        distance_to_transit_km: null,
+        is_full_furnished: document.getElementById('sim-ff') ? document.getElementById('sim-ff').checked : true,
+        has_ac: document.getElementById('sim-ac') ? document.getElementById('sim-ac').checked : true,
+        has_pool: document.getElementById('sim-pool') ? document.getElementById('sim-pool').checked : true,
+        has_gym: document.getElementById('sim-gym') ? document.getElementById('sim-gym').checked : false,
+        has_balcony: document.getElementById('sim-balcony') ? document.getElementById('sim-balcony').checked : false,
+        has_kitchen: document.getElementById('sim-kitchen') ? document.getElementById('sim-kitchen').checked : true,
+        near_transit: document.getElementById('sim-near-transit') ? document.getElementById('sim-near-transit').checked : false,
+        has_parking: document.getElementById('sim-parking') ? document.getElementById('sim-parking').checked : false
     };
 
     const result = await API.simulateRent(payload);
