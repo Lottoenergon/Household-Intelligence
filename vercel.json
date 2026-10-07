@@ -1,5 +1,10 @@
 {
   "version": 2,
+  "functions": {
+    "api/index.py": {
+      "includeFiles": "{backend,data/processed,models,frontend}/**"
+    }
+  },
   "rewrites": [
     {
       "source": "/api/(.*)",
