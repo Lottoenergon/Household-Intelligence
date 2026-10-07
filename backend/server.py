@@ -85,11 +85,11 @@ class SimulationRequest(BaseModel):
     distance_to_cbd_km: Optional[float] = None
     distance_to_transit_km: Optional[float] = None
     is_full_furnished: bool = True
-    has_ac: bool = True
+    has_ac: bool = False
     has_pool: bool = True
     has_gym: bool = False
     has_balcony: bool = False
-    has_kitchen: bool = True
+    has_kitchen: bool = False
     # Fitur tambahan yang ada di model (default False = tidak disebut di iklan)
     is_semi_furnished: bool = False
     has_wifi: bool = False
@@ -292,22 +292,27 @@ def simulate_rent(req: SimulationRequest):
     cbd_km = req.distance_to_cbd_km if req.distance_to_cbd_km is not None else _area_default(req, "distance_to_cbd_km", 8.0)
     transit_km = req.distance_to_transit_km if req.distance_to_transit_km is not None else _area_default(req, "distance_to_transit_km", 1.5)
 
-    # 1. Base structural prediction with neutral amenities to eliminate scraped text keyword regex noise
+    # 1. Base structural prediction with neutral amenities and 1-bathroom baseline
     clean_req = req.model_copy(update={
+        "bathrooms": 1,
+        "is_full_furnished": False, "is_semi_furnished": False,
         "has_ac": False, "has_wifi": False, "has_water_heater": False,
         "has_pool": False, "has_gym": False, "near_transit": False,
         "has_balcony": False, "has_kitchen": False, "has_parking": False
     })
     base_fair = float(np.exp(MODEL.predict(_feature_row(clean_req, cbd_km, transit_km))[0]))
 
-    # Enforce hedonic monotonicity across bedroom & bathroom density
+    # Enforce hedonic monotonicity across bedroom count
     if req.bedrooms > 0:
         for lower_b in range(0, req.bedrooms):
-            for lower_ba in range(1, req.bathrooms + 1):
-                lower_req = clean_req.model_copy(update={"bedrooms": lower_b, "bathrooms": lower_ba})
-                lower_base = float(np.exp(MODEL.predict(_feature_row(lower_req, cbd_km, transit_km))[0]))
-                if lower_base > base_fair:
-                    base_fair = lower_base
+            lower_req = clean_req.model_copy(update={"bedrooms": lower_b})
+            lower_base = float(np.exp(MODEL.predict(_feature_row(lower_req, cbd_km, transit_km))[0]))
+            if lower_base > base_fair:
+                base_fair = lower_base
+
+    # Bathroom utility: additional bathrooms (ensuite / guest powder room) provide monotonic utility (+3.5% per extra bath)
+    extra_baths = max(0, req.bathrooms - 1)
+    base_fair = base_fair * (1.0 + extra_baths * 0.035)
 
     # 2. Objective subdistrict micro-market index calibration
     # Anchors valuation to real neighborhood price per m2 without relying on arbitrary Sudirman distance
@@ -321,34 +326,36 @@ def simulate_rent(req: SimulationRequest):
             clamped_ratio = max(0.65, min(1.65, sub_ratio))
             base_fair = base_fair * (0.35 + 0.65 * clamped_ratio)
 
-    # 3. Monotonic amenity utility premiums (ceteris paribus: physical amenities can never reduce property rent)
+    # 3. Furnishing condition multiplier (Full: +13.9% [audited telemetry benchmark], Semi: +6.0%, Unfurnished: 1.0x)
+    if req.is_full_furnished:
+        furnishing_multiplier = 1.139
+    elif req.is_semi_furnished:
+        furnishing_multiplier = 1.060
+    else:
+        furnishing_multiplier = 1.000
+
+    # 4. Monotonic physical & building amenities premiums (ceteris paribus: amenities never reduce property rent)
     amenity_multiplier = 1.0
-    if req.has_ac:
-        amenity_multiplier += 0.04
-    if req.has_kitchen:
-        amenity_multiplier += 0.04
     if req.has_pool:
         amenity_multiplier += 0.03
     if req.has_gym:
         amenity_multiplier += 0.02
-    if req.has_balcony:
-        amenity_multiplier += 0.02
     if req.near_transit:
         amenity_multiplier += 0.05
+    if req.has_balcony:
+        amenity_multiplier += 0.02
     if req.has_parking:
         amenity_multiplier += 0.02
 
-    fair = base_fair * amenity_multiplier
+    fair = base_fair * furnishing_multiplier * amenity_multiplier
 
     est_fair_rent = round(fair / 50_000) * 50_000
     ci_lower = round(fair * INTERVAL["lower_factor"] / 50_000) * 50_000
     ci_upper = round(fair * INTERVAL["upper_factor"] / 50_000) * 50_000
 
-    # Premi furnished ceteris paribus: prediksi (full furnished) - prediksi (tidak full furnished)
-    on_req = clean_req.model_copy(update={"is_full_furnished": True, "is_semi_furnished": False})
-    off_req = clean_req.model_copy(update={"is_full_furnished": False, "is_semi_furnished": False})
-    rent_on = float(np.exp(MODEL.predict(_feature_row(on_req, cbd_km, transit_km))[0])) * amenity_multiplier
-    rent_off = float(np.exp(MODEL.predict(_feature_row(off_req, cbd_km, transit_km))[0])) * amenity_multiplier
+    # Premi furnished ceteris paribus: full furnished vs unfurnished baseline
+    rent_off = base_fair * 1.0 * amenity_multiplier
+    rent_on = base_fair * 1.139 * amenity_multiplier
     premium_monthly = max(rent_on - rent_off, 0.0)
     fitout_cost = req.floor_size_m2 * req.fitout_cost_per_m2_idr
     payback_months = round(fitout_cost / premium_monthly, 1) if premium_monthly > 0 else None

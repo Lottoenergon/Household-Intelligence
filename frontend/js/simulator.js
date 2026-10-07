@@ -49,8 +49,8 @@ function updateSizeHint() {
         if (currentSize < preset.minRealisticSize) {
             warnEl.style.display = 'block';
             warnEl.innerHTML = isEn
-                ? `⚠️ <strong>Note:</strong> ${currentSize} m² is unusually compact for a ${beds}-bedroom apartment in Greater Jakarta (typical: ${preset.labelEn}). Hedonic pricing models evaluate rent based on effective usable space.`
-                : `⚠️ <strong>Catatan arsitektur:</strong> Luas ${currentSize} m² sangat sempit untuk unit ${beds} kamar tidur di Jabodetabek (standar pasar: ${preset.labelId}). Valuasi hedonik mengevaluasi harga berbasis efisiensi ruang efektif.`;
+                ? `⚠️ <strong>Note:</strong> ${currentSize} m² is unusually compact for a ${beds}-bedroom apartment (standard market size: ${preset.labelEn}). Estimate has been calibrated to remain realistic.`
+                : `⚠️ <strong>Perhatian:</strong> Ukuran ${currentSize} m² tergolong sangat kecil untuk apartemen ${beds} kamar (biasanya ${preset.labelId}). Estimasi harga telah disesuaikan agar tetap realistis.`;
         } else {
             warnEl.style.display = 'none';
         }
@@ -106,11 +106,6 @@ function onSimSubdistrictChange() {
 window.onSimSubdistrictChange = onSimSubdistrictChange;
 
 function onFurnishSelectChange() {
-    const type = document.getElementById('sim-furnish-type').value;
-    const ffBox = document.getElementById('sim-ff');
-    if (ffBox) {
-        ffBox.checked = (type === 'full');
-    }
     runSimulation();
 }
 window.onFurnishSelectChange = onFurnishSelectChange;
@@ -118,6 +113,7 @@ window.onFurnishSelectChange = onFurnishSelectChange;
 async function runSimulation() {
     updateSizeHint();
     const subVal = document.getElementById('sim-subdistrict') ? document.getElementById('sim-subdistrict').value : '';
+    const furnishType = document.getElementById('sim-furnish-type') ? document.getElementById('sim-furnish-type').value : 'full';
 
     const payload = {
         city: document.getElementById('sim-city').value,
@@ -127,12 +123,11 @@ async function runSimulation() {
         bathrooms: parseInt(document.getElementById('sim-baths').value) || 1,
         distance_to_cbd_km: null,
         distance_to_transit_km: null,
-        is_full_furnished: document.getElementById('sim-ff') ? document.getElementById('sim-ff').checked : true,
-        has_ac: document.getElementById('sim-ac') ? document.getElementById('sim-ac').checked : true,
+        is_full_furnished: (furnishType === 'full'),
+        is_semi_furnished: (furnishType === 'semi'),
         has_pool: document.getElementById('sim-pool') ? document.getElementById('sim-pool').checked : true,
         has_gym: document.getElementById('sim-gym') ? document.getElementById('sim-gym').checked : false,
         has_balcony: document.getElementById('sim-balcony') ? document.getElementById('sim-balcony').checked : false,
-        has_kitchen: document.getElementById('sim-kitchen') ? document.getElementById('sim-kitchen').checked : true,
         near_transit: document.getElementById('sim-near-transit') ? document.getElementById('sim-near-transit').checked : false,
         has_parking: document.getElementById('sim-parking') ? document.getElementById('sim-parking').checked : false
     };
@@ -147,12 +142,12 @@ async function runSimulation() {
         document.getElementById('sim-output-rent').innerText = 'Rp ' + result.fair_market_rent_idr.toLocaleString() + ' ' + perMonth;
     }
     if (document.getElementById('sim-output-ci')) {
-        const ciLabel = isEn ? `Market tolerance range ${result.interval_level_pct}%` : `Rentang toleransi pasar ${result.interval_level_pct}%`;
+        const ciLabel = isEn ? 'Fair price range' : 'Kisaran harga wajar';
         const jtWord = isEn ? 'M' : 'jt';
         document.getElementById('sim-output-ci').innerText = `${ciLabel}: Rp ${(result.ci_lower_idr / 1e6).toFixed(1)} ${jtWord} – Rp ${(result.ci_upper_idr / 1e6).toFixed(1)} ${jtWord} ${perMonth}`;
     }
     if (document.getElementById('sim-output-rate')) {
-        const rateLabel = typeof t === 'function' ? t('sim_rate_label', 'Tarif efektif ruang:') : 'Tarif efektif ruang:';
+        const rateLabel = typeof t === 'function' ? t('sim_rate_label', 'Biaya per meter:') : 'Biaya per meter:';
         document.getElementById('sim-output-rate').innerText = `${rateLabel} Rp ${result.implicit_rate_per_m2_idr.toLocaleString()} / m²`;
     }
 

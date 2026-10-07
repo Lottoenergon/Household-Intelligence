@@ -342,27 +342,27 @@
         ========================================================= -->
         <div id="tab-simulator" class="tab-content">
             <div style="margin-bottom: 24px;">
-                <div class="eyebrow-tag">Valuation Engine // Hedonic AVM</div>
-                <h2 style="font-size: 22px; margin-bottom: 4px;" data-i18n="sim_header_title">02 // Smart Rent Valuation Simulator (Hedonic AVM)</h2>
+                <div class="eyebrow-tag" data-i18n="sim_eyebrow">Kalkulator Sewa // Cek Harga Pasar</div>
+                <h2 style="font-size: 22px; margin-bottom: 4px;" data-i18n="sim_header_title">02 // Kalkulator Sewa Apartemen Pintar</h2>
                 <div style="font-size: 14px; color: var(--color-fog);" data-i18n="sim_header_sub">
-                    Cek apakah harga sewa sebuah unit kemahalan atau kemurahan berdasarkan ukuran fisik, letak
-                    strategis, dan kelengkapan fasilitas.
+                    Cek apakah harga sewa apartemen incaranmu wajar, murah, atau kemahalan berdasarkan data pasar aktual di Jabodetabek.
                 </div>
             </div>
 
             <div class="split-view">
                 <!-- Input Panel -->
                 <div class="panel-card">
-                    <div class="panel-header" data-i18n="sim_spec_title">Spesifikasi unit & atribut fisik</div>
+                    <div class="panel-header" data-i18n="sim_spec_title">Detail Apartemen</div>
 
                     <div
-                        style="background-color: var(--color-newsprint-gray); padding: 12px 16px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble); margin-bottom: 16px; font-size: 13px; color: var(--color-carbon-ink); line-height: 1.5;">
-                        <span>💡 <strong>Panduan calon penyewa:</strong> Masukkan spesifikasi unit yang didapat dari survei atau chat agen untuk mengevaluasi estimasi harga wajar pasar.</span>
+                        style="background-color: var(--color-newsprint-gray); padding: 12px 16px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble); margin-bottom: 16px; font-size: 13px; color: var(--color-carbon-ink); line-height: 1.5;"
+                        data-i18n="sim_renter_tip">
+                        <span>💡 <strong>Tips Cari Sewa:</strong> Masukkan ukuran dan lokasi unit dari iklan atau agen untuk mengecek kisaran harga pasar yang wajar.</span>
                     </div>
 
                     <div class="form-row-2col">
                         <div class="form-group">
-                            <label class="form-label" data-i18n="sim_city_label">Wilayah kota</label>
+                            <label class="form-label" data-i18n="sim_city_label">Kota / Wilayah</label>
                             <select id="sim-city" class="select-input" onchange="onSimCityChange()">
                                 <option value="Jakarta Selatan">Jakarta Selatan</option>
                                 <option value="Jakarta Pusat">Jakarta Pusat</option>
@@ -377,9 +377,9 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" data-i18n="sim_subdistrict_label">Target kecamatan atau distrik</label>
+                            <label class="form-label" data-i18n="sim_subdistrict_label">Area / Kecamatan</label>
                             <select id="sim-subdistrict" class="select-input" onchange="onSimSubdistrictChange()">
-                                <option value="" data-i18n="sim_subdistrict_default">Semua kecamatan (median kota)</option>
+                                <option value="" data-i18n="sim_subdistrict_default">Semua area (rata-rata kota)</option>
                             </select>
                         </div>
                     </div>
@@ -390,17 +390,17 @@
 
                     <div class="form-row-2col">
                         <div class="form-group">
-                            <label class="form-label" data-i18n="sim_size_label">Luas bangunan bersih (m²)</label>
+                            <label class="form-label" data-i18n="sim_size_label">Luas bangunan (m²)</label>
                             <input type="number" id="sim-size" class="text-input mono" value="70" min="15" max="350"
                                 oninput="runSimulation()" onchange="runSimulation()">
-                            <div id="sim-size-hint" style="font-size: 11px; color: var(--color-fog); margin-top: 4px;">Standar tipikal pasar: 55–90 m²</div>
+                            <div id="sim-size-hint" style="font-size: 11px; color: var(--color-fog); margin-top: 4px;">Standar pasar: 55–90 m²</div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" data-i18n="sim_furnish_label">Kondisi perabot interior</label>
+                            <label class="form-label" data-i18n="sim_furnish_label">Kondisi Furnitur / Perabot</label>
                             <select id="sim-furnish-type" class="select-input" onchange="onFurnishSelectChange()">
-                                <option value="full" selected data-i18n="sim_furnish_full">Lengkap perabot (full furnished)</option>
-                                <option value="semi">Semi furnished (ada AC / kitchen set)</option>
-                                <option value="unfurnished" data-i18n="sim_furnish_un">Unfurnished (kosongan)</option>
+                                <option value="full" selected data-i18n="sim_furnish_full">Lengkap (Full Furnished) — siap huni</option>
+                                <option value="semi" data-i18n="sim_furnish_semi">Semi Furnished — ada AC & dapur</option>
+                                <option value="unfurnished" data-i18n="sim_furnish_un">Kosongan (Unfurnished) — tanpa perabot</option>
                             </select>
                         </div>
                     </div>
@@ -430,42 +430,30 @@
 
                     <div style="margin-bottom: 14px; padding: 10px 12px; background: var(--color-warm-pearl); border: 1px solid var(--color-hairline); border-radius: var(--radius-buttons); display: flex; align-items: center; gap: 8px;">
                         <span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background-color: var(--color-emerald); flex-shrink: 0;"></span>
-                        <span style="font-size: 11px; color: var(--color-fog);" data-i18n="sim_geo_note">Valuasi berbasis indeks mikromarket kawasan & benchmark historis 728 unit.</span>
+                        <span style="font-size: 11px; color: var(--color-fog);" data-i18n="sim_geo_note">Dihitung berdasarkan rata-rata harga sewa apartemen di kawasan yang kamu pilih.</span>
                     </div>
 
-                    <label class="form-label" style="margin-top: 8px;" data-i18n="sim_amenities_title">Paket fasilitas & amenitas tambahan</label>
+                    <label class="form-label" style="margin-top: 8px;" data-i18n="sim_amenities_title">Fasilitas Gedung & Kawasan (Opsional)</label>
                     <div class="checkbox-grid-2col">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="sim-ff" checked onchange="runSimulation()">
-                            <span style="font-weight: 600;" data-i18n="sim_amenity_ff">Lengkap perabot (full furnished)</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="sim-ac" checked onchange="runSimulation()">
-                            <span data-i18n="sim_amenity_ac">Pendingin udara (AC)</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="sim-kitchen" checked onchange="runSimulation()">
-                            <span data-i18n="sim_amenity_kitchen">Kitchen set siap pakai</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="sim-near-transit" onchange="runSimulation()">
-                            <span data-i18n="sim_amenity_transit">Akses dekat transit rel (MRT/KRL/LRT < 1.5 km)</span>
-                        </label>
                         <label class="checkbox-label">
                             <input type="checkbox" id="sim-pool" checked onchange="runSimulation()">
                             <span data-i18n="sim_amenity_pool">Kolam renang apartemen</span>
                         </label>
                         <label class="checkbox-label">
                             <input type="checkbox" id="sim-gym" onchange="runSimulation()">
-                            <span data-i18n="sim_amenity_gym">Pusat kebugaran (gym)</span>
+                            <span data-i18n="sim_amenity_gym">Pusat kebugaran (fitness/gym)</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="sim-near-transit" onchange="runSimulation()">
+                            <span data-i18n="sim_amenity_transit">Dekat stasiun KRL / MRT / LRT (&lt; 1.5 km)</span>
                         </label>
                         <label class="checkbox-label">
                             <input type="checkbox" id="sim-balcony" onchange="runSimulation()">
-                            <span data-i18n="sim_amenity_balcony">Balkon privat</span>
+                            <span data-i18n="sim_amenity_balcony">Balkon unit</span>
                         </label>
                         <label class="checkbox-label">
                             <input type="checkbox" id="sim-parking" onchange="runSimulation()">
-                            <span data-i18n="sim_amenity_parking">Slot parkir kendaraan terdedikasi</span>
+                            <span data-i18n="sim_amenity_parking">Slot parkir kendaraan</span>
                         </label>
                     </div>
                 </div>
@@ -473,34 +461,33 @@
                 <!-- Simulation Output -->
                 <div>
                     <div class="calc-result-box">
-                        <div class="metric-label" data-i18n="sim_result_title">Estimasi harga sewa wajar pasar</div>
+                        <div class="metric-label" data-i18n="sim_result_title">Perkiraan Harga Sewa Wajar</div>
                         <div style="font-size: 38px; font-weight: 600; color: var(--color-carbon-ink); letter-spacing: -0.02em; margin: 8px 0;"
                             class="mono" id="sim-output-rent">
                             Rp 7,850,000 / bln
                         </div>
                         <div class="mono" style="font-size: 13px; color: var(--color-fog); margin-top: 8px;"
                             id="sim-output-ci">
-                            Rentang toleransi pasar: Rp 7.0 Jt - Rp 8.6 Jt / bulan
+                            Kisaran harga wajar: Rp 7.0 jt – Rp 8.6 jt / bulan
                         </div>
                         <div class="mono" style="font-size: 12px; color: var(--color-fog); margin-top: 4px;"
                             id="sim-output-rate">
-                            Tarif efektif ruang: Rp 174,444 / m²
+                            Biaya per meter: Rp 174.444 / m² per bulan
                         </div>
                     </div>
 
                     <div class="panel-card">
                         <div class="panel-header">
-                            <span>Panduan negosiasi penyewa</span>
-                            <span class="mono badge-acid" style="font-size: 10px;">Rekomendasi model</span>
+                            <span data-i18n="sim_advice_title">Tips Negosiasi Sewa</span>
+                            <span class="mono badge-acid" style="font-size: 10px;" data-i18n="sim_advice_tag">Panduan Renter</span>
                         </div>
-                        <p style="font-size: 13px; color: var(--color-fog); line-height: 1.6; margin-bottom: 14px;">
-                            Jika pemilik unit memasang harga <strong>di atas rentang toleransi</strong>, kamu punya
-                            ruang negosiasi yang kuat dengan menunjukkan rata-rata sewa per meter di kawasan ini.
+                        <p style="font-size: 13px; color: var(--color-fog); line-height: 1.6; margin-bottom: 14px;" data-i18n="sim_advice_1">
+                            Kalau harga yang ditawarkan pemilik di atas kisaran wajar, kamu bisa tawar lebih murah berpatokan pada harga rata-rata per meter di kawasan ini.
                         </p>
                         <div
-                            style="background-color: var(--color-newsprint-gray); padding: 14px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble); font-size: 13px; color: var(--color-carbon-ink); line-height: 1.5;">
-                            💡 <strong>Commuter Insight:</strong> Unit hunian dalam radius &lt;1.5 km dari simpul
-                            transit rel (KRL/MRT/LRT) secara konsisten memiliki stabilitas okupansi 15% lebih tinggi.
+                            style="background-color: var(--color-newsprint-gray); padding: 14px; border-radius: var(--radius-buttons); border: 1px solid var(--color-pebble); font-size: 13px; color: var(--color-carbon-ink); line-height: 1.5;"
+                            data-i18n="sim_commuter_insight">
+                            💡 <strong>Tips Transportasi:</strong> Apartemen yang dekat stasiun KRL, MRT, atau LRT umumnya jauh lebih praktis untuk mobilitas harian dan nilainya lebih stabil.
                         </div>
                     </div>
                 </div>

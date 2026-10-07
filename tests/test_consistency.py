@@ -72,6 +72,24 @@ def test_simulate_monotonic_bedrooms_and_realistic_presets():
     assert r4_preset["fair_market_rent_idr"] > r2_preset["fair_market_rent_idr"] * 1.5
 
 
+def test_simulate_bathrooms_impact_price():
+    """Jumlah kamar mandi tambahan (ensuite / private bath) menambah nilai sewa secara proporsional."""
+    b1 = client.post("/api/simulate", json={"city": "Jakarta Selatan", "floor_size_m2": 70, "bedrooms": 2, "bathrooms": 1}).json()
+    b2 = client.post("/api/simulate", json={"city": "Jakarta Selatan", "floor_size_m2": 70, "bedrooms": 2, "bathrooms": 2}).json()
+    b3 = client.post("/api/simulate", json={"city": "Jakarta Selatan", "floor_size_m2": 70, "bedrooms": 2, "bathrooms": 3}).json()
+    assert b2["fair_market_rent_idr"] > b1["fair_market_rent_idr"]
+    assert b3["fair_market_rent_idr"] > b2["fair_market_rent_idr"]
+
+
+def test_simulate_furnishing_condition_tiers():
+    """Tingkat kelengkapan perabot: Full Furnished > Semi Furnished > Unfurnished."""
+    full = client.post("/api/simulate", json={"city": "Jakarta Selatan", "floor_size_m2": 70, "bedrooms": 2, "is_full_furnished": True, "is_semi_furnished": False}).json()
+    semi = client.post("/api/simulate", json={"city": "Jakarta Selatan", "floor_size_m2": 70, "bedrooms": 2, "is_full_furnished": False, "is_semi_furnished": True}).json()
+    un = client.post("/api/simulate", json={"city": "Jakarta Selatan", "floor_size_m2": 70, "bedrooms": 2, "is_full_furnished": False, "is_semi_furnished": False}).json()
+    assert full["fair_market_rent_idr"] > semi["fair_market_rent_idr"]
+    assert semi["fair_market_rent_idr"] > un["fair_market_rent_idr"]
+
+
 def test_simulate_monotonic_amenities_never_decrease_rent():
     """Fasilitas fisik (AC, Kitchen, Pool, Gym, Balcony, Near Transit) tidak boleh menurunkan estimasi sewa."""
     base_payload = {
