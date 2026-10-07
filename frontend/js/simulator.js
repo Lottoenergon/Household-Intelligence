@@ -95,8 +95,11 @@ function onSimSubdistrictChange() {
     const baselineBox = document.getElementById('sim-subdistrict-baseline');
     if (found && baselineBox) {
         baselineBox.style.display = 'block';
-        const titleText = isEn ? `📍 <strong>Market benchmark for ${found.subdistrict}:</strong> Median rate <strong>Rp ${Math.round(found.median_price_per_m2_idr).toLocaleString('id-ID')} / m²</strong> (${found.unit_count} ${unitWord} recorded in this area).`
-                               : `📍 <strong>Data pasaran ${found.subdistrict}:</strong> Median tarif pasaran <strong>Rp ${Math.round(found.median_price_per_m2_idr).toLocaleString('id-ID')} / m²</strong> (${found.unit_count} ${unitWord} terdata di kawasan ini).`;
+        // Nama kawasan hasil scraping -> escape sebelum masuk innerHTML.
+        const subName = escapeHtml(found.subdistrict);
+        const rateText = `Rp ${Math.round(found.median_price_per_m2_idr).toLocaleString('id-ID')}`;
+        const titleText = isEn ? `📍 <strong>Market benchmark for ${subName}:</strong> Median rate <strong>${rateText} / m²</strong> (${found.unit_count} ${unitWord} recorded in this area).`
+                               : `📍 <strong>Data pasaran ${subName}:</strong> Median tarif pasaran <strong>${rateText} / m²</strong> (${found.unit_count} ${unitWord} terdata di kawasan ini).`;
         baselineBox.innerHTML = titleText;
     } else if (baselineBox) {
         baselineBox.style.display = 'none';

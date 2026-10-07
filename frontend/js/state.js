@@ -12,6 +12,11 @@ const AppState = {
     selectedModalRole: 'investor',
     currentInventoryMode: 'all', // 'all' or 'deals'
     currentDealTier: 'all', // 'all', 'deep', 'good'
+    // Ambang klasifikasi deal. SENGAJA null: nilainya hanya boleh datang dari
+    // /api/telemetry -> deal_thresholds (sumber: src/deal_config.py). Kalau data
+    // itu belum/tidak termuat, UI tidak mengklasifikasi apa pun — lebih baik
+    // daripada menampilkan angka sendiri yang bisa berbeda dari pipeline.
+    dealThresholds: null,
     decayChartInstance: null,
     visibleListingsCount: 60,
     currentFilteredListings: [],

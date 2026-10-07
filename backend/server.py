@@ -5,25 +5,56 @@ Adheres strictly to PRD v1.0 specifications and serves the modern Linear-themed 
 """
 
 import os
+import sys
 import json
-import sqlite3
+import secrets
+import threading
 import joblib
 import pandas as pd
 import numpy as np
-from fastapi import FastAPI, Query, HTTPException
+from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, PlainTextResponse, HTMLResponse
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SRC_DIR = os.path.join(BASE_DIR, "src")
 DATA_PATH = os.path.join(BASE_DIR, "data", "processed", "jabodetabek_rental_evaluated.csv")
-DB_PATH = os.path.join(BASE_DIR, "data", "processed", "rental_intelligence.db")
 FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
 MODEL_PATH = os.path.join(BASE_DIR, "models", "hedonic_gb.joblib")
 METRICS_PATH = os.path.join(BASE_DIR, "data", "processed", "model_evaluation_metrics.json")
 SUMMARY_PATH = os.path.join(BASE_DIR, "data", "processed", "market_summary.json")
+
+# Ambang klasifikasi deal: satu sumber kebenaran yang dipakai juga oleh pipeline
+# dan (lewat /api/telemetry) oleh frontend. Jangan hardcode angka di file lain.
+sys.path.insert(0, SRC_DIR)
+import deal_config  # noqa: E402
+from deal_config import is_below_estimate, matches_tier  # noqa: E402
+
+
+def _is_production() -> bool:
+    return (os.getenv("VERCEL_ENV", "").strip() == "production"
+            or os.getenv("HI_ENV", "").strip().lower() == "production"
+            or os.getenv("ENV", "").strip().lower() == "production")
+
+
+# Frontend memakai path relatif (`/api/...`), jadi aplikasi selalu same-origin dan
+# TIDAK butuh CORS. Default = tidak ada origin lintas-domain yang diizinkan;
+# set ALLOWED_ORIGINS (dipisah koma) bila frontend disajikan dari domain lain.
+ALLOWED_ORIGINS = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "").split(",") if o.strip()]
+if not ALLOWED_ORIGINS and not _is_production():
+    # Kenyamanan pengembangan lokal: izinkan loopback (mis. frontend di :5500).
+    ALLOWED_ORIGINS = [f"http://{host}:{port}"
+                       for host in ("localhost", "127.0.0.1")
+                       for port in (5500, 8000, 8080, 8791)]
+
+# Endpoint maintenance yang memutasi state in-memory; dinonaktifkan sampai
+# HI_ADMIN_TOKEN diisi. Sebelumnya endpoint ini terbuka untuk siapa saja.
+ADMIN_TOKEN = os.getenv("HI_ADMIN_TOKEN", "").strip()
+_reload_lock = threading.Lock()
 
 app = FastAPI(
     title="Household Intelligence API",
@@ -31,13 +62,17 @@ app = FastAPI(
     version="1.0.0"
 )
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Payload /api/listings ~2.3 MB tanpa kompresi; gzip memangkasnya ke seperempatnya.
+app.add_middleware(GZipMiddleware, minimum_size=1024)
+
+if ALLOWED_ORIGINS:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=ALLOWED_ORIGINS,
+        allow_credentials=False,  # tidak ada auth berbasis cookie di aplikasi ini
+        allow_methods=["GET", "POST", "HEAD", "OPTIONS"],
+        allow_headers=["Content-Type", "X-Admin-Token"],
+    )
 
 # Load evaluated dataset in memory for sub-millisecond querying
 def load_dataset():
@@ -50,16 +85,42 @@ def load_dataset():
 
 df = load_dataset()
 
-@app.get("/api/reload-data")
-@app.post("/api/reload-data")
-def reload_data():
-    """Reloads evaluated listings and clean titles into memory."""
-    load_dataset()
-    return {
-        "status": "success",
-        "total_listings": len(df),
-        "sample_title": df.iloc[0]["title"]
-    }
+
+def _cbd_decay_per_5km(frame: pd.DataFrame) -> float:
+    """Kemiringan log-linear harga/m2 terhadap jarak ke CBD, dinyatakan per 5 km.
+
+    Dipakai untuk dokumentasi mesin (llms.txt) supaya angkanya dihitung dari data,
+    bukan ditulis manual. Klaim manual sebelumnya ("12.4% per 5 km") meleset 2.3x
+    dari nilai sebenarnya.
+    """
+    s = frame[["distance_to_cbd_km", "price_per_m2_idr"]].dropna()
+    s = s[s["price_per_m2_idr"].between(10_000, 600_000)]
+    if len(s) < 30:
+        return 0.0
+    slope = float(np.polyfit(s["distance_to_cbd_km"], np.log(s["price_per_m2_idr"]), 1)[0])
+    return round((np.exp(slope * 5) - 1) * 100, 1)
+
+
+CBD_DECAY_PER_5KM_PCT = _cbd_decay_per_5km(df)
+
+
+@app.api_route("/api/reload-data", methods=["GET", "POST"])
+def reload_data(x_admin_token: Optional[str] = Header(None, alias="X-Admin-Token")):
+    """Muat ulang dataset ke memori. Butuh header X-Admin-Token (env HI_ADMIN_TOKEN)."""
+    if not ADMIN_TOKEN:
+        raise HTTPException(
+            status_code=403,
+            detail="Endpoint maintenance dinonaktifkan. Set env HI_ADMIN_TOKEN untuk mengaktifkannya.",
+        )
+    if not x_admin_token or not secrets.compare_digest(x_admin_token, ADMIN_TOKEN):
+        raise HTTPException(status_code=401, detail="Token admin tidak valid.")
+    with _reload_lock:
+        load_dataset()
+        return {
+            "status": "success",
+            "total_listings": len(df),
+            "sample_title": df.iloc[0]["title"],
+        }
 
 
 for _p in (MODEL_PATH, METRICS_PATH, SUMMARY_PATH):
@@ -118,6 +179,11 @@ def get_telemetry():
         "deep_value_count": deals["deep"],
         "good_deals_count": deals["good"],
         "below_estimate_share_pct": deals["below_estimate_share_pct"],
+        # Konsisten dengan /api/districts: satu distrik dihitung per (kota, kawasan).
+        "monitored_districts": int(df.groupby(["target_city", "subdistrict"]).ngroups),
+        # Frontend WAJIB memakai angka ini, bukan literal sendiri: sebelumnya UI
+        # memakai -1.2 sehingga 29 unit salah label sebagai "Deep Value".
+        "deal_thresholds": deal_config.as_dict(),
         "model": {
             "validation": "out-of-fold, KFold 5-lipat x3 pengulangan",
             "r2": gb["r2"], "mae_idr": gb["mae_idr"], "mape_pct": gb["mape_pct"],
@@ -178,14 +244,13 @@ def get_listings(
     if is_furnished:
         filtered = filtered[filtered["is_full_furnished"] == 1]
     if only_deals:
-        filtered = filtered[filtered["deal_score_z"] <= -0.75]
+        filtered = filtered[is_below_estimate(filtered["deal_score_z"])]
     
     subset = filtered.head(limit)
     return {
         "count": len(subset),
         "total_matched": len(filtered),
         "data": subset.to_dict(orient="records"),
-        "listings": subset.to_dict(orient="records")
     }
 
 @app.api_route("/api/benchmarks", methods=["GET", "HEAD"])
@@ -215,16 +280,20 @@ def get_benchmarks():
 @app.api_route("/api/deals", methods=["GET", "HEAD"])
 def get_deals(tier: str = "all", limit: int = 50):
     """Curated Deal Hunter listings ranked by standardized statistical residual."""
-    deals = df[df["deal_score_z"] <= -0.75].copy()
-    if tier == "deep":
-        deals = deals[deals["deal_score_z"] <= -1.5]
-    elif tier == "good":
-        deals = deals[(deals["deal_score_z"] > -1.5) & (deals["deal_score_z"] <= -0.75)]
-    
-    deals = deals.sort_values("deal_score_z").head(limit)
+    try:
+        matched = df[matches_tier(df["deal_score_z"], tier)].copy()
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    matched = matched.sort_values("deal_score_z")
+    deals = matched.head(limit)
     return {
-        "total_deals": len(deals),
+        # total_deals = seluruh unit yang cocok (bukan ukuran halaman), sejalan
+        # dengan total_matched/count di /api/listings.
+        "total_deals": int(len(matched)),
+        "count": int(len(deals)),
+        "limit": limit,
         "tier": tier,
+        "thresholds": deal_config.as_dict(),
         "deals": deals.to_dict(orient="records")
     }
 
@@ -239,7 +308,7 @@ def get_districts(city: Optional[str] = None):
         unit_count=("listing_id", "count"),
         median_rent_idr=("price_monthly_idr", "median"),
         median_price_per_m2_idr=("price_per_m2_idr", "median"),
-        deals_count=("deal_score_z", lambda z: (z <= -0.75).sum()),
+        deals_count=("deal_score_z", lambda z: int(is_below_estimate(z).sum())),
         latitude=("latitude", "mean"),
         longitude=("longitude", "mean")
     ).reset_index().sort_values("unit_count", ascending=False)
@@ -422,28 +491,29 @@ def serve_robots():
 
 @app.api_route("/llms.txt", methods=["GET", "HEAD"], response_class=PlainTextResponse)
 def serve_llms_txt():
-    return """# Household Intelligence — Greater Jakarta Rental Housing & Market Intelligence Engine
+    return f"""# Household Intelligence — Greater Jakarta Rental Housing & Market Intelligence Engine
 
 > Author: Afiatta Ilhan Saleh
 > Repository: https://github.com/Lottoenergon/Household-Intelligence
 > Stack: FastAPI, Python, scikit-learn (GradientBoostingRegressor), SQLite Star Schema, Vanilla JS/CSS
 
 ## Overview
-Household Intelligence is an end-to-end PropTech analytics platform and Automated Valuation Model (AVM) tracking 728 audited residential rental units across 10 Greater Jakarta (Jabodetabek) cities.
+Household Intelligence is an end-to-end PropTech analytics platform and Automated Valuation Model (AVM) tracking {SUMMARY['n_units']} audited residential rental units across {SUMMARY['n_cities']} Greater Jakarta (Jabodetabek) cities.
 
 ## Core Analytics Modules
 1. **Rental Deal Radar**: Identifies undervalued listings priced below statistical fair market value using a hedonic gradient boosting regression model.
 2. **Smart Rent Valuation Calculator**: Real-time hedonic valuation based on unit floor size, micro-district indexing, room counts, and furnishing tiers.
-3. **Urban Spatial Decay (Alonso-Muth-Mills)**: Models rental decay away from the Sudirman CBD (~12.4% decrease per 5 km).
+3. **Urban Spatial Decay (Alonso-Muth-Mills)**: Models rental decay away from the Sudirman CBD ({CBD_DECAY_PER_5KM_PCT:.1f}% per 5 km, diukur log-linear pada harga/m² vs jarak ke CBD, n={len(df)}).
 4. **Investor Capital Allocation & Fit-Out Payback**: Estimates cashflow yield and break-even payback period for furnishing interior renovations.
 
 ## Machine-Readable API Endpoints
 - `GET /api/telemetry` — High-level market metrics, unit counts, and audited benchmarks.
 - `GET /api/listings` — Audited listing catalog with fair value discount deltas.
-- `GET /api/deals` — Top underpriced apartment listings ranked by discount percentage.
+- `GET /api/deals?tier=all|deep|good` — Top underpriced apartment listings ranked by discount percentage.
+- `GET /api/districts?city=` — Per-subdistrict aggregates with unit counts and deal counts.
+- `GET /api/benchmarks` — City and layout-level median rent / price-per-m² benchmarks.
 - `POST /api/simulate` — Real-time hedonic rent simulation engine.
-- `GET /api/decay` — Spatial rent decay curve vs distance to Sudirman CBD.
-- `GET /api/zones` — Concentric ring urban zoning data with inventory counts and median yields.
+- `GET /api/distance-decay` — Spatial rent decay curve vs distance to Sudirman CBD plus urban-zone rings.
 """
 
 @app.api_route("/overview", methods=["GET", "HEAD"], response_class=HTMLResponse)

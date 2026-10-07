@@ -90,14 +90,17 @@ function renderDistrictsGrid() {
 
     const cardsHtml = matched.map(d => {
         const isActive = (selectedSub !== 'All' && d.subdistrict === selectedSub);
-        const safeSub = d.subdistrict.replace(/'/g, "\\'");
-        const safeCity = d.target_city.replace(/'/g, "\\'");
+        // Nama kawasan berasal dari scraping: escape untuk teks DAN atribut.
+        // Dulu nilainya diinterpolasi mentah ke onclick="..." sehingga kutip atau
+        // tag di nama kawasan bisa keluar dari atribut / DOM.
+        const subLabel = escapeHtml(d.subdistrict);
+        const cityLabel = escapeHtml(d.target_city);
         return `
-            <div class="district-card ${isActive ? 'active' : ''}" onclick="selectDistrict('${safeSub}', '${safeCity}')">
+            <div class="district-card ${isActive ? 'active' : ''}" data-subdistrict="${subLabel}" data-city="${cityLabel}" role="button" tabindex="0">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
                     <div>
-                        <div class="mono" style="font-size: 10px; color: var(--color-fog);">${d.target_city}</div>
-                        <div style="font-size: 13px; font-weight: 600; color: var(--color-carbon-ink);">${d.subdistrict}</div>
+                        <div class="mono" style="font-size: 10px; color: var(--color-fog);">${cityLabel}</div>
+                        <div style="font-size: 13px; font-weight: 600; color: var(--color-carbon-ink);">${subLabel}</div>
                     </div>
                     <span class="mono" style="font-size: 10px; background: var(--color-newsprint-gray); border: 1px solid var(--color-pebble); padding: 1px 6px; border-radius: 4px; color: var(--color-carbon-ink); font-weight: 500;">${d.unit_count}</span>
                 </div>
@@ -115,6 +118,19 @@ function renderDistrictsGrid() {
     }).join('');
 
     container.innerHTML = cardsHtml;
+    // Delegasi event: nama kawasan tidak lagi disisipkan ke atribut onclick=.
+    container.onclick = function (ev) {
+        const card = ev.target.closest ? ev.target.closest('.district-card') : null;
+        if (!card || !container.contains(card)) return;
+        selectDistrict(card.dataset.subdistrict, card.dataset.city);
+    };
+    container.onkeydown = function (ev) {
+        if (ev.key !== 'Enter' && ev.key !== ' ') return;
+        const card = ev.target.closest ? ev.target.closest('.district-card') : null;
+        if (!card) return;
+        ev.preventDefault();
+        selectDistrict(card.dataset.subdistrict, card.dataset.city);
+    };
 }
 window.renderDistrictsGrid = renderDistrictsGrid;
 
@@ -212,9 +228,20 @@ function applyFilters() {
         if (furnishedOnly && !item.is_full_furnished) return false;
 
         if (AppState.currentInventoryMode === 'deals') {
-            if (item.deal_score_z > -0.75) return false;
-            if (AppState.currentDealTier === 'deep' && !(item.deal_tier === 'Deep Value' || item.deal_score_z <= -1.2)) return false;
-            if (AppState.currentDealTier === 'good' && !(item.deal_tier === 'Good Deal' || (item.deal_score_z > -1.2 && item.deal_score_z <= -0.75))) return false;
+            // Ambang TUNGGAL dari /api/telemetry -> deal_thresholds
+            // (sumber: src/deal_config.py). Frontend tidak punya angka sendiri.
+            // Sebelumnya baris ini memakai -1.2 + field `deal_tier` yang tidak ada
+            // di dataset, sehingga 29 unit salah label "Deep Value".
+            const thresholds = AppState.dealThresholds;
+            if (!thresholds) {
+                // Belum ada ambang dari server -> jangan mengarang klasifikasi.
+                // Banner error sudah memberi tahu bahwa data gagal dimuat.
+                return false;
+            }
+            const z = item.deal_score_z;
+            if (z > thresholds.good_z) return false;
+            if (AppState.currentDealTier === 'deep' && z > thresholds.deep_z) return false;
+            if (AppState.currentDealTier === 'good' && z <= thresholds.deep_z) return false;
         }
 
         if (searchQuery) {
@@ -314,10 +341,18 @@ function renderListingsCards(filtered) {
     const perM2 = typeof t === 'function' ? t('per_m2', '/m²') : '/m²';
 
     const cardsHtml = visibleSlice.map(item => {
-        const cleanUrl = item.url.startsWith('http') ? item.url : `https://www.rumah123.com${item.url}`;
-        const isDeal = (item.deal_score_z <= -0.75);
-        const isDeep = (item.deal_score_z <= -1.2 || item.deal_tier === 'Deep Value');
-        const displayTitle = cleanDisplayTitle(item);
+        // Data ini hasil scraping -> tidak terpercaya. URL divalidasi skemanya,
+        // seluruh teks di-escape sebelum masuk innerHTML.
+        const cleanUrl = window.safeExternalUrl(item.url, 'https://www.rumah123.com');
+        // Ambang dari server; bila belum termuat, jangan menandai deal sama sekali.
+        const thresholds = AppState.dealThresholds;
+        const z = item.deal_score_z;
+        const isDeal = !!(thresholds && z <= thresholds.good_z);
+        const isDeep = !!(thresholds && z <= thresholds.deep_z);
+        const displayTitle = escapeHtml(cleanDisplayTitle(item));
+        const cityLabel = escapeHtml(item.target_city);
+        const subdistrictLabel = escapeHtml(item.subdistrict);
+        const layoutLabel = escapeHtml(item.layout_category);
 
         let dealPricingBlock = '';
         if (isDeal) {
@@ -353,14 +388,14 @@ function renderListingsCards(filtered) {
                 <div>
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
                         <div class="mono" style="font-size: 10px; color: var(--color-fog);">
-                            ${item.target_city} • ${item.subdistrict}
+                            ${cityLabel} • ${subdistrictLabel}
                         </div>
                         ${isDeal ? `<span class="mono" style="font-size: 10px; ${isDeep ? 'background: var(--color-carbon-ink); color: var(--color-paper-white);' : 'background: var(--color-newsprint-gray); color: var(--color-carbon-ink); border: 1px solid var(--color-pebble);'} padding: 3px 8px; border-radius: var(--radius-pills); font-weight: 600; letter-spacing: 0.02em;">${isDeep ? deepBadge : goodBadge}</span>` : ''}
                     </div>
                     <h4 style="font-size: 14px; font-weight: 600; color: var(--color-carbon-ink); margin-bottom: 8px; line-height: 1.4;">${displayTitle}</h4>
                     <div style="font-size: 11px; color: var(--color-fog); margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 6px;">
                         <span class="mono" style="background: var(--color-newsprint-gray); border: 1px solid var(--color-pebble); padding: 2px 6px; border-radius: 4px; color: var(--color-carbon-ink);">📐 ${item.floor_size_m2} m²</span>
-                        <span class="mono" style="background: var(--color-newsprint-gray); border: 1px solid var(--color-pebble); padding: 2px 6px; border-radius: 4px; color: var(--color-carbon-ink);">🛏️ ${item.layout_category}</span>
+                        <span class="mono" style="background: var(--color-newsprint-gray); border: 1px solid var(--color-pebble); padding: 2px 6px; border-radius: 4px; color: var(--color-carbon-ink);">🛏️ ${layoutLabel}</span>
                         <span style="background: var(--color-newsprint-gray); border: 1px solid var(--color-pebble); padding: 2px 6px; border-radius: 4px; color: var(--color-carbon-ink);">🛋️ ${furnishTag}</span>
                     </div>
                     ${dealPricingBlock}
@@ -378,7 +413,7 @@ function renderListingsCards(filtered) {
                         </div>
                         `}
                     </div>
-                    <a href="${cleanUrl}" target="_blank" class="btn-action-dark" style="padding: 6px 12px; font-size: 12px; text-decoration: none;">
+                    <a href="${cleanUrl}" target="_blank" rel="noopener noreferrer" class="btn-action-dark" style="padding: 6px 12px; font-size: 12px; text-decoration: none;">
                         <span>${viewText}</span>
                         <span class="btn-bubble-icon">↗</span>
                     </a>
@@ -401,7 +436,7 @@ function renderBenchmarkTable(cities) {
     cities.forEach(c => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td style="font-weight: 600; color: var(--color-carbon-ink);">${c.target_city}</td>
+            <td style="font-weight: 600; color: var(--color-carbon-ink);">${escapeHtml(c.target_city)}</td>
             <td class="mono" style="color: var(--color-fog);">${c.sample_size}</td>
             <td class="mono">Rp ${(c.median_rent_idr / 1e6).toFixed(1)} ${jtWord}</td>
             <td class="mono" style="color: var(--color-carbon-ink); font-weight: 600;">Rp ${Math.round(c.median_price_per_m2_idr / 1000)} ${rbWord}${perM2}</td>

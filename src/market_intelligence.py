@@ -20,6 +20,19 @@ from sklearn.linear_model import Ridge
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
 
+# Ambang klasifikasi deal: satu sumber kebenaran (jangan tulis literal di sini).
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import deal_config
+from deal_config import (  # noqa: E402
+    DEAL_DEEP_Z,
+    DEAL_GOOD_Z,
+    PREMIUM_Z,
+    classify_deal,
+    is_below_estimate,
+    is_deep_value,
+    tier_of,
+)
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -188,19 +201,9 @@ def compute_deal_scores(df: pd.DataFrame, fair_rent: np.ndarray) -> pd.DataFrame
 
     df_eval["deal_score_z"] = np.round(df_eval["residual_log"] / df_eval["residual_log"].std(ddof=1), 2)
 
-    def classify_deal(z: float) -> str:
-        if z <= -1.5:
-            return "Deep Value Deal (Rare Find)"
-        elif z <= -0.75:
-            return "Good Deal (Undervalued)"
-        elif z < 0.75:
-            return "Fair Market Price"
-        elif z < 1.5:
-            return "Premium / High Price"
-        else:
-            return "Overpriced / Luxury Tag"
-
+    # classify_deal() diimpor dari deal_config -> ambang tidak ditulis ulang di sini.
     df_eval["deal_classification"] = df_eval["deal_score_z"].apply(classify_deal)
+    df_eval["deal_tier"] = df_eval["deal_score_z"].apply(tier_of)
     return df_eval
 
 
@@ -248,7 +251,7 @@ def build_market_summary(df_eval: pd.DataFrame, model, X: pd.DataFrame, metrics:
     adj = float(np.mean(np.exp(model.predict(X1) - model.predict(X0))) - 1) * 100
 
     z = d["deal_score_z"]
-    flagged = d[z <= -0.75]
+    flagged = d[is_below_estimate(z)]
     by_city = (d.groupby("target_city").agg(n=("listing_id", "count"), median_rent_idr=("price_monthly_idr", "median"),
                median_price_per_m2_idr=("price_per_m2_idr", "median")).reset_index()
                .sort_values("median_price_per_m2_idr", ascending=False))
@@ -261,13 +264,14 @@ def build_market_summary(df_eval: pd.DataFrame, model, X: pd.DataFrame, metrics:
         "tier1_vs_tier3_premium_pct": round(float((t1 / t3 - 1) * 100), 1),
         "furnishing_premium_raw_pct": round(float((raw_f / raw_u - 1) * 100), 1),
         "furnishing_premium_adjusted_pct": round(adj, 1),
+        "deal_thresholds": deal_config.as_dict(),
         "deals": {
-            "below_estimate_total": int((z <= -0.75).sum()),
-            "below_estimate_share_pct": round(float((z <= -0.75).mean() * 100), 1),
-            "deep": int((z <= -1.5).sum()),
-            "good": int(((z > -1.5) & (z <= -0.75)).sum()),
-            "above_estimate_total": int((z >= 0.75).sum()),
-            "above_estimate_share_pct": round(float((z >= 0.75).mean() * 100), 1),
+            "below_estimate_total": int(is_below_estimate(z).sum()),
+            "below_estimate_share_pct": round(float(is_below_estimate(z).mean() * 100), 1),
+            "deep": int(is_deep_value(z).sum()),
+            "good": int((is_below_estimate(z) & ~is_deep_value(z)).sum()),
+            "above_estimate_total": int((z >= PREMIUM_Z).sum()),
+            "above_estimate_share_pct": round(float((z >= PREMIUM_Z).mean() * 100), 1),
             "median_discount_pct_of_flagged": round(float(flagged["discount_pct"].median()), 1) if len(flagged) else None,
         },
         "geo": {
