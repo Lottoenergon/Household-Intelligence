@@ -12,9 +12,15 @@ from backend.server import app
 
 @app.middleware("http")
 async def vercel_path_corrector(request: Request, call_next):
+    if "debug" in request.query_params:
+        return JSONResponse({
+            "scope_path": request.scope.get("path"),
+            "headers": dict(request.headers)
+        })
+    
     # Check headers sent by Vercel to get original requested path
-    original_uri = request.headers.get("x-forwarded-uri") or request.headers.get("x-matched-path")
-    if original_uri:
+    original_uri = request.headers.get("x-invoke-path") or request.headers.get("x-forwarded-uri") or request.headers.get("x-matched-path")
+    if original_uri and original_uri not in ("/api/index.py", "/api/index"):
         request.scope["path"] = original_uri.split("?")[0]
     elif request.scope["path"] in ("/api/index.py", "/api/index"):
         request.scope["path"] = "/"
