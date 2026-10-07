@@ -13,7 +13,7 @@ import numpy as np
 from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, PlainTextResponse
+from fastapi.responses import FileResponse, PlainTextResponse, HTMLResponse
 from pydantic import BaseModel
 from typing import Optional, List
 
@@ -99,7 +99,7 @@ class SimulationRequest(BaseModel):
     # ASUMSI pengguna (bukan hasil data): biaya fit-out per m2 untuk kalkulator payback
     fitout_cost_per_m2_idr: float = 1_200_000.0
 
-@app.get("/api/telemetry")
+@app.api_route("/api/telemetry", methods=["GET", "HEAD"])
 def get_telemetry():
     """Metrik pasar & model. Semua angka dibaca dari artefak pipeline, tidak ada yang ditulis manual."""
     ev = METRICS["evaluation"]
@@ -132,15 +132,16 @@ def get_telemetry():
         },
     }
 
-@app.get("/api/listings")
+@app.api_route("/api/listings", methods=["GET", "HEAD"])
 def get_listings(
     city: Optional[str] = None,
     layout: Optional[str] = None,
     min_price: Optional[float] = None,
     max_price: Optional[float] = None,
     is_furnished: Optional[bool] = None,
-    only_deals: Optional[bool] = False,
-    limit: int = 500
+    only_deals: bool = False,
+    sort_by: str = "deal_score_z",
+    limit: int = 800
 ):
     """Query listings with optional multi-attribute filters."""
     filtered = df.copy()
@@ -187,7 +188,7 @@ def get_listings(
         "listings": subset.to_dict(orient="records")
     }
 
-@app.get("/api/benchmarks")
+@app.api_route("/api/benchmarks", methods=["GET", "HEAD"])
 def get_benchmarks():
     """District and City-level median price benchmarks."""
     city_bench = df.groupby("target_city").agg(
@@ -211,7 +212,7 @@ def get_benchmarks():
         "layouts": layout_bench.to_dict(orient="records")
     }
 
-@app.get("/api/deals")
+@app.api_route("/api/deals", methods=["GET", "HEAD"])
 def get_deals(tier: str = "all", limit: int = 50):
     """Curated Deal Hunter listings ranked by standardized statistical residual."""
     deals = df[df["deal_score_z"] <= -0.75].copy()
@@ -227,7 +228,7 @@ def get_deals(tier: str = "all", limit: int = 50):
         "deals": deals.to_dict(orient="records")
     }
 
-@app.get("/api/districts")
+@app.api_route("/api/districts", methods=["GET", "HEAD"])
 def get_districts(city: Optional[str] = None):
     """Aggregate real property listings by administrative subdistrict / kawasan."""
     dff = df.copy()
@@ -380,7 +381,7 @@ def simulate_rent(req: SimulationRequest):
         },
     }
 
-@app.get("/api/distance-decay")
+@app.api_route("/api/distance-decay", methods=["GET", "HEAD"])
 def get_distance_decay():
     """Data for the Alonso-Muth-Mills urban rent decay model."""
     sample = df[["distance_to_cbd_km", "distance_to_transit_km", "price_per_m2_idr", "target_city", "urban_zone"]].dropna()
@@ -399,7 +400,7 @@ def get_distance_decay():
         "zones": zones
     }
 
-@app.get("/apartemen")
+@app.api_route("/apartemen", methods=["GET", "HEAD"])
 def fallback_tutorial_apartemen():
     """Fallback endpoint for backward compatibility with learning tutorial tabs."""
     sample = df[["listing_id", "title", "price_monthly_idr"]].head(10).to_dict(orient="records")
@@ -444,6 +445,31 @@ Household Intelligence is an end-to-end PropTech analytics platform and Automate
 - `GET /api/decay` — Spatial rent decay curve vs distance to Sudirman CBD.
 - `GET /api/zones` — Concentric ring urban zoning data with inventory counts and median yields.
 """
+
+@app.api_route("/overview", methods=["GET", "HEAD"], response_class=HTMLResponse)
+@app.api_route("/llm", methods=["GET", "HEAD"], response_class=HTMLResponse)
+def serve_overview():
+    summary_text = serve_llms_txt()
+    html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Household Intelligence • LLM & Architecture Overview</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 860px; margin: 40px auto; padding: 0 24px; line-height: 1.6; color: #111; background: #fff; }}
+        pre {{ background: #f6f8fa; padding: 20px; border-radius: 8px; border: 1px solid #e1e4e8; overflow-x: auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 14px; white-space: pre-wrap; }}
+        a {{ color: #0366d6; text-decoration: none; }}
+        a:hover {{ text-decoration: underline; }}
+    </style>
+</head>
+<body>
+    <h1>Household Intelligence Overview</h1>
+    <p>Machine-readable documentation for AI crawlers, LLMs, and PropTech researchers.</p>
+    <pre>{summary_text}</pre>
+</body>
+</html>"""
+    return HTMLResponse(content=html)
 
 @app.api_route("/", methods=["GET", "HEAD"])
 def serve_index():
