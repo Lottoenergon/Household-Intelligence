@@ -67,7 +67,7 @@ function setInvestorRole(isInvestor) {
         if (unlockedView) unlockedView.style.display = 'block';
         if (lockBadge) {
             lockBadge.innerText = unlockedBadgeWord;
-            lockBadge.style.color = '#ffffff';
+            lockBadge.style.color = 'var(--color-paper-white)';
             lockBadge.style.borderColor = 'var(--color-carbon-ink)';
             lockBadge.style.backgroundColor = 'var(--color-carbon-ink)';
         }

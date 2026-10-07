@@ -75,6 +75,9 @@ function renderDistrictsGrid() {
     const monWord = typeof t === 'function' ? t('monitored', 'dipantau') : 'dipantau';
     const dealsWord = typeof t === 'function' ? t('deals_available', 'unit hemat') : 'unit hemat';
     const perMonth = typeof t === 'function' ? t('per_month', '/ bln') : '/ bln';
+    const jtWord = typeof t === 'function' ? t('unit_million', 'jt') : 'jt';
+    const rbWord = typeof t === 'function' ? t('unit_thousand', 'rb') : 'rb';
+    const perM2 = typeof t === 'function' ? t('per_m2', '/m²') : '/m²';
 
     if (badge) {
         badge.innerText = `${matched.length} ${distWord} ${AppState.currentInventoryMode === 'deals' ? withDealsWord : monWord}`;
@@ -100,10 +103,10 @@ function renderDistrictsGrid() {
                 </div>
                 <div style="border-top: 1px solid var(--color-pebble); padding-top: 6px; margin-top: 6px; display: flex; justify-content: space-between; align-items: baseline;">
                     <div class="mono" style="font-size: 12px; color: var(--color-carbon-ink); font-weight: 600;">
-                        Rp ${(d.median_rent_idr / 1e6).toFixed(1)} jt <span style="font-size: 10px; color: var(--color-fog); font-weight: 400;">${perMonth}</span>
+                        Rp ${(d.median_rent_idr / 1e6).toFixed(1)} ${jtWord} <span style="font-size: 10px; color: var(--color-fog); font-weight: 400;">${perMonth}</span>
                     </div>
                     <div class="mono" style="font-size: 10px; color: var(--color-fog);">
-                        Rp ${Math.round(d.median_price_per_m2_idr / 1000)} rb/m²
+                        Rp ${Math.round(d.median_price_per_m2_idr / 1000)} ${rbWord}${perM2}
                     </div>
                 </div>
                 ${d.deals_count > 0 ? `<div style="font-size: 10px; color: var(--color-carbon-ink); margin-top: 4px; font-weight: 600;">⚡ ${d.deals_count} ${dealsWord}</div>` : ''}
@@ -270,7 +273,8 @@ function cleanDisplayTitle(item) {
     t = t.replace(/[,;!*]+$/, '').trim();
 
     const layout = item.layout_category || 'Unit';
-    const furnish = item.is_full_furnished ? 'Furnished' : (item.is_semi_furnished ? 'Semi' : 'Unfurnished');
+    const isEn = (AppState.currentLanguage === 'en');
+    const furnish = item.is_full_furnished ? 'Furnished' : (item.is_semi_furnished ? (isEn ? 'Semi-Furnished' : 'Semi') : (isEn ? 'Unfurnished' : 'Kosongan'));
     const size = item.floor_size_m2 ? ` (${item.floor_size_m2} m²)` : '';
 
     return `${t || ('Apartemen ' + item.subdistrict)} • ${layout} ${furnish}${size}`;
@@ -305,6 +309,9 @@ function renderListingsCards(filtered) {
     const deepBadge = typeof t === 'function' ? t('deal_deep_badge', '🔥 Nilai tinggi') : '🔥 Nilai tinggi';
     const goodBadge = typeof t === 'function' ? t('deal_good_badge', '✨ Hemat') : '✨ Hemat';
     const perMonth = typeof t === 'function' ? t('per_month', '/ bln') : '/ bln';
+    const jtWord = typeof t === 'function' ? t('unit_million', 'jt') : 'jt';
+    const rbWord = typeof t === 'function' ? t('unit_thousand', 'rb') : 'rb';
+    const perM2 = typeof t === 'function' ? t('per_m2', '/m²') : '/m²';
 
     const cardsHtml = visibleSlice.map(item => {
         const cleanUrl = item.url.startsWith('http') ? item.url : `https://www.rumah123.com${item.url}`;
@@ -321,11 +328,11 @@ function renderListingsCards(filtered) {
                 <div class="deal-pricing-block">
                     <div>
                         <div style="font-size: 10px; color: var(--color-fog);">${askingText}</div>
-                        <div class="mono" style="font-size: 13px; color: var(--color-carbon-ink); font-weight: 600;">Rp ${(item.price_monthly_idr / 1e6).toFixed(1)} jt</div>
+                        <div class="mono" style="font-size: 13px; color: var(--color-carbon-ink); font-weight: 600;">Rp ${(item.price_monthly_idr / 1e6).toFixed(1)} ${jtWord}</div>
                     </div>
                     <div>
                         <div style="font-size: 10px; color: var(--color-fog);">${fairEstText}</div>
-                        <div class="mono" style="font-size: 13px; color: var(--color-fog); font-weight: 500;">Rp ${(fairEst / 1e6).toFixed(1)} jt</div>
+                        <div class="mono" style="font-size: 13px; color: var(--color-fog); font-weight: 500;">Rp ${(fairEst / 1e6).toFixed(1)} ${jtWord}</div>
                     </div>
                     <div>
                         <div style="font-size: 10px; color: var(--color-carbon-ink); font-weight: 600;">${savingsText}</div>
@@ -335,6 +342,12 @@ function renderListingsCards(filtered) {
             `;
         }
 
+        const furnishTag = item.is_full_furnished
+            ? (typeof t === 'function' ? t('tag_furnished', 'Furnished') : 'Furnished')
+            : (item.is_semi_furnished
+                ? (typeof t === 'function' ? t('tag_semi_furnished', 'Semi') : 'Semi')
+                : (typeof t === 'function' ? t('tag_unfurnished', 'Kosongan') : 'Kosongan'));
+
         return `
             <div class="listing-card${isDeal ? ' is-deal' : ''}">
                 <div>
@@ -342,13 +355,13 @@ function renderListingsCards(filtered) {
                         <div class="mono" style="font-size: 10px; color: var(--color-fog);">
                             ${item.target_city} • ${item.subdistrict}
                         </div>
-                        ${isDeal ? `<span class="mono" style="font-size: 10px; ${isDeep ? 'background: var(--color-carbon-ink); color: #ffffff;' : 'background: var(--color-newsprint-gray); color: var(--color-carbon-ink); border: 1px solid var(--color-pebble);'} padding: 3px 8px; border-radius: var(--radius-pills); font-weight: 600; letter-spacing: 0.02em;">${isDeep ? deepBadge : goodBadge}</span>` : ''}
+                        ${isDeal ? `<span class="mono" style="font-size: 10px; ${isDeep ? 'background: var(--color-carbon-ink); color: var(--color-paper-white);' : 'background: var(--color-newsprint-gray); color: var(--color-carbon-ink); border: 1px solid var(--color-pebble);'} padding: 3px 8px; border-radius: var(--radius-pills); font-weight: 600; letter-spacing: 0.02em;">${isDeep ? deepBadge : goodBadge}</span>` : ''}
                     </div>
                     <h4 style="font-size: 14px; font-weight: 600; color: var(--color-carbon-ink); margin-bottom: 8px; line-height: 1.4;">${displayTitle}</h4>
                     <div style="font-size: 11px; color: var(--color-fog); margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 6px;">
                         <span class="mono" style="background: var(--color-newsprint-gray); border: 1px solid var(--color-pebble); padding: 2px 6px; border-radius: 4px; color: var(--color-carbon-ink);">📐 ${item.floor_size_m2} m²</span>
                         <span class="mono" style="background: var(--color-newsprint-gray); border: 1px solid var(--color-pebble); padding: 2px 6px; border-radius: 4px; color: var(--color-carbon-ink);">🛏️ ${item.layout_category}</span>
-                        <span style="background: var(--color-newsprint-gray); border: 1px solid var(--color-pebble); padding: 2px 6px; border-radius: 4px; color: var(--color-carbon-ink);">🛋️ ${item.is_full_furnished ? 'Furnished' : (item.is_semi_furnished ? 'Semi' : 'Unfurnished')}</span>
+                        <span style="background: var(--color-newsprint-gray); border: 1px solid var(--color-pebble); padding: 2px 6px; border-radius: 4px; color: var(--color-carbon-ink);">🛋️ ${furnishTag}</span>
                     </div>
                     ${dealPricingBlock}
                 </div>
@@ -357,11 +370,11 @@ function renderListingsCards(filtered) {
                         ${!isDeal ? `
                         <div style="font-size: 9px; color: var(--color-fog);">${askingText}</div>
                         <div class="mono" style="font-size: 15px; color: var(--color-carbon-ink); font-weight: 600;">
-                            Rp ${(item.price_monthly_idr / 1e6).toFixed(1)} jt <span style="font-size: 10px; color: var(--color-fog); font-weight: 400;">${perMonth}</span>
+                            Rp ${(item.price_monthly_idr / 1e6).toFixed(1)} ${jtWord} <span style="font-size: 10px; color: var(--color-fog); font-weight: 400;">${perMonth}</span>
                         </div>
                         ` : `
                         <div class="mono" style="font-size: 11px; color: var(--color-fog);">
-                            Rp ${Math.round(item.price_per_m2_idr / 1000)} rb/m²
+                            Rp ${Math.round(item.price_per_m2_idr / 1000)} ${rbWord}${perM2}
                         </div>
                         `}
                     </div>
@@ -382,13 +395,16 @@ function renderBenchmarkTable(cities) {
     const tbody = document.getElementById('benchmark-tbody');
     if (!tbody || !cities) return;
     tbody.innerHTML = '';
+    const jtWord = typeof t === 'function' ? t('unit_million', 'jt') : 'jt';
+    const rbWord = typeof t === 'function' ? t('unit_thousand', 'rb') : 'rb';
+    const perM2 = typeof t === 'function' ? t('per_m2', '/m²') : '/m²';
     cities.forEach(c => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td style="font-weight: 600; color: var(--color-carbon-ink);">${c.target_city}</td>
             <td class="mono" style="color: var(--color-fog);">${c.sample_size}</td>
-            <td class="mono">IDR ${(c.median_rent_idr / 1e6).toFixed(1)}M</td>
-            <td class="mono" style="color: var(--color-carbon-ink); font-weight: 600;">IDR ${Math.round(c.median_price_per_m2_idr / 1000)}k</td>
+            <td class="mono">Rp ${(c.median_rent_idr / 1e6).toFixed(1)} ${jtWord}</td>
+            <td class="mono" style="color: var(--color-carbon-ink); font-weight: 600;">Rp ${Math.round(c.median_price_per_m2_idr / 1000)} ${rbWord}${perM2}</td>
         `;
         tbody.appendChild(row);
     });

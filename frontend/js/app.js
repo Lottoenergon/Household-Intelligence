@@ -69,7 +69,7 @@ function updateTelemetryUI(data) {
     const rbWord = isEn ? 'k' : 'rb';
 
     if (document.getElementById('kpi-units')) {
-        document.getElementById('kpi-units').innerText = (data.audited_units || 728).toLocaleString() + ' ' + unitWord;
+        document.getElementById('kpi-units').innerText = (data.audited_units || 728).toLocaleString('id-ID') + ' ' + unitWord;
     }
     if (document.getElementById('kpi-rent') && data.median_rent_idr) {
         document.getElementById('kpi-rent').innerText = 'Rp ' + (data.median_rent_idr / 1e6).toFixed(1) + ' ' + jtWord;
@@ -82,14 +82,14 @@ function updateTelemetryUI(data) {
         document.getElementById('kpi-bargains').innerText = count + ' ' + unitWord;
     }
     if (document.getElementById('topbar-status-text')) {
-        document.getElementById('topbar-status-text').innerText = (data.audited_units || 728).toLocaleString() + ' ' + (isEn ? 'active units monitored' : 'unit aktif dipantau');
+        document.getElementById('topbar-status-text').innerText = (data.audited_units || 728).toLocaleString('id-ID') + ' ' + (isEn ? 'active units monitored' : 'unit aktif dipantau');
     }
     if (document.getElementById('count-all-badge')) {
-        document.getElementById('count-all-badge').innerText = (data.audited_units || 728).toLocaleString();
+        document.getElementById('count-all-badge').innerText = (data.audited_units || 728).toLocaleString('id-ID');
     }
     if (document.getElementById('count-deals-badge')) {
         const count = data.bargains_detected !== undefined ? data.bargains_detected : 139;
-        document.getElementById('count-deals-badge').innerText = count.toLocaleString();
+        document.getElementById('count-deals-badge').innerText = count.toLocaleString('id-ID');
     }
     if (document.getElementById('badge-furnish-premium')) {
         const prem = typeof data.furnishing_premium_adjusted_pct === 'number' ? data.furnishing_premium_adjusted_pct : 13.9;

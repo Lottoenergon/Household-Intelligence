@@ -70,8 +70,8 @@ function renderZonesTable(zones) {
         row.innerHTML = `
             <td style="font-weight: 600; color: var(--color-carbon-ink);">${z.urban_zone}</td>
             <td class="mono" style="color: var(--color-fog);">${z.sample_units} ${unitText}</td>
-            <td class="mono" style="color: var(--color-carbon-ink); font-weight: 600;">Rp ${Math.round(z.median_price_per_m2).toLocaleString()}</td>
-            <td class="mono">Rp ${Math.round(z.mean_price_per_m2).toLocaleString()}</td>
+            <td class="mono" style="color: var(--color-carbon-ink); font-weight: 600;">Rp ${Math.round(z.median_price_per_m2).toLocaleString('id-ID')}</td>
+            <td class="mono">Rp ${Math.round(z.mean_price_per_m2).toLocaleString('id-ID')}</td>
         `;
         tbody.appendChild(row);
     });
