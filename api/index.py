@@ -10,6 +10,17 @@ from fastapi import Request
 from fastapi.responses import JSONResponse
 from backend.server import app
 
+@app.middleware("http")
+async def vercel_path_corrector(request: Request, call_next):
+    # Check headers sent by Vercel to get original requested path
+    original_uri = request.headers.get("x-forwarded-uri") or request.headers.get("x-matched-path")
+    if original_uri:
+        request.scope["path"] = original_uri.split("?")[0]
+    elif request.scope["path"] in ("/api/index.py", "/api/index"):
+        request.scope["path"] = "/"
+        
+    return await call_next(request)
+
 # Diagnostic 404 handler to see exact path passed by Vercel
 @app.exception_handler(404)
 async def custom_404_handler(request: Request, exc):
@@ -18,7 +29,7 @@ async def custom_404_handler(request: Request, exc):
         status_code=404,
         content={
             "detail": f"Path not found: '{request.url.path}'",
-            "method": request.method,
-            "routes_sample": routes[:10]
+            "scope_path": request.scope.get("path"),
+            "headers": {k: v for k, v in request.headers.items() if "path" in k or "uri" in k or "url" in k}
         }
     )
