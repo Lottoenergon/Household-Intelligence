@@ -408,7 +408,7 @@ if os.path.exists(FRONTEND_DIR):
     if os.path.exists(js_dir):
         app.mount("/js", StaticFiles(directory=js_dir), name="js")
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 def serve_index():
     index_file = os.path.join(FRONTEND_DIR, "index.html")
     if os.path.exists(index_file):
