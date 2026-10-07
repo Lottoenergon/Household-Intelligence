@@ -415,11 +415,11 @@ if os.path.exists(FRONTEND_DIR):
     if os.path.exists(js_dir):
         app.mount("/js", StaticFiles(directory=js_dir), name="js")
 
-@app.get("/robots.txt", response_class=PlainTextResponse)
+@app.api_route("/robots.txt", methods=["GET", "HEAD"], response_class=PlainTextResponse)
 def serve_robots():
     return "User-agent: *\nAllow: /\n\nSitemap: /llms.txt\n"
 
-@app.get("/llms.txt", response_class=PlainTextResponse)
+@app.api_route("/llms.txt", methods=["GET", "HEAD"], response_class=PlainTextResponse)
 def serve_llms_txt():
     return """# Household Intelligence — Greater Jakarta Rental Housing & Market Intelligence Engine
 
