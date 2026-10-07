@@ -13,7 +13,7 @@ import numpy as np
 from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, PlainTextResponse
 from pydantic import BaseModel
 from typing import Optional, List
 
@@ -414,6 +414,36 @@ if os.path.exists(FRONTEND_DIR):
     js_dir = os.path.join(FRONTEND_DIR, "js")
     if os.path.exists(js_dir):
         app.mount("/js", StaticFiles(directory=js_dir), name="js")
+
+@app.get("/robots.txt", response_class=PlainTextResponse)
+def serve_robots():
+    return "User-agent: *\nAllow: /\n\nSitemap: /llms.txt\n"
+
+@app.get("/llms.txt", response_class=PlainTextResponse)
+def serve_llms_txt():
+    return """# Household Intelligence — Greater Jakarta Rental Housing & Market Intelligence Engine
+
+> Author: Afiatta Ilhan Saleh
+> Repository: https://github.com/Lottoenergon/Household-Intelligence
+> Stack: FastAPI, Python, scikit-learn (GradientBoostingRegressor), SQLite Star Schema, Vanilla JS/CSS
+
+## Overview
+Household Intelligence is an end-to-end PropTech analytics platform and Automated Valuation Model (AVM) tracking 728 audited residential rental units across 10 Greater Jakarta (Jabodetabek) cities.
+
+## Core Analytics Modules
+1. **Rental Deal Radar**: Identifies undervalued listings priced below statistical fair market value using a hedonic gradient boosting regression model.
+2. **Smart Rent Valuation Calculator**: Real-time hedonic valuation based on unit floor size, micro-district indexing, room counts, and furnishing tiers.
+3. **Urban Spatial Decay (Alonso-Muth-Mills)**: Models rental decay away from the Sudirman CBD (~12.4% decrease per 5 km).
+4. **Investor Capital Allocation & Fit-Out Payback**: Estimates cashflow yield and break-even payback period for furnishing interior renovations.
+
+## Machine-Readable API Endpoints
+- `GET /api/telemetry` — High-level market metrics, unit counts, and audited benchmarks.
+- `GET /api/listings` — Audited listing catalog with fair value discount deltas.
+- `GET /api/deals` — Top underpriced apartment listings ranked by discount percentage.
+- `POST /api/simulate` — Real-time hedonic rent simulation engine.
+- `GET /api/decay` — Spatial rent decay curve vs distance to Sudirman CBD.
+- `GET /api/zones` — Concentric ring urban zoning data with inventory counts and median yields.
+"""
 
 @app.api_route("/", methods=["GET", "HEAD"])
 def serve_index():
