@@ -1,22 +1,22 @@
 {
   "version": 2,
   "functions": {
-    "api/index.py": {
+    "app.py": {
       "includeFiles": "{backend,data/processed,models,frontend}/**"
     }
   },
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/index.py"
+      "destination": "/app.py"
     },
     {
       "source": "/llms.txt",
-      "destination": "/api/index.py"
+      "destination": "/app.py"
     },
     {
       "source": "/robots.txt",
-      "destination": "/api/index.py"
+      "destination": "/app.py"
     },
     {
       "source": "/static/(.*)",
