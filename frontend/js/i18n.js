@@ -95,18 +95,18 @@ const I18N_DICTIONARY = {
         advisory_desc_4: "Setiap kenaikan 5 km menjauhi Sudirman CBD rata-rata menurunkan tarif sewa sebesar ~12.4% per m².",
 
         // Tab 2: Simulator
-        sim_eyebrow: "Kalkulator Sewa // Cek Harga Pasar",
+        sim_eyebrow: "Simulasi Sewa • Cek Harga Pasar",
         sim_header_title: "02 // Kalkulator Sewa Apartemen Pintar",
-        sim_header_sub: "Cek apakah harga sewa apartemen incaranmu wajar, murah, atau kemahalan berdasarkan data pasar aktual di Jabodetabek.",
+        sim_header_sub: "Perkiraan harga sewa wajar apartemen berdasarkan data pasaran sewa aktual di Jabodetabek.",
         sim_spec_title: "Detail Apartemen",
-        sim_renter_tip: "💡 <strong>Tips Cari Sewa:</strong> Masukkan ukuran dan lokasi unit dari iklan atau agen untuk mengecek kisaran harga pasar yang wajar.",
+        sim_renter_tip: "💡 <strong>Tips Cari Sewa:</strong> Masukkan perkiraan ukuran dan lokasi unit untuk melihat kisaran harga sewa yang wajar di pasaran.",
         sim_city_label: "Kota / Wilayah",
         sim_subdistrict_label: "Area / Kecamatan",
         sim_subdistrict_default: "Semua area (rata-rata kota)",
         sim_size_label: "Luas bangunan (m²)",
         sim_furnish_label: "Kondisi Furnitur / Perabot",
-        sim_furnish_un: "Kosongan (unfurnished) — tanpa perabot",
-        sim_furnish_semi: "Semi furnished — ada AC & dapur",
+        sim_furnish_un: "Kosongan (unfurnished)",
+        sim_furnish_semi: "Semi furnished (ada AC / dapur)",
         sim_furnish_full: "Lengkap (full furnished) — siap huni",
         sim_beds_label: "Jumlah kamar tidur",
         sim_baths_label: "Jumlah kamar mandi",
@@ -272,19 +272,19 @@ const I18N_DICTIONARY = {
         advisory_desc_4: "Every 5 km farther from Sudirman CBD reduces effective rental rate by ~12.4% per m² on average.",
 
         // Tab 2: Simulator
-        sim_eyebrow: "Rent Calculator // Market Price Check",
+        sim_eyebrow: "Rent Calculator • Market Price Check",
         sim_header_title: "02 // Smart Apartment Rent Calculator",
-        sim_header_sub: "Check whether an apartment's asking rent is fair, cheap, or overpriced based on actual market data in Greater Jakarta.",
+        sim_header_sub: "Fair rental price estimates based on real market rental data across Greater Jakarta.",
         sim_spec_title: "Apartment Details",
-        sim_renter_tip: "💡 <strong>Renter Tip:</strong> Enter the unit size and location from listings or agents to check the fair market price range.",
+        sim_renter_tip: "💡 <strong>Renter Tip:</strong> Enter unit size and location to check the fair market price range.",
         sim_city_label: "City / Region",
         sim_subdistrict_label: "Area / Neighborhood",
         sim_subdistrict_default: "All areas (city average)",
         sim_size_label: "Floor size (m²)",
         sim_furnish_label: "Furnishing Condition",
-        sim_furnish_un: "Unfurnished — bare unit",
-        sim_furnish_semi: "Semi furnished — AC & kitchen fitted",
-        sim_furnish_full: "Full furnished — move-in ready",
+        sim_furnish_un: "Unfurnished (bare unit)",
+        sim_furnish_semi: "Semi furnished (AC / kitchen fitted)",
+        sim_furnish_full: "Full furnished (move-in ready)",
         sim_beds_label: "Bedrooms",
         sim_baths_label: "Bathrooms",
         sim_amenities_title: "Building & Area Facilities (Optional)",
@@ -365,7 +365,13 @@ const I18N_DICTIONARY = {
 function t(key, fallback = '') {
     const lang = (window.AppState && window.AppState.currentLanguage) || 'id';
     const dict = I18N_DICTIONARY[lang] || I18N_DICTIONARY.id;
-    return dict[key] !== undefined ? dict[key] : (fallback || key);
+    if (dict && dict[key] !== undefined) {
+        return dict[key];
+    }
+    if (I18N_DICTIONARY.id && I18N_DICTIONARY.id[key] !== undefined) {
+        return I18N_DICTIONARY.id[key];
+    }
+    return fallback ? fallback : null;
 }
 window.t = t;
 
@@ -392,7 +398,7 @@ function setLanguage(lang) {
         const key = el.getAttribute('data-i18n');
         if (key) {
             const translation = t(key);
-            if (translation) {
+            if (translation !== null && translation !== undefined) {
                 // If element has bubble icon or child tags, preserve them if needed
                 const bubble = el.querySelector('.btn-bubble-icon');
                 if (bubble) {
@@ -402,6 +408,10 @@ function setLanguage(lang) {
                     } else {
                         el.childNodes[0].nodeValue = translation + ' ';
                     }
+                } else if (el.tagName === 'OPTION') {
+                    el.text = translation;
+                } else if (translation.includes('<')) {
+                    el.innerHTML = translation;
                 } else {
                     el.innerText = translation;
                 }
