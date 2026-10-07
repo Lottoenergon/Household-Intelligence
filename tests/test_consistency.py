@@ -59,17 +59,104 @@ def test_simulate_uses_model_bigger_unit_costs_more_and_range_is_ordered():
         assert r["interval_level_pct"] == 80
 
 
-def test_simulate_monotonic_bedrooms_and_realistic_presets():
-    """Memastikan unit 4BR tidak pernah lebih murah dari 2BR baik pada luas tetap maupun tipikal pasar."""
-    # 1. Pada luas tetap (misal 120 m2) di kota yang sama: 4BR >= 2BR
-    r2_same = client.post("/api/simulate", json={"city": "Jakarta Selatan", "floor_size_m2": 120, "bedrooms": 2, "bathrooms": 2}).json()
-    r4_same = client.post("/api/simulate", json={"city": "Jakarta Selatan", "floor_size_m2": 120, "bedrooms": 4, "bathrooms": 3}).json()
-    assert r4_same["fair_market_rent_idr"] >= r2_same["fair_market_rent_idr"]
+def test_simulate_monotonic_on_market_presets():
+    """Monotonisitas diuji pada jalur yang benar-benar dilalui pengguna.
+
+    Assert lama "4BR >= 2BR pada LUAS YANG SAMA (120 m2)" DIHAPUS karena tidak
+    didukung data. Di Jakarta Selatan 1BR median 60 m2 sedangkan 2BR median 94 m2:
+    pada luas yang sama, jumlah kamar lebih sedikit menandakan unit yang lebih
+    premium, dan model memang memprediksi demikian (R2 out-of-fold 0,83; bias di
+    segmen JakSel 2BR 55-90 m2 hanya +8,5%).
+
+    Yang dulu menyembunyikan fakta itu adalah loop max() di server: permintaan
+    2BR 70 m2 dijawab dengan prediksi studio 70 m2 sehingga keluar Rp 28,25 jt,
+    padahal median aktual segmennya Rp 17,0 jt (+64%). Lihat
+    test_simulate_estimate_is_calibrated_to_market_median(), test level produk
+    yang menangkap persis bug tersebut.
+    """
+    # 1. Menambah kamar pada luas TIPIKAL pasarnya selalu menaikkan estimasi.
+    #    Ini jalur UX sebenarnya: UI menyinkronkan luas ke BEDROOM_PRESETS saat
+    #    jumlah kamar diubah (simulator.js).
+    previous = 0.0
+    for beds, size in ((0, 28), (1, 45), (2, 70), (3, 120), (4, 200)):
+        r = client.post("/api/simulate", json={
+            "city": "Jakarta Selatan", "floor_size_m2": size, "bedrooms": beds
+        }).json()
+        assert r["fair_market_rent_idr"] > previous, (
+            f"{beds}BR @ {size} m2 (Rp {r['fair_market_rent_idr']:,.0f}) tidak lebih mahal "
+            f"dari konfigurasi sebelumnya (Rp {previous:,.0f})"
+        )
+        previous = r["fair_market_rent_idr"]
 
     # 2. Pada preset tipikal pasar (2BR 70 m2 vs 4BR 200 m2): 4BR jauh lebih mahal
     r2_preset = client.post("/api/simulate", json={"city": "Jakarta Selatan", "floor_size_m2": 70, "bedrooms": 2, "bathrooms": 1}).json()
     r4_preset = client.post("/api/simulate", json={"city": "Jakarta Selatan", "floor_size_m2": 200, "bedrooms": 4, "bathrooms": 3}).json()
     assert r4_preset["fair_market_rent_idr"] > r2_preset["fair_market_rent_idr"] * 1.5
+
+
+def test_simulate_estimate_is_calibrated_to_market_median():
+    """Estimasi simulator harus dekat dengan median harga pasar segmennya.
+
+    Test level produk ini yang seharusnya menangkap bug max()-envelope: dulu
+    estimasi default keluar Rp 28,25 jt sementara median aktual segmen
+    JakSel 2BR 55-90 m2 adalah Rp 17,0 jt (+66%), dan median aktual itu ada DI
+    LUAR rentang kepercayaan yang ditampilkan ke pengguna.
+    """
+    df_eval = pd.read_csv(os.path.join(BASE, "data", "processed", "jabodetabek_rental_evaluated.csv"))
+    seg = df_eval[(df_eval.target_city == "Jakarta Selatan")
+                  & (df_eval.bedrooms == 2)
+                  & (df_eval.floor_size_m2.between(55, 90))]
+    assert len(seg) >= 5, "Segmen pembanding terlalu kecil untuk test kalibrasi"
+    median_actual = float(seg.price_monthly_idr.median())
+
+    # Konfigurasi tanpa furnishing/amenitas: paling dekat ke "unit median" segmen.
+    r = client.post("/api/simulate", json={
+        "city": "Jakarta Selatan", "floor_size_m2": 70, "bedrooms": 2, "bathrooms": 1,
+        "is_full_furnished": False, "has_pool": False
+    }).json()
+    ratio = r["fair_market_rent_idr"] / median_actual
+    assert 0.75 <= ratio <= 1.35, (
+        f"Estimasi Rp {r['fair_market_rent_idr']:,.0f} terlalu jauh dari median aktual "
+        f"Rp {median_actual:,.0f} (rasio {ratio:.2f}) - curigai counterfactual substitution "
+        f"atau pengali hardcoded yang menumpuk."
+    )
+
+    # Median aktual harus masuk rentang kepercayaan yang ditampilkan ke pengguna.
+    assert r["ci_lower_idr"] <= median_actual <= r["ci_upper_idr"], (
+        "Median harga aktual segmen berada di luar rentang kepercayaan yang ditampilkan"
+    )
+
+
+def test_simulate_reports_data_support():
+    """Estimasi harus menyertakan seberapa kuat data nyata mendukungnya.
+
+    Model pohon bisa mengekstrapolasi diam-diam ke kombinasi kamar/luas yang tidak
+    ada di dataset; UI perlu angka pendukung supaya tidak menampilkan keyakinan palsu.
+    """
+    r = client.post("/api/simulate", json={"city": "Jakarta Selatan", "floor_size_m2": 70, "bedrooms": 2}).json()
+    sup = r["data_support"]
+    assert sup["support_level"] in ("strong", "limited", "extrapolated")
+    assert sup["scope"] in ("city", "national")
+    assert sup["comparables_matched"] >= 1, "Harus ada listing pembanding untuk konfigurasi umum"
+    assert sup["support_level"] in ("strong", "limited"), "Konfigurasi umum harus punya dukungan data nyata"
+    assert sup["median_comparable_rent_idr"] and sup["median_comparable_rent_idr"] > 0
+    assert sup["inside_typical_size_range"] is True, "70 m2 adalah luas normal untuk 2BR"
+
+
+def test_simulate_flags_extrapolated_estimates():
+    """Konfigurasi yang tidak ada di data harus ditandai, bukan ditampilkan seolah yakin.
+
+    Contoh: 4BR 120 m2. Di dataset, 4BR hanya 9 unit dan p05 luasnya 114 m2, jadi
+    kombinasi ini nyaris tidak punya pembanding. Sebelumnya UI menampilkan
+    "median Rp 0.0 jt" karena field median bernilai null.
+    """
+    r = client.post("/api/simulate", json={"city": "Jakarta Selatan", "floor_size_m2": 120, "bedrooms": 4}).json()
+    sup = r["data_support"]
+    assert sup["support_level"] == "extrapolated", "4BR 120 m2 tidak punya pembanding di data"
+    assert sup["comparables_matched"] == 0
+    assert sup["median_comparable_rent_idr"] is None, (
+        "median pembanding harus null (bukan 0) supaya UI tidak menampilkan angka palsu"
+    )
 
 
 def test_simulate_bathrooms_impact_price():

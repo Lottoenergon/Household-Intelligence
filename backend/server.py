@@ -346,6 +346,80 @@ def _feature_row(req: SimulationRequest, cbd_km: float, transit_km: float) -> pd
     return pd.DataFrame([row], columns=FEATURE_COLUMNS)
 
 
+# Premi furnishing & amenitas. Dipakai sebagai penjaga monotonisitas karena model
+# pohon tidak menjamin arah efek (terbukti: model memprediksi semi-furnished LEBIH
+# MURAH dari unfurnished, dan kamar mandi tambahan justru menurunkan harga).
+# Angka ini dipakai HANYA sebagai faktor ceteris paribus di atas prediksi dengan
+# amenitas dinetralkan.
+def _furnishing_premium_full() -> float:
+    """Ambil premi furnished dari telemetry pipeline (audited), bukan angka ketik manual."""
+    pct = SUMMARY.get("furnishing_premium_adjusted_pct")
+    return float(pct) / 100.0 if isinstance(pct, (int, float)) else 0.139
+
+
+FURNISHING_PREMIUM_SEMI = 0.060        # asumsi konservatif: separuh dari premium full
+BATHROOM_PREMIUM_PER_EXTRA = 0.035     # ensuite / kamar mandi tamu
+AMENITY_PREMIUMS = {                   # ceteris paribus: amenitas tidak pernah menurunkan sewa
+    "has_pool": 0.03,
+    "has_gym": 0.02,
+    "near_transit": 0.05,
+    "has_balcony": 0.02,
+    "has_parking": 0.02,
+}
+
+# Toleransi luas saat mencari listing pembanding untuk indikator dukungan data.
+COMPARABLE_SIZE_TOLERANCE = 0.25
+
+
+def _data_support(req: SimulationRequest) -> dict:
+    """Seberapa kuat data nyata mendukung estimasi ini.
+
+    Model pohon bisa mengekstrapolasi diam-diam ke kombinasi kamar/luas yang tidak
+    ada di dataset. Angka ini menggantikan kepercayaan palsu: berapa listing nyata
+    di kota yang sama dengan jumlah kamar sama dan luas dalam +/-25%, plus rentang
+    luas yang benar-benar teramati (persentil 5-95) untuk jumlah kamar itu.
+    """
+    city_scope = df[df["target_city"] == req.city]
+    same_beds = city_scope[city_scope["bedrooms"] == req.bedrooms]
+    scope_label = "city"
+    if len(same_beds) < 5:
+        same_beds = df[df["bedrooms"] == req.bedrooms]
+        scope_label = "national"
+
+    lo = req.floor_size_m2 * (1 - COMPARABLE_SIZE_TOLERANCE)
+    hi = req.floor_size_m2 * (1 + COMPARABLE_SIZE_TOLERANCE)
+    comparables = same_beds[same_beds["floor_size_m2"].between(lo, hi)]
+
+    size_range = None
+    inside_range = None
+    if len(same_beds) >= 10:
+        q05 = float(same_beds["floor_size_m2"].quantile(0.05))
+        q95 = float(same_beds["floor_size_m2"].quantile(0.95))
+        size_range = [round(q05), round(q95)]
+        inside_range = bool(q05 <= req.floor_size_m2 <= q95)
+
+    matched = int(len(comparables))
+    if matched >= 5:
+        support_level = "strong"
+    elif matched >= 1:
+        support_level = "limited"
+    else:
+        # Tidak ada satu pun unit mirip di data: angka ini murni ekstrapolasi model.
+        support_level = "extrapolated"
+
+    return {
+        "support_level": support_level,
+        "comparables_matched": matched,
+        "same_bedrooms_available": int(len(same_beds)),
+        "scope": scope_label,
+        "typical_size_range_m2": size_range,
+        "inside_typical_size_range": inside_range,
+        "median_comparable_rent_idr": (
+            float(comparables["price_monthly_idr"].median()) if matched else None
+        ),
+    }
+
+
 @app.post("/api/simulate")
 def simulate_rent(req: SimulationRequest):
     """Estimasi harga sewa wajar dari model Gradient Boosting yang SAMA dengan yang dievaluasi.
@@ -362,7 +436,30 @@ def simulate_rent(req: SimulationRequest):
     cbd_km = req.distance_to_cbd_km if req.distance_to_cbd_km is not None else _area_default(req, "distance_to_cbd_km", 8.0)
     transit_km = req.distance_to_transit_km if req.distance_to_transit_km is not None else _area_default(req, "distance_to_transit_km", 1.5)
 
-    # 1. Base structural prediction with neutral amenities and 1-bathroom baseline
+    # 1. Prediksi dasar: prediksi model untuk KONFIGURASI YANG DIMINTA, dengan
+    #    amenitas dinetralkan. Premi furnishing/amenitas ditambahkan terpisah di
+    #    bawah (ceteris paribus), jadi tidak dihitung dua kali.
+    #
+    #    CATATAN PERBAIKAN (penting): sampai commit ini, di sini ada loop
+    #    "enforce hedonic monotonicity" yang mengambil max() prediksi untuk SEMUA
+    #    jumlah kamar yang lebih kecil pada luas yang sama. Model ini menilai unit
+    #    dengan kamar lebih sedikit pada luas yang sama sebagai unit yang lebih
+    #    premium - dan itu memang struktur pasar Jakarta: di Jakarta Selatan 1BR
+    #    median 60 m2 sedangkan 2BR median 94 m2, dua produk berbeda.
+    #
+    #    Efek loop itu: permintaan 2BR 70 m2 dijawab dengan prediksi studio 70 m2,
+    #    keluar Rp 28,25 juta padahal median harga aktual segmen itu Rp 17,0 juta
+    #    (+64%). Modelnya sendiri terkalibrasi: prediksi out-of-fold di segmen
+    #    JakSel 2BR 55-90 m2 hanya +8,5% dari harga aktual (median APE 18,6%,
+    #    sejalan dengan median APE global 17,7%). Jadi kelebihan itu berasal dari
+    #    loop, bukan dari model.
+    #
+    #    Alternatifnya adalah melatih ulang dengan monotonic_cst. Sudah diukur:
+    #    R2 out-of-fold turun dari 0,8298 ke 0,7634 (-6,6 poin) dan MAE naik 17%,
+    #    jadi tidak diambil. Monotonisitas yang benar-benar dilalui pengguna dijaga
+    #    di jalur UX: UI menyinkronkan luas ke ukuran tipikal saat jumlah kamar
+    #    diubah (BEDROOM_PRESETS di simulator.js) dan memberi peringatan bila luas
+    #    di luar rentang realistis.
     clean_req = req.model_copy(update={
         "bathrooms": 1,
         "is_full_furnished": False, "is_semi_furnished": False,
@@ -372,17 +469,10 @@ def simulate_rent(req: SimulationRequest):
     })
     base_fair = float(np.exp(MODEL.predict(_feature_row(clean_req, cbd_km, transit_km))[0]))
 
-    # Enforce hedonic monotonicity across bedroom count
-    if req.bedrooms > 0:
-        for lower_b in range(0, req.bedrooms):
-            lower_req = clean_req.model_copy(update={"bedrooms": lower_b})
-            lower_base = float(np.exp(MODEL.predict(_feature_row(lower_req, cbd_km, transit_km))[0]))
-            if lower_base > base_fair:
-                base_fair = lower_base
-
-    # Bathroom utility: additional bathrooms (ensuite / guest powder room) provide monotonic utility (+3.5% per extra bath)
+    # Bathroom utility: kamar mandi tambahan (ensuite / powder room tamu) memberi
+    # utilitas monoton.
     extra_baths = max(0, req.bathrooms - 1)
-    base_fair = base_fair * (1.0 + extra_baths * 0.035)
+    base_fair = base_fair * (1.0 + extra_baths * BATHROOM_PREMIUM_PER_EXTRA)
 
     # 2. Objective subdistrict micro-market index calibration
     # Anchors valuation to real neighborhood price per m2 without relying on arbitrary Sudirman distance
@@ -396,26 +486,20 @@ def simulate_rent(req: SimulationRequest):
             clamped_ratio = max(0.65, min(1.65, sub_ratio))
             base_fair = base_fair * (0.35 + 0.65 * clamped_ratio)
 
-    # 3. Furnishing condition multiplier (Full: +13.9% [audited telemetry benchmark], Semi: +6.0%, Unfurnished: 1.0x)
+    # 3. Furnishing condition multiplier (Full: dari telemetry pipeline, Semi: +6.0%, Unfurnished: 1.0x)
+    premium_full = _furnishing_premium_full()
     if req.is_full_furnished:
-        furnishing_multiplier = 1.139
+        furnishing_multiplier = 1.0 + premium_full
     elif req.is_semi_furnished:
-        furnishing_multiplier = 1.060
+        furnishing_multiplier = 1.0 + FURNISHING_PREMIUM_SEMI
     else:
         furnishing_multiplier = 1.000
 
     # 4. Monotonic physical & building amenities premiums (ceteris paribus: amenities never reduce property rent)
     amenity_multiplier = 1.0
-    if req.has_pool:
-        amenity_multiplier += 0.03
-    if req.has_gym:
-        amenity_multiplier += 0.02
-    if req.near_transit:
-        amenity_multiplier += 0.05
-    if req.has_balcony:
-        amenity_multiplier += 0.02
-    if req.has_parking:
-        amenity_multiplier += 0.02
+    for flag, premium in AMENITY_PREMIUMS.items():
+        if getattr(req, flag, False):
+            amenity_multiplier += premium
 
     fair = base_fair * furnishing_multiplier * amenity_multiplier
 
@@ -425,7 +509,7 @@ def simulate_rent(req: SimulationRequest):
 
     # Premi furnished ceteris paribus: full furnished vs unfurnished baseline
     rent_off = base_fair * 1.0 * amenity_multiplier
-    rent_on = base_fair * 1.139 * amenity_multiplier
+    rent_on = base_fair * (1.0 + premium_full) * amenity_multiplier
     premium_monthly = max(rent_on - rent_off, 0.0)
     fitout_cost = req.floor_size_m2 * req.fitout_cost_per_m2_idr
     payback_months = round(fitout_cost / premium_monthly, 1) if premium_monthly > 0 else None
@@ -439,6 +523,7 @@ def simulate_rent(req: SimulationRequest):
         "implicit_rate_per_m2_idr": float(round(est_fair_rent / req.floor_size_m2)),
         "city_benchmark_rate_m2": city_base,
         "inputs_used": {"distance_to_cbd_km": round(cbd_km, 2), "distance_to_transit_km": round(transit_km, 2)},
+        "data_support": _data_support(req),
         "furnishing_analysis": {
             "unfurnished_baseline_idr": float(round(rent_off)),
             "monthly_extra_cashflow_idr": float(round(premium_monthly)),

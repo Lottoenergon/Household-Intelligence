@@ -26,7 +26,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 
     <!-- Theme Initializer (Prevents Theme Flash) -->
-    <script src="/static/js/theme.js?v=6"></script>
+    <script src="/static/js/theme.js?v=8"></script>
     <script>
         if (typeof initTheme === 'function') initTheme();
     </script>
@@ -479,17 +479,24 @@
                 <div>
                     <div class="calc-result-box">
                         <div class="metric-label" data-i18n="sim_result_title">Perkiraan Harga Sewa Wajar</div>
+                        <!-- Placeholder sengaja bukan angka: dulu di sini tertulis
+                             "Rp 7,850,000 / bln" dan "Rp 174.444 / m²" sehingga
+                             terlihat seperti hasil asli sebelum data termuat. -->
                         <div style="font-size: 38px; font-weight: 600; color: var(--color-carbon-ink); letter-spacing: -0.02em; margin: 8px 0;"
                             class="mono" id="sim-output-rent">
-                            Rp 7,850,000 / bln
+                            —
                         </div>
                         <div class="mono" style="font-size: 13px; color: var(--color-fog); margin-top: 8px;"
                             id="sim-output-ci">
-                            Kisaran harga wajar: Rp 7.0 jt – Rp 8.6 jt / bulan
+                            Menghitung estimasi…
                         </div>
                         <div class="mono" style="font-size: 12px; color: var(--color-fog); margin-top: 4px;"
                             id="sim-output-rate">
-                            Biaya per meter: Rp 174.444 / m² per bulan
+                            —
+                        </div>
+                        <div class="mono" style="font-size: 11px; color: var(--color-fog); margin-top: 10px; border-top: 1px solid var(--color-pebble); padding-top: 8px;"
+                            id="sim-output-support">
+                            —
                         </div>
                     </div>
 
@@ -737,16 +744,16 @@
     </div>
 
     <!-- MODULAR JAVASCRIPT LOGIC -->
-    <script src="/static/js/state.js?v=6"></script>
+    <script src="/static/js/state.js?v=8"></script>
     <!-- sanitize.js harus dimuat sebelum explorer.js/simulator.js yang memakainya -->
-    <script src="/static/js/sanitize.js?v=6"></script>
-    <script src="/static/js/i18n.js?v=6"></script>
-    <script src="/static/js/api.js?v=6"></script>
-    <script src="/static/js/explorer.js?v=6"></script>
-    <script src="/static/js/simulator.js?v=6"></script>
-    <script src="/static/js/investor.js?v=6"></script>
-    <script src="/static/js/auth.js?v=6"></script>
-    <script src="/static/js/app.js?v=6"></script>
+    <script src="/static/js/sanitize.js?v=8"></script>
+    <script src="/static/js/i18n.js?v=8"></script>
+    <script src="/static/js/api.js?v=8"></script>
+    <script src="/static/js/explorer.js?v=8"></script>
+    <script src="/static/js/simulator.js?v=8"></script>
+    <script src="/static/js/investor.js?v=8"></script>
+    <script src="/static/js/auth.js?v=8"></script>
+    <script src="/static/js/app.js?v=8"></script>
 </body>
 
 </html>

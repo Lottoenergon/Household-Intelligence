@@ -67,6 +67,25 @@ function renderDataErrorBanner() {
 window.renderDataErrorBanner = renderDataErrorBanner;
 
 /**
+ * Keadaan saat data sedang dimuat. Dulu tidak ada: selama fetch berjalan halaman
+ * menampilkan "Menampilkan 0 dari 0 unit" dan badge distrik 100 (angka hardcode),
+ * sehingga terlihat seperti hasil pencarian yang kosong.
+ */
+function renderListingsLoading() {
+    const container = document.getElementById('tab1-listings-container');
+    const status = document.getElementById('pagination-status');
+    const btnLoadMore = document.getElementById('btn-load-more');
+    const isEn = (typeof AppState !== 'undefined' && AppState.currentLanguage === 'en');
+    if (container && !container.dataset.loaded) {
+        container.innerHTML = `<div class="mono" style="color: var(--color-fog); padding: 36px; text-align: center; font-size: 12px; grid-column: 1 / -1;">`
+            + (isEn ? 'Loading listing data…' : 'Memuat data unit…') + `</div>`;
+    }
+    if (status) status.innerText = isEn ? 'Loading…' : 'Memuat data…';
+    if (btnLoadMore) btnLoadMore.style.display = 'none';
+}
+window.renderListingsLoading = renderListingsLoading;
+
+/**
  * Daftar unit tidak bisa dimuat: bedakan dari "filter tidak menemukan apa-apa".
  * Dulu kondisi ini tampil sebagai "Menampilkan 0 dari 0 unit" seolah pencariannya kosong.
  */
@@ -76,6 +95,7 @@ function renderListingsUnavailable() {
     const btnLoadMore = document.getElementById('btn-load-more');
     const isEn = (typeof AppState !== 'undefined' && AppState.currentLanguage === 'en');
     if (container) {
+        container.dataset.loaded = 'failed';
         container.innerHTML = `<div style="color: var(--color-fog); padding: 36px; text-align: center; font-size: 13px; grid-column: 1 / -1;">`
             + (isEn ? 'Could not load the listing catalog from the server.'
                     : 'Gagal memuat katalog unit dari server.') + `</div>`;
@@ -86,6 +106,9 @@ function renderListingsUnavailable() {
 window.renderListingsUnavailable = renderListingsUnavailable;
 
 async function initApp() {
+    // Tampilkan keadaan memuat lebih dulu supaya halaman tidak terlihat seperti
+    // pencarian kosong selama fetch 2 MB berjalan.
+    renderListingsLoading();
     try {
         const [telemetry, benchmarks, districts, listings, decay] = await Promise.all([
             API.fetchTelemetry(),

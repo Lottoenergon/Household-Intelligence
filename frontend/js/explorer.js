@@ -423,6 +423,7 @@ function renderListingsCards(filtered) {
     }).join('');
 
     tab1Container.innerHTML = cardsHtml;
+    tab1Container.dataset.loaded = 'ok';
 }
 window.renderListingsCards = renderListingsCards;
 

@@ -154,6 +154,41 @@ async function runSimulation() {
         document.getElementById('sim-output-rate').innerText = `${rateLabel} Rp ${Math.round(result.implicit_rate_per_m2_idr).toLocaleString('id-ID')} / m²`;
     }
 
+    // Dukungan data: berapa listing NYATA yang mendukung estimasi ini. Model pohon
+    // bisa mengekstrapolasi ke kombinasi kamar/luas yang tidak ada di dataset, jadi
+    // pengguna perlu lihat seberapa kuat datanya alih-alih menebak. Jangan pernah
+    // mencetak median saat tidak ada pembanding (dulu tampil "Rp 0.0 jt").
+    if (document.getElementById('sim-output-support') && result.data_support) {
+        const s = result.data_support;
+        const jtWord = typeof t === 'function' ? t('unit_million', 'jt') : 'jt';
+        const hasComps = typeof s.median_comparable_rent_idr === 'number';
+        const parts = [];
+
+        if (hasComps) {
+            parts.push(isEn
+                ? `Data support: ${s.comparables_matched} comparable units (median Rp ${(s.median_comparable_rent_idr / 1e6).toFixed(1)} ${jtWord})`
+                : `Dukungan data: ${s.comparables_matched} unit pembanding (median Rp ${(s.median_comparable_rent_idr / 1e6).toFixed(1)} ${jtWord})`);
+        } else {
+            parts.push(isEn
+                ? 'Data support: no comparable unit found in the dataset'
+                : 'Dukungan data: tidak ada unit pembanding di dataset');
+        }
+
+        if (s.typical_size_range_m2) {
+            parts.push(isEn
+                ? `typical size ${s.typical_size_range_m2[0]}–${s.typical_size_range_m2[1]} m²`
+                : `luas normal ${s.typical_size_range_m2[0]}–${s.typical_size_range_m2[1]} m²`);
+        }
+
+        if (s.support_level === 'extrapolated') {
+            parts.push(isEn ? '⚠ extrapolated estimate, treat with caution' : '⚠ estimasi ekstrapolasi, hati-hati');
+        } else if (s.inside_typical_size_range === false) {
+            parts.push(isEn ? '⚠ size outside the typical range' : '⚠ luas di luar rentang normal');
+        }
+
+        document.getElementById('sim-output-support').innerText = parts.join(' · ');
+    }
+
     // Update Bu Sarah Section if open
     if (result.furnishing_analysis) {
         const fa = result.furnishing_analysis;
