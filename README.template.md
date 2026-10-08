@@ -1,13 +1,3 @@
----
-title: Household Intelligence
-emoji: 🏢
-colorFrom: blue
-colorTo: indigo
-sdk: gradio
-app_file: app.py
-pinned: false
----
-
 # Household Intelligence: Jabodetabek Apartment Rental Price Model
 
 <!-- AUTO-GENERATED from README.template.md by scripts/render_readme.py. Do not edit README.md by hand. -->
