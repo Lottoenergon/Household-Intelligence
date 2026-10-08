@@ -1,0 +1,1568 @@
+{
+  "version": 1,
+  "note": "Canonical Jabodetabek apartment projects. 'city' is filled by infer_registry_cities.py from listing evidence.",
+  "projects": [
+    {
+      "id": "pondok-indah-residences",
+      "name": "Pondok Indah Residences",
+      "city": null,
+      "aliases": [
+        "pir 1",
+        "pir 2",
+        "pir 3",
+        "pir tower",
+        "pondok indah residence",
+        "pondok indah residences"
+      ]
+    },
+    {
+      "id": "pondok-indah-golf-apartment",
+      "name": "Pondok Indah Golf Apartment",
+      "city": null,
+      "aliases": [
+        "pondok indah golf"
+      ]
+    },
+    {
+      "id": "casa-grande-residence",
+      "name": "Casa Grande Residence",
+      "city": null,
+      "aliases": [
+        "casa grande",
+        "casa grande residence",
+        "casagrande",
+        "casagrande residence"
+      ]
+    },
+    {
+      "id": "anandamaya-residence",
+      "name": "Anandamaya Residence",
+      "city": null,
+      "aliases": [
+        "anandamaya",
+        "anandamaya residence"
+      ]
+    },
+    {
+      "id": "denpasar-residence",
+      "name": "Denpasar Residence",
+      "city": null,
+      "aliases": [
+        "denpasar residence"
+      ]
+    },
+    {
+      "id": "district-8-scbd",
+      "name": "District 8 SCBD",
+      "city": null,
+      "aliases": [
+        "district 8",
+        "district 8 scbd",
+        "district8"
+      ]
+    },
+    {
+      "id": "residence-8-senopati",
+      "name": "Residence 8 Senopati",
+      "city": null,
+      "aliases": [
+        "residence 8",
+        "residence 8 senopati",
+        "residence8"
+      ]
+    },
+    {
+      "id": "essence-darmawangsa",
+      "name": "Essence Darmawangsa",
+      "city": null,
+      "aliases": [
+        "essence darmawangsa",
+        "essence dharmawangsa"
+      ]
+    },
+    {
+      "id": "kemang-village",
+      "name": "Kemang Village",
+      "city": null,
+      "aliases": [
+        "kemang village"
+      ]
+    },
+    {
+      "id": "the-mansion-kemang",
+      "name": "The Mansion Kemang",
+      "city": null,
+      "aliases": [
+        "mansion kemang",
+        "the mansion kemang"
+      ]
+    },
+    {
+      "id": "south-hills",
+      "name": "South Hills",
+      "city": null,
+      "aliases": [
+        "south hill",
+        "south hills"
+      ]
+    },
+    {
+      "id": "capital-residence",
+      "name": "Capital Residence",
+      "city": null,
+      "aliases": [
+        "capital residence"
+      ]
+    },
+    {
+      "id": "ambassade-residence",
+      "name": "Ambassade Residence",
+      "city": null,
+      "aliases": [
+        "ambasade",
+        "ambasade residence",
+        "ambassade",
+        "ambassade residence"
+      ]
+    },
+    {
+      "id": "permata-hijau-suites",
+      "name": "Permata Hijau Suites",
+      "city": null,
+      "aliases": [
+        "permata hijau suite",
+        "permata hijau suites"
+      ]
+    },
+    {
+      "id": "permata-hijau-residence",
+      "name": "Permata Hijau Residence",
+      "city": null,
+      "aliases": [
+        "permata hijau residence",
+        "permata hijau residences"
+      ]
+    },
+    {
+      "id": "gandaria-heights",
+      "name": "Gandaria Heights",
+      "city": null,
+      "aliases": [
+        "gandaria height",
+        "gandaria heights"
+      ]
+    },
+    {
+      "id": "setiabudi-skygarden",
+      "name": "Setiabudi Skygarden",
+      "city": null,
+      "aliases": [
+        "setiabudi sky garden",
+        "setiabudi skygarden",
+        "sky garden"
+      ]
+    },
+    {
+      "id": "southgate-residence",
+      "name": "Southgate Residence",
+      "city": null,
+      "aliases": [
+        "south gate",
+        "southgate"
+      ]
+    },
+    {
+      "id": "branz-simatupang",
+      "name": "Branz Simatupang",
+      "city": null,
+      "aliases": [
+        "branz simatupang"
+      ]
+    },
+    {
+      "id": "branz-mega-kuningan",
+      "name": "Branz Mega Kuningan",
+      "city": null,
+      "aliases": [
+        "branz mega kuningan"
+      ]
+    },
+    {
+      "id": "the-newton-1",
+      "name": "The Newton 1",
+      "city": null,
+      "aliases": [
+        "newton 1",
+        "the newton 1"
+      ]
+    },
+    {
+      "id": "the-newton-2",
+      "name": "The Newton 2",
+      "city": null,
+      "aliases": [
+        "newton 2",
+        "the newton 2"
+      ]
+    },
+    {
+      "id": "the-newton",
+      "name": "The Newton",
+      "city": null,
+      "aliases": [
+        "newton",
+        "the newton"
+      ]
+    },
+    {
+      "id": "apple-1-condovilla",
+      "name": "Apple 1 Condovilla",
+      "city": null,
+      "aliases": [
+        "apple 1 condovilla",
+        "apple condovilla"
+      ]
+    },
+    {
+      "id": "fx-residence",
+      "name": "FX Residence",
+      "city": null,
+      "aliases": [
+        "fx residence"
+      ]
+    },
+    {
+      "id": "savyavasa",
+      "name": "Savyavasa",
+      "city": null,
+      "aliases": [
+        "savyavasa"
+      ]
+    },
+    {
+      "id": "la-vie-suites",
+      "name": "La Vie Suites",
+      "city": null,
+      "aliases": [
+        "la vie suite",
+        "la vie suites"
+      ]
+    },
+    {
+      "id": "l-avenue",
+      "name": "L'Avenue",
+      "city": null,
+      "aliases": [
+        "l'avenue",
+        "lavenue"
+      ]
+    },
+    {
+      "id": "senopati-suites",
+      "name": "Senopati Suites",
+      "city": null,
+      "aliases": [
+        "senopati suite",
+        "senopati suites"
+      ]
+    },
+    {
+      "id": "tamansari-semanggi",
+      "name": "Tamansari Semanggi",
+      "city": null,
+      "aliases": [
+        "tamansari semanggi"
+      ]
+    },
+    {
+      "id": "kalibata-city",
+      "name": "Kalibata City",
+      "city": null,
+      "aliases": [
+        "kalibata",
+        "kalibata city"
+      ]
+    },
+    {
+      "id": "woodland-park",
+      "name": "Woodland Park",
+      "city": null,
+      "aliases": [
+        "woodland park"
+      ]
+    },
+    {
+      "id": "nifarro-park",
+      "name": "Nifarro Park",
+      "city": null,
+      "aliases": [
+        "nifarro park"
+      ]
+    },
+    {
+      "id": "signature-park-grande",
+      "name": "Signature Park Grande",
+      "city": null,
+      "aliases": [
+        "signature park grande"
+      ]
+    },
+    {
+      "id": "taman-rasuna",
+      "name": "Taman Rasuna",
+      "city": null,
+      "aliases": [
+        "rasuna",
+        "taman rasuna"
+      ]
+    },
+    {
+      "id": "the-bellezza",
+      "name": "The Bellezza",
+      "city": null,
+      "aliases": [
+        "belleza",
+        "the belleza"
+      ]
+    },
+    {
+      "id": "botanica",
+      "name": "Botanica",
+      "city": null,
+      "aliases": [
+        "botanica"
+      ]
+    },
+    {
+      "id": "1park-residences",
+      "name": "1Park Residences",
+      "city": null,
+      "aliases": [
+        "1 park avenue",
+        "1 park residence",
+        "1park residence",
+        "1park residences"
+      ]
+    },
+    {
+      "id": "kuningan-city",
+      "name": "Kuningan City",
+      "city": null,
+      "aliases": [
+        "kuningan city"
+      ]
+    },
+    {
+      "id": "the-stature-residences",
+      "name": "The Stature Residences",
+      "city": null,
+      "aliases": [
+        "[menteng] 2br",
+        "stature",
+        "the stature"
+      ]
+    },
+    {
+      "id": "menteng-park",
+      "name": "Menteng Park",
+      "city": null,
+      "aliases": [
+        "menteng park"
+      ]
+    },
+    {
+      "id": "57-promenade",
+      "name": "57 Promenade",
+      "city": null,
+      "aliases": [
+        "57 promenade",
+        "fifty seven promenade"
+      ]
+    },
+    {
+      "id": "sahid-sudirman-residence",
+      "name": "Sahid Sudirman Residence",
+      "city": null,
+      "aliases": [
+        "sahid sudirman",
+        "sahid sudirman residence"
+      ]
+    },
+    {
+      "id": "kempinski-private-residences",
+      "name": "Kempinski Private Residences",
+      "city": null,
+      "aliases": [
+        "kempinski",
+        "kempinski residence",
+        "kempinski residences"
+      ]
+    },
+    {
+      "id": "sudirman-hill",
+      "name": "Sudirman Hill",
+      "city": null,
+      "aliases": [
+        "sudirman hill",
+        "sudirman hills"
+      ]
+    },
+    {
+      "id": "sudirman-park",
+      "name": "Sudirman Park",
+      "city": null,
+      "aliases": [
+        "sudirman park"
+      ]
+    },
+    {
+      "id": "citylofts-sudirman",
+      "name": "Citylofts Sudirman",
+      "city": null,
+      "aliases": [
+        "city loft sudirman",
+        "cityloft sudirman",
+        "citylofts",
+        "citylofts sudirman"
+      ]
+    },
+    {
+      "id": "royale-springhill",
+      "name": "Royale Springhill",
+      "city": null,
+      "aliases": [
+        "royale springhill",
+        "springhill royale",
+        "the springhill"
+      ]
+    },
+    {
+      "id": "the-mansion-kemayoran",
+      "name": "The Mansion Kemayoran",
+      "city": null,
+      "aliases": [
+        "mansion bougenvillel",
+        "mansion kemayoran",
+        "the mansion bougenville",
+        "the mansion jasmine",
+        "the mansion kemayoran"
+      ]
+    },
+    {
+      "id": "menara-jakarta",
+      "name": "Menara Jakarta",
+      "city": null,
+      "aliases": [
+        "menara jakarta"
+      ]
+    },
+    {
+      "id": "capitol-park-residence",
+      "name": "Capitol Park Residence",
+      "city": null,
+      "aliases": [
+        "capitol park",
+        "capitol park residence"
+      ]
+    },
+    {
+      "id": "salemba-residence",
+      "name": "Salemba Residence",
+      "city": null,
+      "aliases": [
+        "salemba residence"
+      ]
+    },
+    {
+      "id": "mediterania-boulevard",
+      "name": "Mediterania Boulevard",
+      "city": null,
+      "aliases": [
+        "mediterania boulevard"
+      ]
+    },
+    {
+      "id": "mediterania-marina",
+      "name": "Mediterania Marina",
+      "city": null,
+      "aliases": [
+        "mediterania marina"
+      ]
+    },
+    {
+      "id": "green-pramuka-city",
+      "name": "Green Pramuka City",
+      "city": null,
+      "aliases": [
+        "green pramuka",
+        "green pramuka city"
+      ]
+    },
+    {
+      "id": "pavilion-sudirman",
+      "name": "Pavilion Sudirman",
+      "city": null,
+      "aliases": [
+        "pavilion sudirman"
+      ]
+    },
+    {
+      "id": "thamrin-residences",
+      "name": "Thamrin Residences",
+      "city": null,
+      "aliases": [
+        "thamrin residence",
+        "thamrin residences"
+      ]
+    },
+    {
+      "id": "thamrin-executive",
+      "name": "Thamrin Executive",
+      "city": null,
+      "aliases": [
+        "thamrin executive"
+      ]
+    },
+    {
+      "id": "cosmo-terrace",
+      "name": "Cosmo Terrace",
+      "city": null,
+      "aliases": [
+        "cosmo terrace"
+      ]
+    },
+    {
+      "id": "puri-mansion",
+      "name": "Puri Mansion",
+      "city": null,
+      "aliases": [
+        "puri mansion"
+      ]
+    },
+    {
+      "id": "puri-orchard",
+      "name": "Puri Orchard",
+      "city": null,
+      "aliases": [
+        "puri orchard"
+      ]
+    },
+    {
+      "id": "puri-park-view",
+      "name": "Puri Park View",
+      "city": null,
+      "aliases": [
+        "puri park view"
+      ]
+    },
+    {
+      "id": "st-moritz-residences",
+      "name": "St. Moritz Residences",
+      "city": null,
+      "aliases": [
+        "saint moritz",
+        "st moritz",
+        "st. moritz"
+      ]
+    },
+    {
+      "id": "the-windsor",
+      "name": "The Windsor",
+      "city": null,
+      "aliases": [
+        "the windsor",
+        "windsor"
+      ]
+    },
+    {
+      "id": "mediterania-garden-residences-2",
+      "name": "Mediterania Garden Residences 2",
+      "city": null,
+      "aliases": [
+        "medit 2",
+        "mediterania 2",
+        "mediterania garden 2",
+        "mediterania garden residences 2"
+      ]
+    },
+    {
+      "id": "mediterania-garden-residences-1",
+      "name": "Mediterania Garden Residences 1",
+      "city": null,
+      "aliases": [
+        "medit 1",
+        "mediterania 1",
+        "mediterania garden 1",
+        "mediterania garden residences 1"
+      ]
+    },
+    {
+      "id": "royal-mediterania-garden",
+      "name": "Royal Mediterania Garden",
+      "city": null,
+      "aliases": [
+        "royal mediterania",
+        "royal mediterania garden"
+      ]
+    },
+    {
+      "id": "madison-park",
+      "name": "Madison Park",
+      "city": null,
+      "aliases": [
+        "madison park"
+      ]
+    },
+    {
+      "id": "grand-madison",
+      "name": "Grand Madison",
+      "city": null,
+      "aliases": [
+        "grand madison"
+      ]
+    },
+    {
+      "id": "neo-soho",
+      "name": "Neo Soho",
+      "city": null,
+      "aliases": [
+        "neo soho"
+      ]
+    },
+    {
+      "id": "condominium-taman-anggrek",
+      "name": "Condominium Taman Anggrek",
+      "city": null,
+      "aliases": [
+        "condominium taman anggrek",
+        "taman anggrek",
+        "taman anggrek condominium",
+        "taman anggrek condominum"
+      ]
+    },
+    {
+      "id": "green-sedayu",
+      "name": "Green Sedayu",
+      "city": null,
+      "aliases": [
+        "green sedayu"
+      ]
+    },
+    {
+      "id": "ciputra-international",
+      "name": "Ciputra International",
+      "city": null,
+      "aliases": [
+        "ciputra international",
+        "ciputra puri",
+        "ciputrainternational"
+      ]
+    },
+    {
+      "id": "west-vista-puri",
+      "name": "West Vista Puri",
+      "city": null,
+      "aliases": [
+        "the crest west vista",
+        "west vista"
+      ]
+    },
+    {
+      "id": "citra-living-kalideres",
+      "name": "Citra Living Kalideres",
+      "city": null,
+      "aliases": [
+        "citra living"
+      ]
+    },
+    {
+      "id": "citra-lake-suites",
+      "name": "Citra Lake Suites",
+      "city": null,
+      "aliases": [
+        "citra lake suites"
+      ]
+    },
+    {
+      "id": "centro-city-grogol",
+      "name": "Centro City Grogol",
+      "city": null,
+      "aliases": [
+        "centro city"
+      ]
+    },
+    {
+      "id": "grand-tropic",
+      "name": "Grand Tropic",
+      "city": null,
+      "aliases": [
+        "grand tropic"
+      ]
+    },
+    {
+      "id": "green-royal-condo-house",
+      "name": "Green Royal Condo House",
+      "city": null,
+      "aliases": [
+        "green royal",
+        "green royal condo house"
+      ]
+    },
+    {
+      "id": "albatros-daan-mogot",
+      "name": "Albatros Daan Mogot",
+      "city": null,
+      "aliases": [
+        "albatros"
+      ]
+    },
+    {
+      "id": "westmark",
+      "name": "Westmark",
+      "city": null,
+      "aliases": [
+        "westmark"
+      ]
+    },
+    {
+      "id": "gp-plaza",
+      "name": "GP Plaza",
+      "city": null,
+      "aliases": [
+        "gp plaza",
+        "gpplaza"
+      ]
+    },
+    {
+      "id": "kedoya-elok",
+      "name": "Kedoya Elok",
+      "city": null,
+      "aliases": [
+        "kedoya elok"
+      ]
+    },
+    {
+      "id": "tokyo-riverside-pik-2",
+      "name": "Tokyo Riverside PIK 2",
+      "city": null,
+      "aliases": [
+        "apartemen tokyo full",
+        "tokyo pik 2",
+        "tokyo riverside",
+        "tokyo riverside pik",
+        "tokyo riverside pik 2"
+      ]
+    },
+    {
+      "id": "osaka-riverview-pik-2",
+      "name": "Osaka Riverview PIK 2",
+      "city": null,
+      "aliases": [
+        "osaka pik 2",
+        "osaka riverview",
+        "osaka riverview pik 2"
+      ]
+    },
+    {
+      "id": "gold-coast-pik",
+      "name": "Gold Coast PIK",
+      "city": null,
+      "aliases": [
+        "gold coast",
+        "gold coast pik",
+        "goldcoast"
+      ]
+    },
+    {
+      "id": "green-bay-pluit",
+      "name": "Green Bay Pluit",
+      "city": null,
+      "aliases": [
+        "green bay",
+        "green bay pluit",
+        "greenbay",
+        "greenbay pluit"
+      ]
+    },
+    {
+      "id": "pluit-sea-view",
+      "name": "Pluit Sea View",
+      "city": null,
+      "aliases": [
+        "pluit sea view",
+        "pluit seaview"
+      ]
+    },
+    {
+      "id": "regatta",
+      "name": "Regatta",
+      "city": null,
+      "aliases": [
+        "regatta"
+      ]
+    },
+    {
+      "id": "french-walk-moi",
+      "name": "French Walk MOI",
+      "city": null,
+      "aliases": [
+        "french walk",
+        "frenchwalk",
+        "lyon frenchwalk",
+        "lyon garden"
+      ]
+    },
+    {
+      "id": "city-home-moi",
+      "name": "City Home MOI",
+      "city": null,
+      "aliases": [
+        "city home",
+        "cityhome"
+      ]
+    },
+    {
+      "id": "gading-resort-residences",
+      "name": "Gading Resort Residences",
+      "city": null,
+      "aliases": [
+        "gading resort",
+        "gading resort residence"
+      ]
+    },
+    {
+      "id": "the-summit-residences",
+      "name": "The Summit Residences",
+      "city": null,
+      "aliases": [
+        "the summit",
+        "the summit residences"
+      ]
+    },
+    {
+      "id": "menara-kelapa-gading",
+      "name": "Menara Kelapa Gading",
+      "city": null,
+      "aliases": [
+        "menara kelapa gading"
+      ]
+    },
+    {
+      "id": "sherwood-kelapa-gading",
+      "name": "Sherwood Kelapa Gading",
+      "city": null,
+      "aliases": [
+        "sherwood"
+      ]
+    },
+    {
+      "id": "the-kensington",
+      "name": "The Kensington",
+      "city": null,
+      "aliases": [
+        "kensington",
+        "the kensington"
+      ]
+    },
+    {
+      "id": "gading-nias",
+      "name": "Gading Nias",
+      "city": null,
+      "aliases": [
+        "gading nias"
+      ]
+    },
+    {
+      "id": "sunter-park-view",
+      "name": "Sunter Park View",
+      "city": null,
+      "aliases": [
+        "sunter park view"
+      ]
+    },
+    {
+      "id": "green-lake-sunter",
+      "name": "Green Lake Sunter",
+      "city": null,
+      "aliases": [
+        "green lake apt sunter",
+        "green lake sunter"
+      ]
+    },
+    {
+      "id": "menara-marina-condominium",
+      "name": "Menara Marina Condominium",
+      "city": null,
+      "aliases": [
+        "menara marina",
+        "menara marina condominium"
+      ]
+    },
+    {
+      "id": "northland-ancol-residence",
+      "name": "Northland Ancol Residence",
+      "city": null,
+      "aliases": [
+        "northland ancol",
+        "northland ancol residence"
+      ]
+    },
+    {
+      "id": "ancol-mansion",
+      "name": "Ancol Mansion",
+      "city": null,
+      "aliases": [
+        "ancol mansion"
+      ]
+    },
+    {
+      "id": "bassura-city",
+      "name": "Bassura City",
+      "city": null,
+      "aliases": [
+        "bassura",
+        "bassura city"
+      ]
+    },
+    {
+      "id": "the-oak-tower",
+      "name": "The Oak Tower",
+      "city": null,
+      "aliases": [
+        "oak tower",
+        "the oak tower"
+      ]
+    },
+    {
+      "id": "cleon-park-jgc",
+      "name": "Cleon Park JGC",
+      "city": null,
+      "aliases": [
+        "cleon",
+        "cleon park"
+      ]
+    },
+    {
+      "id": "callia-apartment",
+      "name": "Callia Apartment",
+      "city": null,
+      "aliases": [
+        "callia"
+      ]
+    },
+    {
+      "id": "tifolia-apartment",
+      "name": "Tifolia Apartment",
+      "city": null,
+      "aliases": [
+        "apart tifolia",
+        "tifolia"
+      ]
+    },
+    {
+      "id": "sedayu-city-suites",
+      "name": "Sedayu City Suites",
+      "city": null,
+      "aliases": [
+        "sedayu city",
+        "sedayu city suites"
+      ]
+    },
+    {
+      "id": "patria-park-cawang",
+      "name": "Patria Park Cawang",
+      "city": null,
+      "aliases": [
+        "patria park"
+      ]
+    },
+    {
+      "id": "mth-square",
+      "name": "MTH Square",
+      "city": null,
+      "aliases": [
+        "mth square"
+      ]
+    },
+    {
+      "id": "sakura-garden-city",
+      "name": "Sakura Garden City",
+      "city": null,
+      "aliases": [
+        "sakura garden city"
+      ]
+    },
+    {
+      "id": "menteng-square",
+      "name": "Menteng Square",
+      "city": null,
+      "aliases": [
+        "menteng square"
+      ]
+    },
+    {
+      "id": "sentra-timur-residence",
+      "name": "Sentra Timur Residence",
+      "city": null,
+      "aliases": [
+        "sentra timur",
+        "sentra timur residence"
+      ]
+    },
+    {
+      "id": "tamansari-hive",
+      "name": "Tamansari Hive",
+      "city": null,
+      "aliases": [
+        "tamansari hive"
+      ]
+    },
+    {
+      "id": "the-branz-bsd",
+      "name": "The Branz BSD",
+      "city": null,
+      "aliases": [
+        "branz bsd",
+        "branz serpong",
+        "the branz bsd"
+      ]
+    },
+    {
+      "id": "sky-house-bsd",
+      "name": "Sky House BSD",
+      "city": null,
+      "aliases": [
+        "sky house bsd",
+        "skyhouse bsd"
+      ]
+    },
+    {
+      "id": "sky-house-alam-sutera",
+      "name": "Sky House Alam Sutera",
+      "city": null,
+      "aliases": [
+        "sky house alam sutera",
+        "skyhouse"
+      ]
+    },
+    {
+      "id": "the-lloyd-alam-sutera",
+      "name": "The Lloyd Alam Sutera",
+      "city": null,
+      "aliases": [
+        "lloyd",
+        "lloyd alam sutera",
+        "the lloyd",
+        "the lloyd alam sutera"
+      ]
+    },
+    {
+      "id": "saumata",
+      "name": "Saumata",
+      "city": null,
+      "aliases": [
+        "saumata"
+      ]
+    },
+    {
+      "id": "pacific-garden-campus-town",
+      "name": "Pacific Garden Campus Town",
+      "city": null,
+      "aliases": [
+        "pacific garden",
+        "pasific garden"
+      ]
+    },
+    {
+      "id": "midtown-residence-serpong",
+      "name": "Midtown Residence Serpong",
+      "city": null,
+      "aliases": [
+        "m town residence",
+        "m-town",
+        "m-town residence",
+        "m-town signature",
+        "midtown residence"
+      ]
+    },
+    {
+      "id": "carstensz-residence",
+      "name": "Carstensz Residence",
+      "city": null,
+      "aliases": [
+        "carstensz",
+        "carstensz residence",
+        "carstenz",
+        "carstenz residence"
+      ]
+    },
+    {
+      "id": "urbantown-serpong",
+      "name": "Urbantown Serpong",
+      "city": null,
+      "aliases": [
+        "urbantown",
+        "urbantown serpong"
+      ]
+    },
+    {
+      "id": "akasa-pure-living-bsd",
+      "name": "Akasa Pure Living BSD",
+      "city": null,
+      "aliases": [
+        "akasa",
+        "akasa bsd",
+        "akasa pure living",
+        "akasa pure living bsd"
+      ]
+    },
+    {
+      "id": "treepark-bsd",
+      "name": "Treepark BSD",
+      "city": null,
+      "aliases": [
+        "tree park bsd",
+        "treepark",
+        "treepark bsd"
+      ]
+    },
+    {
+      "id": "asatti-bsd",
+      "name": "Asatti BSD",
+      "city": null,
+      "aliases": [
+        "asatti",
+        "asatti bsd"
+      ]
+    },
+    {
+      "id": "marigold-nava-park",
+      "name": "Marigold Nava Park",
+      "city": null,
+      "aliases": [
+        "marigold",
+        "marigold nava park",
+        "marigold navapark"
+      ]
+    },
+    {
+      "id": "casa-de-parco-bsd",
+      "name": "Casa De Parco BSD",
+      "city": null,
+      "aliases": [
+        "casa de parco"
+      ]
+    },
+    {
+      "id": "b-residence-bsd",
+      "name": "B-Residence BSD",
+      "city": null,
+      "aliases": [
+        "b residence",
+        "b-residence"
+      ]
+    },
+    {
+      "id": "sky-view-bsd",
+      "name": "Sky View BSD",
+      "city": null,
+      "aliases": [
+        "sky view",
+        "sky view bsd"
+      ]
+    },
+    {
+      "id": "paddington-heights",
+      "name": "Paddington Heights",
+      "city": null,
+      "aliases": [
+        "paddington",
+        "paddington height",
+        "paddington heights"
+      ]
+    },
+    {
+      "id": "scientia-residences",
+      "name": "Scientia Residences",
+      "city": null,
+      "aliases": [
+        "scientia",
+        "scientia residence"
+      ]
+    },
+    {
+      "id": "brooklyn-alam-sutera",
+      "name": "Brooklyn Alam Sutera",
+      "city": null,
+      "aliases": [
+        "apt brooklyn",
+        "brooklyn alam sutera",
+        "brooklyn studio alam sutera"
+      ]
+    },
+    {
+      "id": "elevee-alam-sutera",
+      "name": "Elevee Alam Sutera",
+      "city": null,
+      "aliases": [
+        "elevee",
+        "elevee alam sutera"
+      ]
+    },
+    {
+      "id": "silkwood-residences",
+      "name": "Silkwood Residences",
+      "city": null,
+      "aliases": [
+        "silkwood",
+        "silkwood residences"
+      ]
+    },
+    {
+      "id": "yukata-suites",
+      "name": "Yukata Suites",
+      "city": null,
+      "aliases": [
+        "yukata",
+        "yukata suites"
+      ]
+    },
+    {
+      "id": "springwood-residence",
+      "name": "Springwood Residence",
+      "city": null,
+      "aliases": [
+        "springwood",
+        "springwood residence"
+      ]
+    },
+    {
+      "id": "embarcadero-bintaro",
+      "name": "Embarcadero Bintaro",
+      "city": null,
+      "aliases": [
+        "embarcadero",
+        "embarcadero bintaro"
+      ]
+    },
+    {
+      "id": "bintaro-icon",
+      "name": "Bintaro Icon",
+      "city": null,
+      "aliases": [
+        "bintaro icon"
+      ]
+    },
+    {
+      "id": "bintaro-plaza-residences",
+      "name": "Bintaro Plaza Residences",
+      "city": null,
+      "aliases": [
+        "bintaro plaza",
+        "bintaro plaza residences"
+      ]
+    },
+    {
+      "id": "the-breeze-bintaro",
+      "name": "The Breeze Bintaro",
+      "city": null,
+      "aliases": [
+        "apartemen breeze",
+        "breeze bintaro"
+      ]
+    },
+    {
+      "id": "u-residence-karawaci",
+      "name": "U Residence Karawaci",
+      "city": null,
+      "aliases": [
+        "bizloft u residence",
+        "u residence",
+        "u residences"
+      ]
+    },
+    {
+      "id": "samesta-mahata-margonda",
+      "name": "Samesta Mahata Margonda",
+      "city": null,
+      "aliases": [
+        "mahata margonda",
+        "samesta mahata margonda"
+      ]
+    },
+    {
+      "id": "evenciio-margonda",
+      "name": "Evenciio Margonda",
+      "city": null,
+      "aliases": [
+        "evenciio",
+        "evenciio margonda"
+      ]
+    },
+    {
+      "id": "taman-melati-margonda",
+      "name": "Taman Melati Margonda",
+      "city": null,
+      "aliases": [
+        "taman melati",
+        "taman melati margonda"
+      ]
+    },
+    {
+      "id": "margonda-residence",
+      "name": "Margonda Residence",
+      "city": null,
+      "aliases": [
+        "mares",
+        "margonda residence"
+      ]
+    },
+    {
+      "id": "park-view-depok",
+      "name": "Park View Depok",
+      "city": null,
+      "aliases": [
+        "park view",
+        "park view depok"
+      ]
+    },
+    {
+      "id": "green-lake-view-depok",
+      "name": "Green Lake View Depok",
+      "city": null,
+      "aliases": [
+        "green lake view",
+        "green lake view depok",
+        "green lakeview",
+        "green lakeview depok"
+      ]
+    },
+    {
+      "id": "cinere-resort",
+      "name": "Cinere Resort",
+      "city": null,
+      "aliases": [
+        "cinere resort"
+      ]
+    },
+    {
+      "id": "cinere-bellevue",
+      "name": "Cinere Bellevue",
+      "city": null,
+      "aliases": [
+        "cinere bellevue"
+      ]
+    },
+    {
+      "id": "saladin-mansion",
+      "name": "Saladin Mansion",
+      "city": null,
+      "aliases": [
+        "saladin",
+        "saladin mansion"
+      ]
+    },
+    {
+      "id": "podomoro-golf-view",
+      "name": "Podomoro Golf View",
+      "city": null,
+      "aliases": [
+        "podomoro cimanggis",
+        "podomoro golf",
+        "podomoro golf view"
+      ]
+    },
+    {
+      "id": "the-springlake-view",
+      "name": "The Springlake View",
+      "city": null,
+      "aliases": [
+        "springlake view",
+        "the springlake view"
+      ]
+    },
+    {
+      "id": "the-springlake-summarecon",
+      "name": "The Springlake Summarecon",
+      "city": null,
+      "aliases": [
+        "spring lake",
+        "springlake",
+        "springlake summarecon",
+        "the springlake",
+        "the springlake summarecon"
+      ]
+    },
+    {
+      "id": "primrose-condovilla",
+      "name": "Primrose Condovilla",
+      "city": null,
+      "aliases": [
+        "primrose",
+        "primrose condovilla"
+      ]
+    },
+    {
+      "id": "pakuwon-residence-bekasi",
+      "name": "Pakuwon Residence Bekasi",
+      "city": null,
+      "aliases": [
+        "pakuwon",
+        "pakuwon residence",
+        "pakuwon residence bekasi"
+      ]
+    },
+    {
+      "id": "grand-dhika-city",
+      "name": "Grand Dhika City",
+      "city": null,
+      "aliases": [
+        "grand dhika",
+        "grand dhika city"
+      ]
+    },
+    {
+      "id": "grand-kamala-lagoon",
+      "name": "Grand Kamala Lagoon",
+      "city": null,
+      "aliases": [
+        "grand kamala lagoon",
+        "kamala lagoon"
+      ]
+    },
+    {
+      "id": "grand-icon-caman",
+      "name": "Grand Icon Caman",
+      "city": null,
+      "aliases": [
+        "grand icon",
+        "grand icon caman"
+      ]
+    },
+    {
+      "id": "vasanta-innopark-cibitung",
+      "name": "Vasanta Innopark Cibitung",
+      "city": null,
+      "aliases": [
+        "vasanta",
+        "vasanta cibitung",
+        "vasanta innopark",
+        "vasanta-cibitung"
+      ]
+    },
+    {
+      "id": "grande-valore-jababeka",
+      "name": "Grande Valore Jababeka",
+      "city": null,
+      "aliases": [
+        "grande valore"
+      ]
+    },
+    {
+      "id": "sayana-harapan-indah",
+      "name": "Sayana Harapan Indah",
+      "city": null,
+      "aliases": [
+        "sayana"
+      ]
+    },
+    {
+      "id": "trivium-terrace-cikarang",
+      "name": "Trivium Terrace Cikarang",
+      "city": null,
+      "aliases": [
+        "trivium",
+        "trivium north",
+        "trivium terrace"
+      ]
+    },
+    {
+      "id": "orange-county-cikarang",
+      "name": "Orange County Cikarang",
+      "city": null,
+      "aliases": [
+        "orange county"
+      ]
+    },
+    {
+      "id": "chadstone-cikarang",
+      "name": "Chadstone Cikarang",
+      "city": null,
+      "aliases": [
+        "chadstone",
+        "chadstone cikarang"
+      ]
+    },
+    {
+      "id": "meikarta-cikarang",
+      "name": "Meikarta Cikarang",
+      "city": null,
+      "aliases": [
+        "meikarta"
+      ]
+    },
+    {
+      "id": "mutiara-bekasi",
+      "name": "Mutiara Bekasi",
+      "city": null,
+      "aliases": [
+        "mutiara bekasi"
+      ]
+    },
+    {
+      "id": "saffron-noble-sentul-city",
+      "name": "Saffron Noble Sentul City",
+      "city": null,
+      "aliases": [
+        "saffron",
+        "saffron noble",
+        "safron"
+      ]
+    },
+    {
+      "id": "sentul-tower-apartment",
+      "name": "Sentul Tower Apartment",
+      "city": null,
+      "aliases": [
+        "sentu tower",
+        "sentul tower",
+        "sta sentul tower"
+      ]
+    },
+    {
+      "id": "transpark-cibubur",
+      "name": "Transpark Cibubur",
+      "city": null,
+      "aliases": [
+        "trans studio cibubur",
+        "transpark cibubur"
+      ]
+    },
+    {
+      "id": "bogor-icon",
+      "name": "Bogor Icon",
+      "city": null,
+      "aliases": [
+        "bogor icon"
+      ]
+    },
+    {
+      "id": "grand-center-point",
+      "name": "Grand Center Point",
+      "city": null,
+      "aliases": [
+        "grand center point"
+      ]
+    },
+    {
+      "id": "cosmo-mansion",
+      "name": "Cosmo Mansion",
+      "city": "Jakarta Pusat",
+      "aliases": [
+        "cosmo mansion",
+        "cosmo manssion",
+        "cosmo terrace mansion"
+      ]
+    }
+  ]
+}
