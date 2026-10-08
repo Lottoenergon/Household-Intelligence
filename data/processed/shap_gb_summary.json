@@ -1,0 +1,225 @@
+{
+  "model": "GradientBoostingRegressor (hedonic_gb.joblib)",
+  "sample_n": 300,
+  "units": "SHAP values are on ln(IDR) scale; share_pct = share of total |SHAP|",
+  "base_value_ln": 15.6776,
+  "global_importance": [
+    {
+      "feature": "log_floor_size",
+      "mean_abs_shap_log": 0.5099,
+      "share_pct": 53.27
+    },
+    {
+      "feature": "distance_to_cbd_km",
+      "mean_abs_shap_log": 0.1003,
+      "share_pct": 10.48
+    },
+    {
+      "feature": "city_Jakarta Selatan",
+      "mean_abs_shap_log": 0.1,
+      "share_pct": 10.45
+    },
+    {
+      "feature": "distance_to_transit_km",
+      "mean_abs_shap_log": 0.0686,
+      "share_pct": 7.17
+    },
+    {
+      "feature": "is_full_furnished",
+      "mean_abs_shap_log": 0.0513,
+      "share_pct": 5.36
+    },
+    {
+      "feature": "bedrooms",
+      "mean_abs_shap_log": 0.0329,
+      "share_pct": 3.44
+    },
+    {
+      "feature": "city_Jakarta Barat",
+      "mean_abs_shap_log": 0.0143,
+      "share_pct": 1.49
+    },
+    {
+      "feature": "city_Bogor",
+      "mean_abs_shap_log": 0.0124,
+      "share_pct": 1.3
+    },
+    {
+      "feature": "is_semi_furnished",
+      "mean_abs_shap_log": 0.0107,
+      "share_pct": 1.12
+    },
+    {
+      "feature": "city_Tangerang",
+      "mean_abs_shap_log": 0.0098,
+      "share_pct": 1.02
+    },
+    {
+      "feature": "city_Jakarta Utara",
+      "mean_abs_shap_log": 0.0089,
+      "share_pct": 0.93
+    },
+    {
+      "feature": "city_Depok",
+      "mean_abs_shap_log": 0.0055,
+      "share_pct": 0.58
+    },
+    {
+      "feature": "city_Tangerang Selatan",
+      "mean_abs_shap_log": 0.0052,
+      "share_pct": 0.54
+    },
+    {
+      "feature": "has_ac",
+      "mean_abs_shap_log": 0.0051,
+      "share_pct": 0.54
+    },
+    {
+      "feature": "has_parking",
+      "mean_abs_shap_log": 0.0046,
+      "share_pct": 0.48
+    },
+    {
+      "feature": "bathrooms",
+      "mean_abs_shap_log": 0.004,
+      "share_pct": 0.42
+    },
+    {
+      "feature": "city_Jakarta Pusat",
+      "mean_abs_shap_log": 0.0035,
+      "share_pct": 0.37
+    },
+    {
+      "feature": "has_pool",
+      "mean_abs_shap_log": 0.0023,
+      "share_pct": 0.24
+    },
+    {
+      "feature": "city_Jakarta Timur",
+      "mean_abs_shap_log": 0.0023,
+      "share_pct": 0.24
+    },
+    {
+      "feature": "has_kitchen",
+      "mean_abs_shap_log": 0.0017,
+      "share_pct": 0.18
+    },
+    {
+      "feature": "near_transit",
+      "mean_abs_shap_log": 0.0014,
+      "share_pct": 0.15
+    },
+    {
+      "feature": "has_water_heater",
+      "mean_abs_shap_log": 0.0011,
+      "share_pct": 0.12
+    },
+    {
+      "feature": "has_wifi",
+      "mean_abs_shap_log": 0.0007,
+      "share_pct": 0.07
+    },
+    {
+      "feature": "has_balcony",
+      "mean_abs_shap_log": 0.0005,
+      "share_pct": 0.05
+    },
+    {
+      "feature": "has_gym",
+      "mean_abs_shap_log": 0.0001,
+      "share_pct": 0.01
+    }
+  ],
+  "local_examples": [
+    {
+      "listing_id": "LST-00040",
+      "base_value_idr": 6437206.0,
+      "top_contributions": [
+        {
+          "feature": "log_floor_size",
+          "shap_log": 1.8794
+        },
+        {
+          "feature": "city_Jakarta Selatan",
+          "shap_log": 0.3766
+        },
+        {
+          "feature": "distance_to_transit_km",
+          "shap_log": 0.2475
+        }
+      ]
+    },
+    {
+      "listing_id": "LST-00336",
+      "base_value_idr": 6437206.0,
+      "top_contributions": [
+        {
+          "feature": "log_floor_size",
+          "shap_log": -0.3285
+        },
+        {
+          "feature": "distance_to_transit_km",
+          "shap_log": -0.1227
+        },
+        {
+          "feature": "is_full_furnished",
+          "shap_log": 0.1021
+        }
+      ]
+    },
+    {
+      "listing_id": "LST-00327",
+      "base_value_idr": 6437206.0,
+      "top_contributions": [
+        {
+          "feature": "distance_to_transit_km",
+          "shap_log": 0.0655
+        },
+        {
+          "feature": "city_Jakarta Utara",
+          "shap_log": -0.0578
+        },
+        {
+          "feature": "city_Jakarta Selatan",
+          "shap_log": -0.0451
+        }
+      ]
+    },
+    {
+      "listing_id": "LST-00513",
+      "base_value_idr": 6437206.0,
+      "top_contributions": [
+        {
+          "feature": "log_floor_size",
+          "shap_log": 0.9747
+        },
+        {
+          "feature": "city_Jakarta Selatan",
+          "shap_log": -0.1262
+        },
+        {
+          "feature": "distance_to_cbd_km",
+          "shap_log": -0.0743
+        }
+      ]
+    },
+    {
+      "listing_id": "LST-00549",
+      "base_value_idr": 6437206.0,
+      "top_contributions": [
+        {
+          "feature": "log_floor_size",
+          "shap_log": -0.3407
+        },
+        {
+          "feature": "distance_to_cbd_km",
+          "shap_log": -0.1379
+        },
+        {
+          "feature": "is_full_furnished",
+          "shap_log": -0.0982
+        }
+      ]
+    }
+  ]
+}
