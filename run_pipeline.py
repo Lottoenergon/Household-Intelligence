@@ -11,6 +11,8 @@ import json
 import sqlite3
 import subprocess
 import logging
+import argparse
+from typing import List
 import pandas as pd
 
 logging.basicConfig(
@@ -30,7 +32,43 @@ EXPECTED_VIEWS = [
 ]
 
 
+def merge_staged_sources(data_raw_dir: str, sources: List[str]) -> str:
+    """Merge raw_<source>_staged.json files into raw_rental_listings_staged.json with dedup by URL."""
+    merged = []
+    seen_urls = set()
+    for src in sources:
+        path = os.path.join(data_raw_dir, f"raw_{src}_staged.json")
+        if not os.path.exists(path):
+            logger.warning("Staged file missing: %s", path)
+            continue
+        with open(path, encoding="utf-8") as f:
+            records = json.load(f)
+        for r in records:
+            url = r.get("url")
+            if url and url not in seen_urls:
+                seen_urls.add(url)
+                merged.append(r)
+            elif not url:
+                # keep records without URL (should be rare)
+                merged.append(r)
+    out_path = os.path.join(data_raw_dir, "raw_rental_listings_staged.json")
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(merged, f, indent=2, ensure_ascii=False)
+    logger.info("Merged %d sources -> %d unique listings at %s", len(sources), len(merged), out_path)
+    return out_path
+
+
 def run_pipeline():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--scrape", action="store_true", help="Force re-scrape")
+    parser.add_argument("--sources", nargs="+", choices=["rumah123", "99co"],
+                        help="Source(s) to scrape (each writes raw_<source>_staged.json)")
+    parser.add_argument("--pages", type=int, default=8, help="Pages per region")
+    parser.add_argument("--merge-only", action="store_true", help="Only merge existing staged files")
+    parser.add_argument("--merge", action="store_true",
+                        help="Setelah scrape --sources, merge ke raw_rental_listings_staged.json (dedup URL). Default: OFF")
+    args = parser.parse_args()
+
     base_dir = os.path.dirname(os.path.abspath(__file__))
     src_dir = os.path.join(base_dir, "src")
     data_raw_dir = os.path.join(base_dir, "data", "raw")
@@ -47,8 +85,25 @@ def run_pipeline():
     # ---------------------------------------------------------
     # Step 1: Ingestion
     # ---------------------------------------------------------
-    scrape_requested = "--scrape" in sys.argv or not os.path.exists(raw_staged_file)
-    if scrape_requested:
+    if args.merge_only:
+        if not args.sources:
+            parser.error("--merge-only requires --sources")
+        merge_staged_sources(data_raw_dir, args.sources)
+        # fall through to transformation
+    elif args.sources:
+        logger.info("[[Phase 1/4] Running Web Ingestion for sources: %s (output terpisah, produksi tidak disentuh)...]", ", ".join(args.sources))
+        sources_script = os.path.join(src_dir, "sources.py")
+        for src in args.sources:
+            subprocess.run([
+                sys.executable, sources_script,
+                "--source", src,
+                "--pages", str(args.pages)
+            ], check=True)
+        if args.merge:
+            merge_staged_sources(data_raw_dir, args.sources)
+        else:
+            logger.info("Merge di-skip (tanpa --merge). Staged produksi tidak berubah.")
+    elif args.scrape or not os.path.exists(raw_staged_file):
         logger.info("[[Phase 1/4] Running Web Ingestion Engine across 10 Jabodetabek cities...]")
         ingest_script = os.path.join(src_dir, "ingestion.py")
         subprocess.run([sys.executable, ingest_script], check=True)
@@ -73,7 +128,7 @@ def run_pipeline():
     # Step 4: Quality & Integrity Assertions
     # ---------------------------------------------------------
     logger.info("[[Phase 4/4] Executing Automated Data Integrity & Schema Assertions...]")
-    
+
     if not os.path.exists(db_file):
         raise FileNotFoundError(f"Database {db_file} was not generated!")
     if not os.path.exists(eval_csv):

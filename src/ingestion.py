@@ -29,6 +29,8 @@ USER_AGENTS = [
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 ]
 
+RUMAH123_CRAWL_DELAY_SEC = 5.0  # robots.txt: Crawl-Delay: 5
+
 TARGET_REGIONS = [
     {"region_slug": "jakarta-selatan", "city_name": "Jakarta Selatan", "province": "DKI Jakarta"},
     {"region_slug": "jakarta-pusat", "city_name": "Jakarta Pusat", "province": "DKI Jakarta"},
@@ -148,8 +150,8 @@ def run_ingestion_pipeline(pages_per_region: int = 8, output_dir: str = "data/ra
             all_extracted_records.extend(page_records)
             region_count += len(page_records)
             
-            # Politeness delay
-            time.sleep(random.uniform(0.4, 0.8))
+            # Politeness delay: robots.txt rumah123 Crawl-Delay: 5 (+ jitter)
+            time.sleep(RUMAH123_CRAWL_DELAY_SEC + random.uniform(0.0, 1.0))
 
         logger.info(f"Completed {city}: Ingested {region_count} listings.")
 
