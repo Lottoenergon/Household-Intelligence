@@ -7,6 +7,20 @@
   "tier1_vs_tier3_premium_pct": 63.0,
   "furnishing_premium_raw_pct": 11.9,
   "furnishing_premium_adjusted_pct": 13.9,
+  "deal_thresholds": {
+    "scale": "z_residual_log",
+    "good_z": -0.75,
+    "deep_z": -1.5,
+    "premium_z": 0.75,
+    "overpriced_z": 1.5,
+    "labels": {
+      "deep": "Deep Value Deal (Rare Find)",
+      "good": "Good Deal (Undervalued)",
+      "fair": "Fair Market Price",
+      "premium": "Premium / High Price",
+      "overpriced": "Overpriced / Luxury Tag"
+    }
+  },
   "deals": {
     "below_estimate_total": 139,
     "below_estimate_share_pct": 19.1,

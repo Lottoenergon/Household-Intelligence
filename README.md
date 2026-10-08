@@ -109,7 +109,7 @@ Scraping is capped by pages per city, so city sizes reflect the scraper, not the
 2. **Coordinates:** the portal omits or corrupts some. Invalid ones (missing, or longitude copied from latitude) are replaced by the subdistrict, then city, median of valid coordinates. Overall 8.9% of rows are imputed, and **64% of South Tangerang rows**, so distances there are approximate. Each row carries `geo_source`.
 3. **Missing variables:** building/project name, floor level, building age and condition are not in the model. They drive a lot of apartment rent variation.
 4. **Amenities come from regex on short ad text.** "Not mentioned" is treated as "absent". Furnishing is flagged for only 39.3% of listings.
-5. **Not a true hedonic regression yet.** Gradient Boosting has no coefficients. The "model-adjusted" furnishing premium is the average change in prediction when the flag is switched, not a regression coefficient.
+5. **Gradient Boosting has no coefficients.** For implicit prices use the OLS layer (`/api/hedonic`); its out-of-fold R2 is lower than GB, so it is for interpretation, not valuation. The "model-adjusted" furnishing premium from GB is the average change in prediction when the flag is switched.
 6. **Cross-broker duplicates** are removed with a heuristic (same price, size, bedrooms, bathrooms and location), which can also drop genuinely identical units in one building.
 7. The fit-out payback calculator uses a **user-supplied cost assumption** (default Rp 1.2M per m², not derived from data).
 8. Check the portal's terms and robots.txt before re-scraping or republishing listing data.
@@ -120,6 +120,7 @@ Scraping is capped by pages per city, so city sizes reflect the scraper, not the
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 python run_pipeline.py            # cleans, trains, writes model + metrics + this README (add --scrape to re-ingest)
+python scripts/clean_listing_titles.py   # re-apply editorial titles: the pipeline regenerates the CSVs from scratch and drops raw_title / canonical_apartment
 python -m uvicorn backend.server:app --port 8000    # open http://localhost:8000
 ```
 
@@ -127,7 +128,7 @@ Tests: `pip install -r requirements-dev.txt && python -m pytest tests -q` (inclu
 
 ## 6. Roadmap
 
-- [ ] True hedonic layer: OLS/Ridge on log rent for interpretable implicit prices, and SHAP for the Gradient Boosting model
+- [x] Interpretable hedonic layer: OLS on log rent (HC1 SE, 95% CI) gives implicit prices per attribute (`/api/hedonic`). Still open: SHAP for the Gradient Boosting model
 - [ ] Building/project entity resolution from listing titles (the biggest missing feature)
 - [ ] Wider validation: more sources, repeated scrapes over time, price trends
 - [ ] Cleaner dependency list and CORS hardening

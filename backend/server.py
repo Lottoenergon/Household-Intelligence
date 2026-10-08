@@ -535,6 +535,18 @@ def simulate_rent(req: SimulationRequest):
         },
     }
 
+HEDONIC_PATH = os.path.join(BASE_DIR, "data", "processed", "hedonic_implicit_prices.json")
+
+
+@app.api_route("/api/hedonic", methods=["GET", "HEAD"])
+def get_hedonic():
+    """Implicit price per fitur (OLS log-rent, HC1, CI 95%). Interpretasi, bukan prediksi."""
+    if not os.path.exists(HEDONIC_PATH):
+        raise HTTPException(status_code=503, detail="hedonic_implicit_prices.json belum ada; jalankan pipeline.")
+    with open(HEDONIC_PATH, encoding="utf-8") as f:
+        return json.load(f)
+
+
 @app.api_route("/api/distance-decay", methods=["GET", "HEAD"])
 def get_distance_decay():
     """Data for the Alonso-Muth-Mills urban rent decay model."""
@@ -598,6 +610,7 @@ Household Intelligence is an end-to-end PropTech analytics platform and Automate
 - `GET /api/districts?city=` — Per-subdistrict aggregates with unit counts and deal counts.
 - `GET /api/benchmarks` — City and layout-level median rent / price-per-m² benchmarks.
 - `POST /api/simulate` — Real-time hedonic rent simulation engine.
+- `GET /api/hedonic` — OLS log-rent implicit prices per attribute (% effect, 95% CI, HC1 SE). For interpretation, not valuation.
 - `GET /api/distance-decay` — Spatial rent decay curve vs distance to Sudirman CBD plus urban-zone rings.
 """
 

@@ -1,0 +1,258 @@
+{
+  "model_type": "OLS on ln(monthly rent), HC1 robust SE",
+  "n": 728,
+  "r2_in_sample_log": 0.7902,
+  "r2_oof_log": 0.7783,
+  "effects": [
+    {
+      "feature": "log_floor_size",
+      "unit": "per +10% luas",
+      "effect_pct": 9.71,
+      "ci95_pct": [
+        8.98,
+        10.45
+      ],
+      "significant": true
+    },
+    {
+      "feature": "bedrooms",
+      "unit": "vs baseline",
+      "effect_pct": -8.68,
+      "ci95_pct": [
+        -13.03,
+        -4.11
+      ],
+      "significant": true
+    },
+    {
+      "feature": "bathrooms",
+      "unit": "vs baseline",
+      "effect_pct": 2.04,
+      "ci95_pct": [
+        -5.49,
+        10.18
+      ],
+      "significant": false
+    },
+    {
+      "feature": "distance_to_cbd_km",
+      "unit": "per +1 km",
+      "effect_pct": -1.26,
+      "ci95_pct": [
+        -2.14,
+        -0.38
+      ],
+      "significant": true
+    },
+    {
+      "feature": "distance_to_transit_km",
+      "unit": "per +1 km",
+      "effect_pct": -0.3,
+      "ci95_pct": [
+        -1.38,
+        0.78
+      ],
+      "significant": false
+    },
+    {
+      "feature": "is_full_furnished",
+      "unit": "vs baseline",
+      "effect_pct": 15.21,
+      "ci95_pct": [
+        8.18,
+        22.69
+      ],
+      "significant": true
+    },
+    {
+      "feature": "is_semi_furnished",
+      "unit": "vs baseline",
+      "effect_pct": -22.11,
+      "ci95_pct": [
+        -32.61,
+        -9.98
+      ],
+      "significant": true
+    },
+    {
+      "feature": "has_ac",
+      "unit": "vs baseline",
+      "effect_pct": -8.44,
+      "ci95_pct": [
+        -19.54,
+        4.2
+      ],
+      "significant": false
+    },
+    {
+      "feature": "has_wifi",
+      "unit": "vs baseline",
+      "effect_pct": -15.98,
+      "ci95_pct": [
+        -34.73,
+        8.17
+      ],
+      "significant": false
+    },
+    {
+      "feature": "has_water_heater",
+      "unit": "vs baseline",
+      "effect_pct": 5.31,
+      "ci95_pct": [
+        -8.54,
+        21.26
+      ],
+      "significant": false
+    },
+    {
+      "feature": "has_pool",
+      "unit": "vs baseline",
+      "effect_pct": -2.01,
+      "ci95_pct": [
+        -10.52,
+        7.32
+      ],
+      "significant": false
+    },
+    {
+      "feature": "has_gym",
+      "unit": "vs baseline",
+      "effect_pct": 3.86,
+      "ci95_pct": [
+        -8.0,
+        17.24
+      ],
+      "significant": false
+    },
+    {
+      "feature": "near_transit",
+      "unit": "vs baseline",
+      "effect_pct": -10.62,
+      "ci95_pct": [
+        -19.48,
+        -0.79
+      ],
+      "significant": true
+    },
+    {
+      "feature": "has_balcony",
+      "unit": "vs baseline",
+      "effect_pct": -11.23,
+      "ci95_pct": [
+        -29.94,
+        12.49
+      ],
+      "significant": false
+    },
+    {
+      "feature": "has_kitchen",
+      "unit": "vs baseline",
+      "effect_pct": -3.24,
+      "ci95_pct": [
+        -21.62,
+        19.45
+      ],
+      "significant": false
+    },
+    {
+      "feature": "has_parking",
+      "unit": "vs baseline",
+      "effect_pct": -14.0,
+      "ci95_pct": [
+        -24.76,
+        -1.7
+      ],
+      "significant": true
+    },
+    {
+      "feature": "city_Bogor",
+      "unit": "vs baseline",
+      "effect_pct": 42.98,
+      "ci95_pct": [
+        25.11,
+        63.39
+      ],
+      "significant": true
+    },
+    {
+      "feature": "city_Depok",
+      "unit": "vs baseline",
+      "effect_pct": -3.7,
+      "ci95_pct": [
+        -20.44,
+        16.56
+      ],
+      "significant": false
+    },
+    {
+      "feature": "city_Jakarta Barat",
+      "unit": "vs baseline",
+      "effect_pct": -20.68,
+      "ci95_pct": [
+        -36.1,
+        -1.54
+      ],
+      "significant": true
+    },
+    {
+      "feature": "city_Jakarta Pusat",
+      "unit": "vs baseline",
+      "effect_pct": 16.93,
+      "ci95_pct": [
+        -9.22,
+        50.62
+      ],
+      "significant": false
+    },
+    {
+      "feature": "city_Jakarta Selatan",
+      "unit": "vs baseline",
+      "effect_pct": 60.54,
+      "ci95_pct": [
+        25.53,
+        105.33
+      ],
+      "significant": true
+    },
+    {
+      "feature": "city_Jakarta Timur",
+      "unit": "vs baseline",
+      "effect_pct": -16.23,
+      "ci95_pct": [
+        -31.48,
+        2.4
+      ],
+      "significant": false
+    },
+    {
+      "feature": "city_Jakarta Utara",
+      "unit": "vs baseline",
+      "effect_pct": -19.8,
+      "ci95_pct": [
+        -34.7,
+        -1.5
+      ],
+      "significant": true
+    },
+    {
+      "feature": "city_Tangerang",
+      "unit": "vs baseline",
+      "effect_pct": -18.34,
+      "ci95_pct": [
+        -29.46,
+        -5.46
+      ],
+      "significant": true
+    },
+    {
+      "feature": "city_Tangerang Selatan",
+      "unit": "vs baseline",
+      "effect_pct": -4.92,
+      "ci95_pct": [
+        -18.8,
+        11.33
+      ],
+      "significant": false
+    }
+  ]
+}

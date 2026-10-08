@@ -395,6 +395,10 @@ def run_market_intelligence_pipeline(base_dir: str = "."):
     with open(metrics_json_path, "w", encoding="utf-8") as f:
         json.dump(metrics, f, indent=2)
 
+    # 4b. Lapisan hedonik interpretable (OLS, implicit price + CI 95%)
+    import hedonic_ols
+    hedonic_ols.run(base_dir)
+
     # 5. Sync to Relational Star Schema DB
     sync_to_sqlite(df_evaluated, sql_path, db_path)
 
