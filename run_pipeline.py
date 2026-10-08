@@ -33,16 +33,28 @@ EXPECTED_VIEWS = [
 
 
 def merge_staged_sources(data_raw_dir: str, sources: List[str]) -> str:
-    """Merge raw_<source>_staged.json files into raw_rental_listings_staged.json with dedup by URL."""
+    """Merge staged scrap files into raw_rental_listings_staged.json with dedup by URL.
+
+    Menerima dua konvensi nama (yang lama `raw_<src>_staged.json` dan konvensi
+    sekarang `scrap_v2_<src>_raw.json`) supaya `--merge-only` tidak pernah lagi
+    menimpa file produksi dengan daftar kosong saat nama file tidak cocok.
+    """
     merged = []
     seen_urls = set()
+    found = False
     for src in sources:
-        path = os.path.join(data_raw_dir, f"raw_{src}_staged.json")
-        if not os.path.exists(path):
-            logger.warning("Staged file missing: %s", path)
+        candidates = [
+            os.path.join(data_raw_dir, f"raw_{src}_staged.json"),
+            os.path.join(data_raw_dir, f"scrap_v2_{src}_raw.json"),
+        ]
+        path = next((p for p in candidates if os.path.exists(p)), None)
+        if path is None:
+            logger.warning("Staged file missing for source '%s' (dicoba: %s)", src, candidates)
             continue
+        found = True
         with open(path, encoding="utf-8") as f:
             records = json.load(f)
+        logger.info("Merging source '%s' from %s (%d records)", src, os.path.basename(path), len(records))
         for r in records:
             url = r.get("url")
             if url and url not in seen_urls:
@@ -51,6 +63,11 @@ def merge_staged_sources(data_raw_dir: str, sources: List[str]) -> str:
             elif not url:
                 # keep records without URL (should be rare)
                 merged.append(r)
+    if not found or not merged:
+        raise ValueError(
+            "Merge dibatalkan: tidak ada file sumber yang ditemukan / 0 record. "
+            "File produksi TIDAK ditimpa (cegah wipe data)."
+        )
     out_path = os.path.join(data_raw_dir, "raw_rental_listings_staged.json")
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(merged, f, indent=2, ensure_ascii=False)
@@ -123,6 +140,16 @@ def run_pipeline():
     logger.info("[[Phase 3/4] Training Econometric Hedonic Model & Syncing Star Schema DB...]")
     mi_script = os.path.join(src_dir, "market_intelligence.py")
     subprocess.run([sys.executable, mi_script], check=True)
+
+    # ---------------------------------------------------------
+    # Step 3b: Entity resolution / title cleanup (WAJIB setelah rebuild DB)
+    # market_intelligence.py menulis ulang fact_rental_listings, jadi kolom
+    # canonical_apartment & resolution_confidence harus di-apply ulang di sini
+    # supaya /api/deals tidak kehilangan field-nya.
+    # ---------------------------------------------------------
+    logger.info("[[Phase 3b/4] Applying entity resolution & listing title cleanup...]")
+    cleanup_script = os.path.join(base_dir, "scripts", "clean_listing_titles.py")
+    subprocess.run([sys.executable, cleanup_script], check=True)
 
     # ---------------------------------------------------------
     # Step 4: Quality & Integrity Assertions

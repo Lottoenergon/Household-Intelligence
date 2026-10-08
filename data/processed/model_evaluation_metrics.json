@@ -1,145 +1,145 @@
 {
   "model_type": "GradientBoostingRegressor (Hedonic Price Engine)",
-  "sample_size": 728,
-  "n_subdistricts": 100,
+  "sample_size": 2321,
+  "n_subdistricts": 145,
   "evaluation": {
     "kfold_5x3": {
       "naive": {
-        "r2": 0.737,
-        "r2_std": 0.0018,
-        "r2_log": 0.7452,
-        "r2_log_std": 0.0013,
-        "mae_idr": 2593529.2666,
-        "mae_idr_std": 5791.8583,
-        "rmse_idr": 5121268.6647,
-        "rmse_idr_std": 17615.5815,
-        "mape_pct": 29.2907,
-        "mape_pct_std": 0.1204,
-        "median_ape_pct": 20.5007,
-        "median_ape_pct_std": 0.3008
+        "r2": 0.6987,
+        "r2_std": 0.0014,
+        "r2_log": 0.7353,
+        "r2_log_std": 0.0006,
+        "mae_idr": 3239561.9089,
+        "mae_idr_std": 6517.9396,
+        "rmse_idr": 6915666.7918,
+        "rmse_idr_std": 15954.5857,
+        "mape_pct": 33.9391,
+        "mape_pct_std": 0.0441,
+        "median_ape_pct": 23.1443,
+        "median_ape_pct_std": 0.153
       },
       "ridge": {
-        "r2": 0.7531,
-        "r2_std": 0.0034,
-        "r2_log": 0.7776,
-        "r2_log_std": 0.0026,
-        "mae_idr": 2494656.0846,
-        "mae_idr_std": 21142.9749,
-        "rmse_idr": 4961797.7816,
-        "rmse_idr_std": 33676.6053,
-        "mape_pct": 28.1812,
-        "mape_pct_std": 0.2886,
-        "median_ape_pct": 20.7965,
-        "median_ape_pct_std": 0.3039
+        "r2": 0.675,
+        "r2_std": 0.0014,
+        "r2_log": 0.739,
+        "r2_log_std": 0.0013,
+        "mae_idr": 3246965.7963,
+        "mae_idr_std": 11914.9452,
+        "rmse_idr": 7182528.2065,
+        "rmse_idr_std": 15045.2913,
+        "mape_pct": 32.5379,
+        "mape_pct_std": 0.1281,
+        "median_ape_pct": 23.0058,
+        "median_ape_pct_std": 0.0791
       },
       "gb": {
-        "r2": 0.8298,
-        "r2_std": 0.0078,
-        "r2_log": 0.8193,
-        "r2_log_std": 0.0025,
-        "mae_idr": 2105921.3624,
-        "mae_idr_std": 35465.9374,
-        "rmse_idr": 4118851.3204,
-        "rmse_idr_std": 95158.3861,
-        "mape_pct": 25.4931,
-        "mape_pct_std": 0.1217,
-        "median_ape_pct": 17.7217,
-        "median_ape_pct_std": 0.3285
+        "r2": 0.7555,
+        "r2_std": 0.0048,
+        "r2_log": 0.8009,
+        "r2_log_std": 0.0007,
+        "mae_idr": 2664584.7453,
+        "mae_idr_std": 33932.0552,
+        "rmse_idr": 6230354.2896,
+        "rmse_idr_std": 61379.849,
+        "mape_pct": 27.6049,
+        "mape_pct_std": 0.1143,
+        "median_ape_pct": 18.9034,
+        "median_ape_pct_std": 0.2922
       }
     },
     "group_kfold_subdistrict": {
       "naive": {
-        "r2": 0.7386,
+        "r2": 0.605,
         "r2_std": null,
-        "r2_log": 0.7274,
+        "r2_log": 0.7043,
         "r2_log_std": null,
-        "mae_idr": 2659066.1519,
+        "mae_idr": 3646823.541,
         "mae_idr_std": null,
-        "rmse_idr": 5105119.0795,
+        "rmse_idr": 7919095.4998,
         "rmse_idr_std": null,
-        "mape_pct": 30.5627,
+        "mape_pct": 35.2892,
         "mape_pct_std": null,
-        "median_ape_pct": 22.4854,
+        "median_ape_pct": 24.3646,
         "median_ape_pct_std": null
       },
       "ridge": {
-        "r2": 0.7328,
+        "r2": 0.6022,
         "r2_std": null,
-        "r2_log": 0.7371,
+        "r2_log": 0.7043,
         "r2_log_std": null,
-        "mae_idr": 2662365.0496,
+        "mae_idr": 3572520.7547,
         "mae_idr_std": null,
-        "rmse_idr": 5161261.8484,
+        "rmse_idr": 7946408.0926,
         "rmse_idr_std": null,
-        "mape_pct": 30.5981,
+        "mape_pct": 34.0947,
         "mape_pct_std": null,
-        "median_ape_pct": 23.7176,
+        "median_ape_pct": 24.1478,
         "median_ape_pct_std": null
       },
       "gb": {
-        "r2": 0.7443,
+        "r2": 0.6848,
         "r2_std": null,
-        "r2_log": 0.7368,
+        "r2_log": 0.7674,
         "r2_log_std": null,
-        "mae_idr": 2616522.9608,
+        "mae_idr": 3079236.2172,
         "mae_idr_std": null,
-        "rmse_idr": 5049357.6965,
+        "rmse_idr": 7074214.9385,
         "rmse_idr_std": null,
-        "mape_pct": 30.1544,
+        "mape_pct": 29.8848,
         "mape_pct_std": null,
-        "median_ape_pct": 21.743,
+        "median_ape_pct": 21.1652,
         "median_ape_pct_std": null
       }
     }
   },
-  "train_in_sample_r2_DIAGNOSTIC_ONLY": 0.9531,
+  "train_in_sample_r2_DIAGNOSTIC_ONLY": 0.8278,
   "feature_importances": [
     {
       "feature": "log_floor_size",
-      "importance": 0.6792
+      "importance": 0.7536
     },
     {
       "feature": "distance_to_cbd_km",
-      "importance": 0.0967
-    },
-    {
-      "feature": "city_Jakarta Selatan",
-      "importance": 0.086
+      "importance": 0.0951
     },
     {
       "feature": "distance_to_transit_km",
-      "importance": 0.07
+      "importance": 0.0729
+    },
+    {
+      "feature": "city_Jakarta Selatan",
+      "importance": 0.0196
     },
     {
       "feature": "bedrooms",
-      "importance": 0.0137
+      "importance": 0.0102
+    },
+    {
+      "feature": "city_Jakarta Barat",
+      "importance": 0.007
     },
     {
       "feature": "is_full_furnished",
-      "importance": 0.0123
+      "importance": 0.0062
     },
     {
       "feature": "city_Bogor",
-      "importance": 0.0057
+      "importance": 0.0061
     },
     {
-      "feature": "is_semi_furnished",
-      "importance": 0.0055
-    },
-    {
-      "feature": "bathrooms",
-      "importance": 0.0053
+      "feature": "city_Depok",
+      "importance": 0.0044
     },
     {
       "feature": "city_Jakarta Utara",
-      "importance": 0.004
+      "importance": 0.0038
     }
   ],
   "prediction_interval": {
     "level": 0.8,
-    "log_lower": -0.38681422528387516,
-    "log_upper": 0.35123362581693207,
-    "lower_factor": 0.6792172646012246,
-    "upper_factor": 1.4208192271929974
+    "log_lower": -0.39362503182769126,
+    "log_upper": 0.3786898226996506,
+    "lower_factor": 0.6746069649617988,
+    "upper_factor": 1.460369991863513
   }
 }

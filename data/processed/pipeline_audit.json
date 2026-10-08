@@ -1,31 +1,31 @@
 {
-  "raw_records": 800,
-  "after_url_dedup": 796,
-  "after_price_validation": 790,
+  "raw_records": 2787,
+  "after_url_dedup": 2787,
+  "after_price_validation": 2765,
   "price_period_counts": {
-    "yearly": 513,
-    "monthly": 274,
-    "daily": 3
+    "yearly": 1951,
+    "monthly": 804,
+    "daily": 10
   },
-  "content_duplicates_removed": 59,
-  "after_content_dedup": 731,
+  "content_duplicates_removed": 423,
+  "after_content_dedup": 2342,
   "floor_size_missing_imputed": 2,
-  "after_floor_bounds": 728,
+  "after_floor_bounds": 2321,
   "geo_source_counts": {
-    "listing": 663,
-    "subdistrict_centroid": 65
+    "listing": 2118,
+    "subdistrict_centroid": 203
   },
-  "final_records": 728,
+  "final_records": 2321,
   "geo_imputed_share_by_city": {
-    "Bekasi": 0.0,
-    "Bogor": 0.0299,
-    "Depok": 0.087,
-    "Jakarta Barat": 0.0676,
-    "Jakarta Pusat": 0.0,
-    "Jakarta Selatan": 0.0,
-    "Jakarta Timur": 0.0135,
-    "Jakarta Utara": 0.0137,
-    "Tangerang": 0.0,
-    "Tangerang Selatan": 0.641
+    "Bekasi": 0.013,
+    "Bogor": 0.0266,
+    "Depok": 0.0583,
+    "Jakarta Barat": 0.0754,
+    "Jakarta Pusat": 0.0233,
+    "Jakarta Selatan": 0.0196,
+    "Jakarta Timur": 0.014,
+    "Jakarta Utara": 0.0212,
+    "Tangerang": 0.0039,
+    "Tangerang Selatan": 0.6288
   }
 }

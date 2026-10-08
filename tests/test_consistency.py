@@ -146,17 +146,19 @@ def test_simulate_reports_data_support():
 def test_simulate_flags_extrapolated_estimates():
     """Konfigurasi yang tidak ada di data harus ditandai, bukan ditampilkan seolah yakin.
 
-    Contoh: 4BR 120 m2. Di dataset, 4BR hanya 9 unit dan p05 luasnya 114 m2, jadi
-    kombinasi ini nyaris tidak punya pembanding. Sebelumnya UI menampilkan
+    Contoh: 5BR di Jakarta Selatan. Di dataset 5BR = 0 unit di kota tsb, fallback
+    ke national pun 0 comparables dalam ±25%. Sebelumnya UI menampilkan
     "median Rp 0.0 jt" karena field median bernilai null.
     """
-    r = client.post("/api/simulate", json={"city": "Jakarta Selatan", "floor_size_m2": 120, "bedrooms": 4}).json()
+    r = client.post("/api/simulate", json={"city": "Jakarta Selatan", "floor_size_m2": 300, "bedrooms": 5}).json()
     sup = r["data_support"]
-    assert sup["support_level"] == "extrapolated", "4BR 120 m2 tidak punya pembanding di data"
+    assert sup["support_level"] == "extrapolated", "5BR 300 m2 JakSel tidak punya pembanding di data"
     assert sup["comparables_matched"] == 0
     assert sup["median_comparable_rent_idr"] is None, (
         "median pembanding harus null (bukan 0) supaya UI tidak menampilkan angka palsu"
     )
+    # scope fallback ke national karena 5BR JakSel = 0
+    assert sup["scope"] == "national"
 
 
 def test_simulate_bathrooms_impact_price():

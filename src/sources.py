@@ -47,7 +47,7 @@ TARGET_SLUGS_99CO = {
 
 # Crawl-delay from https://www.99.co/robots.txt: rogerbot/dotbot = 3, * = none.
 # rumah123 robots.txt: Crawl-Delay: 5 for *.
-CRAWL_DELAY_SEC = {"rumah123": 5.0, "99co": 3.0}
+CRAWL_DELAY_SEC = {"rumah123": 5.0, "99co": 5.0}
 
 
 def polite_sleep(source: str) -> None:
