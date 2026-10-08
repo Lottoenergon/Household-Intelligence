@@ -78,8 +78,10 @@ def _parse_next_data(html: str) -> Optional[Dict[str, Any]]:
 
 # ---------------------------------------------------------------- 99.co ----
 
+_99CO_PARAM = "hlmn"  # 99.co pagination param (verified live: ?hlmn=2 returns distinct listings; ?page= ignored)
+
 def build_99co_url(city_slug: str, page: int) -> str:
-    return f"https://www.99.co/id/sewa/apartemen/{city_slug}?page={page}"
+    return f"https://www.99.co/id/sewa/apartemen/{city_slug}?{_99CO_PARAM}={page}"
 
 
 def parse_99co_listings(html: str, region_meta: Dict[str, str]) -> List[Dict[str, Any]]:
@@ -157,16 +159,23 @@ def parse_99co_listings(html: str, region_meta: Dict[str, str]) -> List[Dict[str
 
 
 def scrape_99co(region_meta: Dict[str, str], pages: int = 3) -> List[Dict[str, Any]]:
+    """Pagination ?hlmn= (verified live). Early-stop jk 2 halaman beruntun tanpa URL baru."""
     slug = TARGET_SLUGS_99CO[region_meta["city_name"]]
     records: List[Dict[str, Any]] = []
+    seen: set = set()
+    stale = 0
     for p in range(1, pages + 1):
         html = fetch_text(build_99co_url(slug, p))
         if not html:
             break
         page_recs = parse_99co_listings(html, region_meta)
-        if not page_recs:
+        fresh = [r for r in page_recs if r.get("url") and r["url"] not in seen]
+        for r in fresh:
+            seen.add(r["url"])
+        records.extend(fresh)
+        stale = stale + 1 if not fresh else 0
+        if stale >= 2:
             break
-        records.extend(page_recs)
         polite_sleep("99co")
     return records
 

@@ -65,3 +65,29 @@ def test_rumah123_url_matches_ingestion():
 def test_rumah123_adapter_registered_and_delayed():
     assert "rumah123" in S.ADAPTERS
     assert S.CRAWL_DELAY_SEC["rumah123"] >= 5.0
+
+
+def test_99co_pagination_uses_hlmn_not_page():
+    # Regression: 99.co uses ?hlmn= for pagination, not ?page=
+    # Page 1 vs page 2 must return distinct listings (0 overlap)
+    import requests, re, json
+    UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+    H = {"User-Agent": UA, "Accept-Language": "id-ID,id;q=0.9"}
+    def ids(hlmn):
+        h = requests.get(f"https://www.99.co/id/sewa/apartemen/jakarta-selatan?hlmn={hlmn}", headers=H, timeout=30).text
+        m = re.search(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', h, re.S)
+        d = json.loads(m.group(1))
+        L = d["props"]["pageProps"]["data"]["listings"]
+        out = []
+        for g in L:
+            for it in g.get("data", []):
+                out.append(it.get("id") or it.get("property_id"))
+        return set(out)
+    p1 = ids(1)
+    p2 = ids(2)
+    assert p1 and p2
+    assert len(p1 & p2) == 0, f"pagination overlap: {p1 & p2}"
+    # URL builder must use hlmn
+    assert S.build_99co_url("jakarta-selatan", 1).endswith("?hlmn=1")
+    assert S.build_99co_url("jakarta-selatan", 2).endswith("?hlmn=2")
+    assert "?page=" not in S.build_99co_url("jakarta-selatan", 1)

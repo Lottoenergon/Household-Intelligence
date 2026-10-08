@@ -74,7 +74,10 @@ def test_hedonic_artifact_exists_and_has_ci():
     p = os.path.join(BASE, "data", "processed", "hedonic_implicit_prices.json")
     assert os.path.exists(p), "pipeline belum menulis hedonic_implicit_prices.json"
     res = json.load(open(p, encoding="utf-8"))
-    assert res["n"] == 728 and len(res["effects"]) > 10
+    cleaned = os.path.join(BASE, "data", "processed", "jabodetabek_rental_cleaned.csv")
+    import pandas as pd
+    n_clean = len(pd.read_csv(cleaned))
+    assert res["n"] == n_clean and len(res["effects"]) > 10
     for e in res["effects"]:
         assert e["ci95_pct"][0] <= e["effect_pct"] <= e["ci95_pct"][1]
     assert "r2_oof_log" in res
