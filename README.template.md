@@ -107,10 +107,11 @@ Tests: `pip install -r requirements-dev.txt && python -m pytest tests -q` (inclu
 
 ## 6. Roadmap
 
-- [x] Interpretable hedonic layer: OLS on log rent (HC1 SE, 95% CI) gives implicit prices per attribute (`/api/hedonic`). Still open: SHAP for the Gradient Boosting model
-- [ ] Building/project entity resolution from listing titles (the biggest missing feature)
+- [x] Interpretable hedonic layer: OLS on log rent (HC1 SE, 95% CI) gives implicit prices per attribute (`/api/hedonic`)
+- [x] Building/project entity resolution from listing titles: registry-driven matcher (`src/entity_resolution.py`, 173 projects in `data/property_registry.json`). Conservative: a listing resolves only on an exact alias or a distinctive-token match in the title/URL; anything ambiguous stays `Unresolved`. Not yet wired into the CSV/API
+- [ ] SHAP for the Gradient Boosting model (the OLS layer already gives implicit prices)
 - [ ] Wider validation: more sources, repeated scrapes over time, price trends
-- [ ] Cleaner dependency list and CORS hardening
+- [x] Cleaner dependency list (`requirements.txt` lists `requests` and `beautifulsoup4`, which were imported but missing) and CORS hardening (same-origin by default)
 
 ## Author
 

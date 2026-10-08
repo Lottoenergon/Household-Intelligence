@@ -4,11 +4,14 @@ uvicorn>=0.30.0
 pydantic>=2.8.0
 python-multipart>=0.0.9
 
+# Scraping (src/ingestion.py)
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+
 # Data Processing & Analytics
 pandas>=2.2.0
 numpy>=2.0.0
 
-# Econometric Valuation & ML
+# Econometric Valuation & ML (scipy comes in transitively via scikit-learn)
 scikit-learn>=1.5.0
-scipy>=1.13.0
 joblib>=1.4.0

@@ -2,6 +2,19 @@
 
 All notable changes to this project. The v0.3 work was a self-audit: I re-checked my own claims against the data, found problems, and fixed them. The problems are listed on purpose.
 
+## [Unreleased]
+
+### Added
+- `data/property_registry.json`: 173 building projects with curated aliases, exported from the previously hardcoded registry in `scripts/clean_listing_titles.py`.
+- `src/entity_resolution.py`: conservative `resolve()` — matches only on the listing title/URL (descriptions mention nearby landmarks and caused false merges); anything ambiguous returns `Unresolved` with confidence 0. Not yet wired into the CSV/API.
+- `tests/test_entity_resolution.py`: 8 tests, each encoding a real false-merge hit during development (47 tests total, all green).
+
+### Fixed
+- `requirements.txt`: added `requests` and `beautifulsoup4` (imported by `src/ingestion.py` but missing); dropped the direct `scipy` pin (comes in transitively via scikit-learn).
+
+### Changed
+- README roadmap: entity resolution marked done (matcher), CORS hardening and dependency cleanup marked done; SHAP remains the open modelling item.
+
 ## [0.3.0] - 2026-10-04: audit and fixes (previous version: v0.2-alpha)
 
 ### Step 1: geo cleaning
