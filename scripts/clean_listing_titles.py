@@ -18,199 +18,10 @@ CSV_PATH = os.path.join(BASE_DIR, "data", "processed", "jabodetabek_rental_evalu
 DB_PATH = os.path.join(BASE_DIR, "data", "processed", "rental_intelligence.db")
 REPORT_PATH = os.path.join(BASE_DIR, "data", "processed", "title_cleanup_report.md")
 
-# Comprehensive Canonical Property Registry for Greater Jakarta (Jabodetabek)
-# Ordered by specificity so longer/more specific names match first
-PROJECT_REGISTRY = [
-    # Jakarta Selatan
-    ("Pondok Indah Residences", ["pondok indah residence", "pondok indah residences", "pir tower", "pir 1", "pir 2", "pir 3"]),
-    ("Pondok Indah Golf Apartment", ["pondok indah golf", "golf view apartment for lease near jis"]),
-    ("Casa Grande Residence", ["casa grande residence", "casagrande residence", "casa grande", "casagrande"]),
-    ("Anandamaya Residence", ["anandamaya residence", "anandamaya"]),
-    ("Denpasar Residence", ["denpasar residence"]),
-    ("District 8 SCBD", ["district 8 scbd", "district 8", "district8"]),
-    ("Residence 8 Senopati", ["residence 8 senopati", "residence 8", "residence8"]),
-    ("Essence Darmawangsa", ["essence darmawangsa", "essence dharmawangsa"]),
-    ("Kemang Village", ["kemang village"]),
-    ("The Mansion Kemang", ["the mansion kemang", "mansion kemang"]),
-    ("South Hills", ["south hills", "south hill"]),
-    ("Capital Residence", ["capital residence"]),
-    ("Ambassade Residence", ["ambassade residence", "ambasade residence", "ambassade", "ambasade"]),
-    ("Permata Hijau Suites", ["permata hijau suites", "permata hijau suite"]),
-    ("Permata Hijau Residence", ["permata hijau residence", "permata hijau residences"]),
-    ("Gandaria Heights", ["gandaria height", "gandaria heights"]),
-    ("Setiabudi Skygarden", ["setiabudi skygarden", "setiabudi sky garden", "sky garden"]),
-    ("Southgate Residence", ["southgate", "south gate"]),
-    ("Branz Simatupang", ["branz simatupang"]),
-    ("Branz Mega Kuningan", ["branz mega kuningan"]),
-    ("The Newton 1", ["the newton 1", "newton 1"]),
-    ("The Newton 2", ["the newton 2", "newton 2"]),
-    ("The Newton", ["the newton", "newton"]),
-    ("Apple 1 Condovilla", ["apple 1 condovilla", "apple condovilla"]),
-    ("FX Residence", ["fx residence"]),
-    ("Savyavasa", ["savyavasa"]),
-    ("La Vie Suites", ["la vie suite", "la vie suites"]),
-    ("L'Avenue", ["l'avenue", "lavenue"]),
-    ("Senopati Suites", ["senopati suites", "senopati suite"]),
-    ("Tamansari Semanggi", ["tamansari semanggi"]),
-    ("Kalibata City", ["kalibata city", "kalibata"]),
-    ("Woodland Park", ["woodland park"]),
-    ("Nifarro Park", ["nifarro park"]),
-    ("Signature Park Grande", ["signature park grande"]),
-    ("Taman Rasuna", ["taman rasuna", "rasuna"]),
-    ("The Bellezza", ["belleza", "the belleza"]),
-    ("Botanica", ["botanica"]),
-    ("1Park Residences", ["1park residence", "1 park residence", "1park residences", "1 park avenue"]),
-    ("Kuningan City", ["kuningan city"]),
+import sys
+sys.path.insert(0, os.path.join(BASE_DIR, "src"))
+import entity_resolution  # registry-driven, conservative (data/property_registry.json)
 
-    # Jakarta Pusat
-    ("The Stature Residences", ["the stature residences", "the stature", "stature residences", "stature", "[menteng] 2br"]),
-    ("Menteng Park", ["menteng park"]),
-    ("57 Promenade", ["57 promenade", "fifty seven promenade"]),
-    ("Sahid Sudirman Residence", ["sahid sudirman residence", "sahid sudirman"]),
-    ("Kempinski Private Residences", ["kempinski residence", "kempinski residences", "kempinski"]),
-    ("Sudirman Hill", ["sudirman hill", "sudirman hills"]),
-    ("Sudirman Park", ["sudirman park", "a comfortable and stylish urban residence in central jakarta"]),
-    ("Citylofts Sudirman", ["citylofts sudirman", "city loft sudirman", "cityloft sudirman", "citylofts"]),
-    ("Royale Springhill", ["royale springhill", "springhill royale", "the springhill"]),
-    ("The Mansion Kemayoran", ["the mansion jasmine", "the mansion bougenville", "the mansion kemayoran", "mansion kemayoran", "mansion bougenvillel"]),
-    ("Menara Jakarta", ["menara jakarta"]),
-    ("Capitol Park Residence", ["capitol park residence", "capitol park"]),
-    ("Salemba Residence", ["salemba residence"]),
-    ("Mediterania Boulevard", ["mediterania boulevard"]),
-    ("Mediterania Marina", ["mediterania marina"]),
-    ("Green Pramuka City", ["green pramuka city", "green pramuka"]),
-    ("Pavilion Sudirman", ["pavilion sudirman"]),
-    ("Thamrin Residences", ["thamrin residence", "thamrin residences"]),
-    ("Thamrin Executive", ["thamrin executive"]),
-    ("Cosmo Terrace", ["cosmo terrace"]),
-
-    # Jakarta Barat
-    ("Puri Mansion", ["puri mansion"]),
-    ("Puri Orchard", ["puri orchard"]),
-    ("Puri Park View", ["puri park view"]),
-    ("St. Moritz Residences", ["st moritz", "st. moritz", "saint moritz"]),
-    ("The Windsor", ["the windsor", "windsor"]),
-    ("Mediterania Garden Residences 2", ["mediterania garden residences 2", "mediterania garden 2", "mediterania 2", "medit 2"]),
-    ("Mediterania Garden Residences 1", ["mediterania garden residences 1", "mediterania garden 1", "mediterania 1", "medit 1"]),
-    ("Royal Mediterania Garden", ["royal mediterania garden", "royal mediterania"]),
-    ("Madison Park", ["madison park"]),
-    ("Grand Madison", ["grand madison"]),
-    ("Neo Soho", ["neo soho"]),
-    ("Condominium Taman Anggrek", ["taman anggrek condominium", "taman anggrek condominum", "condominium taman anggrek", "taman anggrek"]),
-    ("Green Sedayu", ["green sedayu", "taman palem"]),
-    ("Ciputra International", ["ciputrainternational", "ciputra international", "ciputra puri"]),
-    ("West Vista Puri", ["west vista", "the crest west vista"]),
-    ("Citra Living Kalideres", ["citra living"]),
-    ("Citra Lake Suites", ["citra lake suites"]),
-    ("Centro City Grogol", ["centro city"]),
-    ("Grand Tropic", ["grand tropic"]),
-    ("Green Royal Condo House", ["green royal condo house", "green royal"]),
-    ("Albatros Daan Mogot", ["albatros"]),
-    ("Westmark", ["westmark"]),
-    ("GP Plaza", ["gp plaza", "gpplaza"]),
-    ("Kedoya Elok", ["kedoya elok"]),
-
-    # Jakarta Utara
-    ("Tokyo Riverside PIK 2", ["tokyo riverside pik 2", "tokyo riverside", "tokyo pik 2", "tokyo riverside pik", "apartemen tokyo full"]),
-    ("Osaka Riverview PIK 2", ["osaka riverview pik 2", "osaka riverview", "osaka pik 2"]),
-    ("Gold Coast PIK", ["gold coast pik", "gold coast", "goldcoast"]),
-    ("Green Bay Pluit", ["green bay pluit", "greenbay pluit", "green bay", "greenbay"]),
-    ("Pluit Sea View", ["pluit sea view", "pluit seaview"]),
-    ("Regatta", ["regatta"]),
-    ("French Walk MOI", ["french walk", "frenchwalk", "lyon frenchwalk", "lyon garden"]),
-    ("City Home MOI", ["city home", "cityhome"]),
-    ("Gading Resort Residences", ["gading resort residence", "gading resort"]),
-    ("The Summit Residences", ["the summit residences", "the summit"]),
-    ("Menara Kelapa Gading", ["menara kelapa gading"]),
-    ("Sherwood Kelapa Gading", ["sherwood"]),
-    ("The Kensington", ["the kensington", "kensington"]),
-    ("Gading Nias", ["gading nias"]),
-    ("Sunter Park View", ["sunter park view"]),
-    ("Green Lake Sunter", ["green lake sunter", "green lake apt sunter"]),
-    ("Menara Marina Condominium", ["menara marina condominium", "menara marina"]),
-    ("Northland Ancol Residence", ["northland ancol residence", "northland ancol"]),
-    ("Ancol Mansion", ["ancol mansion"]),
-
-    # Jakarta Timur
-    ("Bassura City", ["bassura city", "bassura"]),
-    ("The Oak Tower", ["oak tower", "the oak tower"]),
-    ("Cleon Park JGC", ["cleon park", "cleon"]),
-    ("Callia Apartment", ["callia"]),
-    ("Tifolia Apartment", ["tifolia", "apart tifolia"]),
-    ("Sedayu City Suites", ["sedayu city suites", "sedayu city"]),
-    ("Patria Park Cawang", ["patria park"]),
-    ("MTH Square", ["mth square"]),
-    ("Sakura Garden City", ["sakura garden city"]),
-    ("Menteng Square", ["menteng square"]),
-    ("Sentra Timur Residence", ["sentra timur residence", "sentra timur"]),
-    ("Tamansari Hive", ["tamansari hive"]),
-
-    # Tangerang & Tangerang Selatan
-    ("The Branz BSD", ["the branz bsd", "branz bsd", "branz serpong"]),
-    ("Sky House BSD", ["sky house bsd", "skyhouse bsd"]),
-    ("Sky House Alam Sutera", ["sky house alam sutera", "sky house", "skyhouse"]),
-    ("The Lloyd Alam Sutera", ["the lloyd alam sutera", "the lloyd", "lloyd alam sutera", "lloyd"]),
-    ("Saumata", ["saumata"]),
-    ("Pacific Garden Campus Town", ["pacific garden", "pasific garden"]),
-    ("Midtown Residence Serpong", ["midtown residence", "m-town residence", "m town residence", "m-town signature", "m-town", "mtown"]),
-    ("Carstensz Residence", ["carstensz residence", "carstenz residence", "carstensz", "carstenz"]),
-    ("Urbantown Serpong", ["urbantown serpong", "urbantown"]),
-    ("Akasa Pure Living BSD", ["akasa pure living bsd", "akasa pure living", "akasa bsd", "akasa"]),
-    ("Treepark BSD", ["treepark bsd", "tree park bsd", "treepark"]),
-    ("Asatti BSD", ["asatti bsd", "asatti"]),
-    ("Marigold Nava Park", ["marigold nava park", "marigold navapark", "marigold"]),
-    ("Casa De Parco BSD", ["casa de parco"]),
-    ("B-Residence BSD", ["b residence", "b-residence"]),
-    ("Sky View BSD", ["sky view bsd", "sky view"]),
-    ("Paddington Heights", ["paddington height", "paddington heights", "paddington"]),
-    ("Scientia Residences", ["scientia residence", "scientia"]),
-    ("Brooklyn Alam Sutera", ["brooklyn studio alam sutera", "brooklyn alam sutera", "apt brooklyn"]),
-    ("Elevee Alam Sutera", ["elevee alam sutera", "elevee"]),
-    ("Silkwood Residences", ["silkwood residences", "silkwood"]),
-    ("Yukata Suites", ["yukata suites", "yukata"]),
-    ("Springwood Residence", ["springwood residence", "springwood"]),
-    ("Embarcadero Bintaro", ["embarcadero bintaro", "embarcadero"]),
-    ("Bintaro Icon", ["bintaro icon"]),
-    ("Bintaro Plaza Residences", ["bintaro plaza residences", "bintaro plaza"]),
-    ("The Breeze Bintaro", ["breeze bintaro", "apartemen breeze"]),
-    ("U Residence Karawaci", ["u residence", "u residences", "bizloft u residence"]),
-
-    # Depok
-    ("Samesta Mahata Margonda", ["samesta mahata margonda", "mahata margonda"]),
-    ("Evenciio Margonda", ["evenciio margonda", "evenciio"]),
-    ("Taman Melati Margonda", ["taman melati margonda", "taman melati"]),
-    ("Margonda Residence", ["margonda residence", "mares"]),
-    ("Park View Depok", ["park view depok", "park view"]),
-    ("Green Lake View Depok", ["green lake view depok", "green lake view", "green lakeview depok", "green lakeview"]),
-    ("Cinere Resort", ["cinere resort"]),
-    ("Cinere Bellevue", ["cinere bellevue"]),
-    ("Saladin Mansion", ["saladin mansion", "saladin"]),
-    ("Podomoro Golf View", ["podomoro golf view", "podomoro golf", "podomoro cimanggis"]),
-
-    # Bekasi
-    ("The Springlake View", ["the springlake view", "springlake view"]),
-    ("The Springlake Summarecon", ["the springlake summarecon", "the springlake", "springlake summarecon", "springlake", "spring lake"]),
-    ("Primrose Condovilla", ["primrose condovilla", "primrose"]),
-    ("Pakuwon Residence Bekasi", ["pakuwon residence bekasi", "pakuwon residence", "pakuwon"]),
-    ("Grand Dhika City", ["grand dhika city", "grand dhika"]),
-    ("Grand Kamala Lagoon", ["grand kamala lagoon", "kamala lagoon"]),
-    ("Grand Icon Caman", ["grand icon caman", "grand icon"]),
-    ("Vasanta Innopark Cibitung", ["vasanta innopark", "vasanta-cibitung", "vasanta cibitung", "vasanta"]),
-    ("Grande Valore Jababeka", ["grande valore"]),
-    ("Sayana Harapan Indah", ["sayana"]),
-    ("Trivium Terrace Cikarang", ["trivium terrace", "trivium north", "trivium"]),
-    ("Orange County Cikarang", ["orange country", "orange county"]),
-    ("Chadstone Cikarang", ["chadstone cikarang", "chadstone"]),
-    ("Meikarta Cikarang", ["meikarta"]),
-    ("Mutiara Bekasi", ["mutiara bekasi"]),
-
-    # Bogor
-    ("Saffron Noble Sentul City", ["saffron noble", "saffron sentul", "saffron", "safron"]),
-    ("Sentul Tower Apartment", ["sentul tower", "sta sentul tower", "sentu tower"]),
-    ("Transpark Cibubur", ["transpark cibubur", "trans studio cibubur"]),
-    ("Bogor Icon", ["bogor icon"]),
-    ("Grand Center Point", ["grand center point"])
-]
 
 def extract_special_details(raw_title, url):
     """
@@ -287,54 +98,11 @@ def build_editorial_title(row):
     is_ff = bool(row['is_full_furnished'])
     is_sf = bool(row['is_semi_furnished'])
 
-    # Full search haystack
-    context = f"{raw_title} {url} {desc}".lower()
-
-    # 1. Match Canonical Property Project
-    matched_project = None
-    for canonical_name, aliases in PROJECT_REGISTRY:
-        for alias in aliases:
-            if alias in context:
-                matched_project = canonical_name
-                break
-        if matched_project:
-            break
-
-    # Fallback if not directly matched in registry
-    if not matched_project:
-        # Check subdistrict specific fallbacks
-        if "kemayoran" in context:
-            matched_project = "The Mansion Kemayoran"
-        elif "sentul city" in context or "sentul" in context:
-            matched_project = "Sentul City Residences"
-        elif "karawaci" in context:
-            matched_project = "U Residence Karawaci"
-        elif "scbd" in context:
-            matched_project = "SCBD Executive Suites"
-        elif "senopati" in context:
-            matched_project = "Senopati Residence"
-        elif "kuningan" in context:
-            matched_project = "Kuningan Premier Suites"
-        elif "tebet" in context:
-            matched_project = "Tebet Urban Residences"
-        elif "puri" in context:
-            matched_project = "Puri Indah Residences"
-        elif "gading serpong" in context:
-            matched_project = "Gading Serpong Residences"
-        elif "bsd" in context:
-            matched_project = "BSD City Residences"
-        elif "bintaro" in context:
-            matched_project = "Bintaro Jaya Residences"
-        elif "bekasi" in context:
-            matched_project = "Grand Bekasi Residences"
-        elif "depok" in context or "margonda" in context:
-            matched_project = "Margonda Residences"
-        else:
-            matched_project = f"Apartemen {subdistrict}"
-
-    # 2. Extract special identifiers (Tower, View, Feature)
+    # 1+2. Canonical building via the conservative resolver (title + url only).
+    #      Never invent a name: unresolved listings are labelled honestly.
+    res = entity_resolution.resolve(raw_title, url)
+    matched_project = res["name"] if res["project_id"] else f"Unresolved • {subdistrict}"
     special_details = extract_special_details(raw_title, url)
-    # Remove any detail if project already contains it
     clean_details = [d for d in special_details if d.lower() not in matched_project.lower()]
     detail_suffix = f" {' '.join(clean_details)}" if clean_details else ""
 
@@ -385,12 +153,18 @@ def run_cleanup():
         print("Backed up original titles to 'raw_title' column.")
 
     # Apply algorithmic transformation
-    cleaned_titles = []
+    cleaned_titles, canonicals, confs = [], [], []
     for idx, row in df.iterrows():
         c = build_editorial_title(row)
         cleaned_titles.append(c)
+        raw = str(row["raw_title"] if pd.notna(row["raw_title"]) else row["title"])
+        res = entity_resolution.resolve(raw, str(row["url"]))
+        canonicals.append(res["name"])  # None when unresolved (never a made-up name)
+        confs.append(res["confidence"])
 
     df["title"] = cleaned_titles
+    df["canonical_apartment"] = canonicals
+    df["resolution_confidence"] = confs
 
     # Save to CSV
     df.to_csv(CSV_PATH, index=False, encoding="utf-8")
@@ -407,16 +181,17 @@ def run_cleanup():
             # Add raw_title column to db if not exists
             cursor.execute("PRAGMA table_info(fact_rental_listings);")
             cols = [info[1] for info in cursor.fetchall()]
-            if "raw_title" not in cols:
-                try:
-                    cursor.execute("ALTER TABLE fact_rental_listings ADD COLUMN raw_title TEXT;")
-                except Exception as e:
-                    pass
+            for col, typ in (("raw_title", "TEXT"), ("canonical_apartment", "TEXT"), ("resolution_confidence", "TEXT")):
+                if col not in cols:
+                    try:
+                        cursor.execute(f"ALTER TABLE fact_rental_listings ADD COLUMN {col} {typ};")
+                    except Exception:
+                        pass
 
             for idx, row in df.iterrows():
                 cursor.execute(
-                    "UPDATE fact_rental_listings SET title = ?, raw_title = ? WHERE listing_id = ?;",
-                    (row["title"], row["raw_title"], row["listing_id"])
+                    "UPDATE fact_rental_listings SET title = ?, raw_title = ?, canonical_apartment = ?, resolution_confidence = ? WHERE listing_id = ?;",
+                    (row["title"], row["raw_title"], row["canonical_apartment"], row["resolution_confidence"], row["listing_id"])
                 )
             conn.commit()
             print(f"Updated {total_rows} listings in SQLite database {DB_PATH}.")

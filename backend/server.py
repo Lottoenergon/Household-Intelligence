@@ -81,6 +81,11 @@ def load_dataset():
     df["discount_pct"] = df["discount_pct"].round(1)
     df["residual_idr"] = df["residual_idr"].round(0)
     df["deal_score_z"] = df["deal_score_z"].round(2)
+    # Kolom resolver boleh null (unresolved = tidak ada nama karangan).
+    # NaN -> None supaya JSON response valid.
+    for col in df.columns:
+        if not pd.api.types.is_numeric_dtype(df[col]):
+            df[col] = df[col].astype(object).where(df[col].notna(), None)
     return df
 
 df = load_dataset()
