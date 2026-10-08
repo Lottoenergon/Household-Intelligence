@@ -541,6 +541,16 @@ def simulate_rent(req: SimulationRequest):
     }
 
 HEDONIC_PATH = os.path.join(BASE_DIR, "data", "processed", "hedonic_implicit_prices.json")
+SHAP_PATH = os.path.join(BASE_DIR, "data", "processed", "shap_gb_summary.json")
+
+
+@app.api_route("/api/shap", methods=["GET", "HEAD"])
+def get_shap():
+    """SHAP untuk model GB (read-only; jalankan `python src/shap_gb.py` untuk regenerate)."""
+    if not os.path.exists(SHAP_PATH):
+        raise HTTPException(status_code=503, detail="shap_gb_summary.json belum ada; jalankan `python src/shap_gb.py`.")
+    with open(SHAP_PATH, encoding="utf-8") as f:
+        return json.load(f)
 
 
 @app.api_route("/api/hedonic", methods=["GET", "HEAD"])

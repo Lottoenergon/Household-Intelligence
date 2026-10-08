@@ -40,3 +40,13 @@ def test_summary_artifact_present_and_sane():
     assert gi and gi[0]["feature"] == "log_floor_size"
     shares = sum(g["share_pct"] for g in gi)
     assert 99.0 <= shares <= 101.0
+
+
+def test_api_shap_endpoint_serves_summary():
+    from fastapi.testclient import TestClient
+    from backend.server import app
+    if not os.path.exists(SUMMARY_PATH):
+        pytest.skip("jalankan `python src/shap_gb.py` dulu")
+    resp = TestClient(app).get("/api/shap")
+    assert resp.status_code == 200
+    assert resp.json()["global_importance"][0]["feature"] == "log_floor_size"
