@@ -18,13 +18,9 @@ An end-to-end analytics project: scrape apartment **rental** listings across Gre
 
 ## 1. Results (all numbers generated from the pipeline output)
 
-| | |
-|---|---|
-| Listings scraped → analysed | 800 → **728** (4 URL duplicates, 6 sale ads / invalid prices, 59 cross-broker duplicates removed) |
-| Coverage | 10 cities, 100 subdistricts, apartments for rent only |
-| Median asking rent / median rent per m² | Rp 6.0M per month / Rp 126k per m² |
-| Price premium, core (<7 km from Sudirman) vs outer ring (15–28 km) | +63.0% (median rent per m²) |
-| Full-furnished premium | +11.9% raw median; +13.9% model-adjusted (controls for size, location, amenities) |
+I scraped **800** rental listings and kept **728** after cleaning: 4 duplicate URLs, 6 sale ads or invalid prices, and 59 cross-broker duplicates were removed. The final set covers 10 cities and 100 subdistricts of apartments for rent. The median asking rent is Rp 6.0M per month (Rp 126k per m²).
+
+Two patterns stand out. Apartments within 7 km of Sudirman cost about **+63.0%** more per m² than ones 15–28 km out, and fully furnished units ask **+11.9%** more in raw medians. After controlling for size, location and amenities the gap is **+13.9%** — furnishing pays for itself roughly as much as the raw numbers suggest.
 
 ### Model accuracy (out-of-fold, never evaluated on training rows)
 

@@ -19,3 +19,10 @@ Thumbs.db
 temp/
 logs/
 scratch/
+
+# Regenerable pipeline artifacts (rebuilt by run_pipeline.py); runtime-needed ones stay tracked
+data/raw/
+data/processed/jabodetabek_rental_cleaned.csv
+data/processed/rental_intelligence.db
+data/processed/live_tunnel_url.txt
+data/processed/tunnel.log
