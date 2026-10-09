@@ -43,27 +43,36 @@ def merge_staged_sources(data_raw_dir: str, sources: List[str]) -> str:
     seen_urls = set()
     found = False
     for src in sources:
+        # Konvensi nama bergeser antar versi; pakai file PERTAMA yang ada saja per source
+        # (raw_mamikos_staged.json sudah hasil mapping siap-pakai, jangan ditimpa scrap_v3 mentah).
         candidates = [
             os.path.join(data_raw_dir, f"raw_{src}_staged.json"),
             os.path.join(data_raw_dir, f"scrap_v3_{src}_raw.json"),
             os.path.join(data_raw_dir, f"scrap_v2_{src}_raw.json"),
         ]
         path = next((p for p in candidates if os.path.exists(p)), None)
-        if path is None:
-            logger.warning("Staged file missing for source '%s' (dicoba: %s)", src, candidates)
+        # v1 legacy = batch rumah123 lama (800 rec, tanpa field source).
+        if src == "rumah123":
+            v1 = os.path.join(data_raw_dir, "scrap_v1_raw.json")
+            paths = ([path] if path else []) + ([v1] if os.path.exists(v1) else [])
+        else:
+            paths = [path] if path else []
+        if not paths:
+            logger.warning("Staged files missing for source '%s' (dicoba: %s)", src, candidates)
             continue
-        found = True
-        with open(path, encoding="utf-8") as f:
-            records = json.load(f)
-        logger.info("Merging source '%s' from %s (%d records)", src, os.path.basename(path), len(records))
-        for r in records:
-            url = r.get("url")
-            if url and url not in seen_urls:
-                seen_urls.add(url)
-                merged.append(r)
-            elif not url:
-                # keep records without URL (should be rare)
-                merged.append(r)
+        for p in paths:
+            found = True
+            with open(p, encoding="utf-8") as f:
+                records = json.load(f)
+            logger.info("Merging source '%s' from %s (%d records)", src, os.path.basename(p), len(records))
+            for r in records:
+                url = r.get("url") or r.get("share_url")
+                if url and url not in seen_urls:
+                    seen_urls.add(url)
+                    merged.append(r)
+                elif not url:
+                    # keep records without URL (should be rare)
+                    merged.append(r)
     if not found or not merged:
         raise ValueError(
             "Merge dibatalkan: tidak ada file sumber yang ditemukan / 0 record. "

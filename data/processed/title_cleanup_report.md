@@ -1,6 +1,6 @@
 # Household Intelligence • Listing Title Refinement Audit Report
 **Date:** 2026-10-06  
-**Total Listings Processed:** 2822 listings across 10 Greater Jakarta jurisdictions  
+**Total Listings Processed:** 3371 listings across 10 Greater Jakarta jurisdictions  
 **Target Architecture:** Editorial Real Estate comp standard (`<Building Name> [<Detail>] • <Layout> <Furnishing> (<Size> m²)`)
 
 ## Sample Comparison Before & After Refinement (Across All Cities)
