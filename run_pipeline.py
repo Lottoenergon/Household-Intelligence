@@ -45,6 +45,7 @@ def merge_staged_sources(data_raw_dir: str, sources: List[str]) -> str:
     for src in sources:
         candidates = [
             os.path.join(data_raw_dir, f"raw_{src}_staged.json"),
+            os.path.join(data_raw_dir, f"scrap_v3_{src}_raw.json"),
             os.path.join(data_raw_dir, f"scrap_v2_{src}_raw.json"),
         ]
         path = next((p for p in candidates if os.path.exists(p)), None)
@@ -78,7 +79,7 @@ def merge_staged_sources(data_raw_dir: str, sources: List[str]) -> str:
 def run_pipeline():
     parser = argparse.ArgumentParser()
     parser.add_argument("--scrape", action="store_true", help="Force re-scrape")
-    parser.add_argument("--sources", nargs="+", choices=["rumah123", "99co"],
+    parser.add_argument("--sources", nargs="+", choices=["rumah123", "99co", "mamikos"],
                         help="Source(s) to scrape (each writes raw_<source>_staged.json)")
     parser.add_argument("--pages", type=int, default=8, help="Pages per region")
     parser.add_argument("--merge-only", action="store_true", help="Only merge existing staged files")

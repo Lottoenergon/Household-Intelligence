@@ -1,12 +1,12 @@
 {
-  "n_units": 2321,
+  "n_units": 2822,
   "n_cities": 10,
-  "median_rent_idr": 6000000.0,
-  "median_price_per_m2_idr": 129056.04719764012,
-  "furnished_share_pct": 34.9,
-  "tier1_vs_tier3_premium_pct": 68.4,
-  "furnishing_premium_raw_pct": 11.0,
-  "furnishing_premium_adjusted_pct": 9.9,
+  "median_rent_idr": 5500000.0,
+  "median_price_per_m2_idr": 132113.82113821138,
+  "furnished_share_pct": 48.0,
+  "tier1_vs_tier3_premium_pct": 68.0,
+  "furnishing_premium_raw_pct": 3.2,
+  "furnishing_premium_adjusted_pct": 1.9,
   "deal_thresholds": {
     "scale": "z_residual_log",
     "good_z": -0.75,
@@ -22,120 +22,121 @@
     }
   },
   "deals": {
-    "below_estimate_total": 378,
-    "below_estimate_share_pct": 16.3,
-    "deep": 102,
-    "good": 276,
-    "above_estimate_total": 351,
-    "above_estimate_share_pct": 15.1,
-    "median_discount_pct_of_flagged": 34.7
+    "below_estimate_total": 464,
+    "below_estimate_share_pct": 16.4,
+    "deep": 128,
+    "good": 336,
+    "above_estimate_total": 463,
+    "above_estimate_share_pct": 16.4,
+    "median_discount_pct_of_flagged": 35.5
   },
   "geo": {
-    "imputed_share_pct": 8.7,
+    "imputed_share_pct": 43.1,
     "imputed_share_pct_by_city": {
-      "Bekasi": 1.3,
-      "Bogor": 2.7,
-      "Depok": 5.8,
-      "Jakarta Barat": 7.5,
-      "Jakarta Pusat": 2.3,
-      "Jakarta Selatan": 2.0,
-      "Jakarta Timur": 1.4,
-      "Jakarta Utara": 2.1,
-      "Tangerang": 0.4,
-      "Tangerang Selatan": 62.9
+      "Bekasi": 51.8,
+      "Bogor": 9.3,
+      "Depok": 50.8,
+      "Jakarta Barat": 16.8,
+      "Jakarta Pusat": 49.6,
+      "Jakarta Selatan": 52.4,
+      "Jakarta Timur": 33.1,
+      "Jakarta Utara": 37.9,
+      "Tangerang": 37.6,
+      "Tangerang Selatan": 66.0
     }
   },
   "by_city": [
     {
       "target_city": "Jakarta Selatan",
-      "n": 255,
-      "median_rent_idr": 23000000.0,
-      "median_price_per_m2_idr": 227586.0
+      "n": 382,
+      "median_rent_idr": 20416667.0,
+      "median_price_per_m2_idr": 220882.0
     },
     {
       "target_city": "Jakarta Pusat",
-      "n": 257,
-      "median_rent_idr": 15000000.0,
-      "median_price_per_m2_idr": 225000.0
+      "n": 375,
+      "median_rent_idr": 12000000.0,
+      "median_price_per_m2_idr": 192308.0
     },
     {
       "target_city": "Bogor",
-      "n": 188,
-      "median_rent_idr": 4583333.0,
-      "median_price_per_m2_idr": 155364.0
+      "n": 150,
+      "median_rent_idr": 4500000.0,
+      "median_price_per_m2_idr": 147682.0
     },
     {
       "target_city": "Tangerang Selatan",
-      "n": 229,
-      "median_rent_idr": 6500000.0,
-      "median_price_per_m2_idr": 130208.0
+      "n": 191,
+      "median_rent_idr": 6250000.0,
+      "median_price_per_m2_idr": 130719.0
     },
     {
       "target_city": "Jakarta Barat",
-      "n": 252,
-      "median_rent_idr": 6208333.0,
-      "median_price_per_m2_idr": 120281.0
+      "n": 203,
+      "median_rent_idr": 6500000.0,
+      "median_price_per_m2_idr": 123106.0
     },
     {
       "target_city": "Depok",
-      "n": 206,
-      "median_rent_idr": 3333333.0,
-      "median_price_per_m2_idr": 115563.0
+      "n": 327,
+      "median_rent_idr": 3100000.0,
+      "median_price_per_m2_idr": 116000.0
     },
     {
       "target_city": "Jakarta Timur",
-      "n": 214,
+      "n": 236,
       "median_rent_idr": 4166667.0,
-      "median_price_per_m2_idr": 112407.0
+      "median_price_per_m2_idr": 113104.0
     },
     {
       "target_city": "Bekasi",
-      "n": 230,
-      "median_rent_idr": 4000000.0,
-      "median_price_per_m2_idr": 106432.0
+      "n": 367,
+      "median_rent_idr": 3500000.0,
+      "median_price_per_m2_idr": 111905.0
     },
     {
       "target_city": "Tangerang",
-      "n": 254,
-      "median_rent_idr": 4583333.0,
-      "median_price_per_m2_idr": 106046.0
+      "n": 311,
+      "median_rent_idr": 3750000.0,
+      "median_price_per_m2_idr": 107323.0
     },
     {
       "target_city": "Jakarta Utara",
-      "n": 236,
-      "median_rent_idr": 6250000.0,
-      "median_price_per_m2_idr": 99354.0
+      "n": 280,
+      "median_rent_idr": 5000000.0,
+      "median_price_per_m2_idr": 107143.0
     }
   ],
   "audit": {
-    "raw_records": 2787,
-    "after_url_dedup": 2787,
-    "after_price_validation": 2765,
+    "raw_records": 3729,
+    "after_url_dedup": 3729,
+    "after_price_validation": 3709,
     "price_period_counts": {
-      "yearly": 1951,
-      "monthly": 804,
-      "daily": 10
+      "monthly": 2179,
+      "yearly": 1522,
+      "daily": 8
     },
-    "content_duplicates_removed": 423,
-    "after_content_dedup": 2342,
+    "content_duplicates_removed": 789,
+    "after_content_dedup": 2920,
     "floor_size_missing_imputed": 2,
-    "after_floor_bounds": 2321,
+    "after_floor_bounds": 2822,
     "geo_source_counts": {
-      "listing": 2118,
-      "subdistrict_centroid": 203
+      "listing": 1605,
+      "subdistrict_centroid": 931,
+      "city_centroid": 286
     },
-    "final_records": 2321,
+    "final_records": 2822,
     "geo_imputed_share_by_city": {
-      "Bekasi": 0.013,
-      "Bogor": 0.0266,
-      "Depok": 0.0583,
-      "Jakarta Barat": 0.0754,
-      "Jakarta Pusat": 0.0233,
-      "Jakarta Selatan": 0.0196,
-      "Jakarta Timur": 0.014,
-      "Jakarta Utara": 0.0212,
-      "Tangerang": 0.0039,
-      "Tangerang Selatan": 0.6288
+      "Bekasi": 0.5177,
+      "Bogor": 0.0933,
+      "Depok": 0.5076,
+      "Jakarta Barat": 0.1675,
+      "Jakarta Pusat": 0.496,
+      "Jakarta Selatan": 0.5236,
+      "Jakarta Timur": 0.3305,
+      "Jakarta Utara": 0.3786,
+      "Tangerang": 0.3762,
+      "Tangerang Selatan": 0.6597
     }
   }
 }

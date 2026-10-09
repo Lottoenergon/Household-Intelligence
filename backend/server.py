@@ -362,7 +362,12 @@ def _furnishing_premium_full() -> float:
     return float(pct) / 100.0 if isinstance(pct, (int, float)) else 0.139
 
 
-FURNISHING_PREMIUM_SEMI = 0.060        # asumsi konservatif: separuh dari premium full
+def _furnishing_premium_semi() -> float:
+    """Semi premium = setengah dari full premium aktual (dinamis, bukan hardcoded)."""
+    return _furnishing_premium_full() / 2.0
+
+
+FURNISHING_PREMIUM_SEMI = 0.060        # LEGACY fallback; kode sekarang pakai _furnishing_premium_semi()
 BATHROOM_PREMIUM_PER_EXTRA = 0.035     # ensuite / kamar mandi tamu
 AMENITY_PREMIUMS = {                   # ceteris paribus: amenitas tidak pernah menurunkan sewa
     "has_pool": 0.03,
@@ -491,12 +496,12 @@ def simulate_rent(req: SimulationRequest):
             clamped_ratio = max(0.65, min(1.65, sub_ratio))
             base_fair = base_fair * (0.35 + 0.65 * clamped_ratio)
 
-    # 3. Furnishing condition multiplier (Full: dari telemetry pipeline, Semi: +6.0%, Unfurnished: 1.0x)
+    # 3. Furnishing condition multiplier (Full: dari telemetry pipeline, Semi: setengah full, Unfurnished: 1.0x)
     premium_full = _furnishing_premium_full()
     if req.is_full_furnished:
         furnishing_multiplier = 1.0 + premium_full
     elif req.is_semi_furnished:
-        furnishing_multiplier = 1.0 + FURNISHING_PREMIUM_SEMI
+        furnishing_multiplier = 1.0 + _furnishing_premium_semi()
     else:
         furnishing_multiplier = 1.000
 
