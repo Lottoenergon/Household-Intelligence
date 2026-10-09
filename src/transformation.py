@@ -184,27 +184,38 @@ def parse_normalized_price(raw_val: str) -> Tuple[float, str, bool]:
     return monthly_price, period, is_outlier
 
 
-def extract_amenity_features(title: str, desc: str) -> Dict[str, int]:
+def extract_amenity_features(title: str, desc: str, extra: str = "") -> Dict[str, int]:
     """
     NLP keyword extraction for apartment amenities from Indonesian property descriptions.
+    extra: additional text (e.g., top_facility from Mamikos) to boost signal for sources with thin descriptions.
     """
-    combined_text = f"{str(title).lower()} {str(desc).lower()}"
+    combined_text = f"{str(title).lower()} {str(desc).lower()} {str(extra).lower()}"
     
-    # 1. Furnishing status
+    # 1. Furnishing status (also check furnished_status field passed via extra)
     is_full_furnished = int(bool(re.search(r'\bfull(?:y)?\s*(?:furnished|furnish)|\bfff\b', combined_text)))
     is_semi_furnished = int(bool(re.search(r'\bsemi\s*(?:furnished|furnish)\b', combined_text)))
     is_unfurnished = int(bool(re.search(r'\bunfurnished|\bnon\s*furnish|\bkosongan?\b', combined_text)))
     
-    # 2. Specific Amenities
+    # 2. Specific Amenities - expanded for Mamikos top_facility values
+    # AC variants: "AC", "Air Conditioner", "air conditioner"
     has_ac = int(bool(re.search(r'\bac\b|air\s*conditioner', combined_text)))
+    # WiFi variants: "WiFi", "internet", "indihome", "biznet"
     has_wifi = int(bool(re.search(r'\bwifi\b|internet|indihome|biznet', combined_text)))
     has_water_heater = int(bool(re.search(r'water\s*heater|pemanas\s*air', combined_text)))
+    # Pool: "kolam renang", "swimming pool", "pool"
     has_pool = int(bool(re.search(r'kolam\s*renang|swimming\s*pool|\bpool\b', combined_text)))
+    # Gym: "gym", "fitness", "pusat kebugaran" - Mamikos doesn't have this explicitly
     has_gym = int(bool(re.search(r'\bgym\b|fitness|pusat\s*kebugaran', combined_text)))
+    # Balcony: "balcon", "balkon"
     has_balcony = int(bool(re.search(r'balcon|balkon', combined_text)))
+    # Kitchen: "kitchen set", "dapur", "kompor"
     has_kitchen = int(bool(re.search(r'kitchen\s*set|dapur|kompor', combined_text)))
+    # Transit: "mrt", "lrt", "krl", "stasiun", "transjakarta", "busway"
     near_transit = int(bool(re.search(r'\bmrt\b|\blrt\b|\bkrl\b|\bstasiun\b|\btransjakarta\b|\bbusway\b', combined_text)))
+    # Parking: "parkir", "parking"
     has_parking = int(bool(re.search(r'parkir|parking', combined_text)))
+    # Mamikos-specific from top_facility: "K. Mandi Dalam" = kamar mandi dalam (implied by bathroom count), 
+    # "Kloset Duduk" = toilet, "Akses 24 Jam" = 24h access, "Kasur" = bed (furnished signal)
 
     return {
         "is_full_furnished": is_full_furnished,
@@ -306,9 +317,25 @@ def clean_and_transform_pipeline(raw_json_path: str, output_dir: str = "data/pro
     df_valid["price_per_m2_idr"] = df_valid["price_monthly_idr"] / df_valid["floor_size_m2"]
 
     # 5. Extract NLP amenity vectors
+    # `extra` mengangkat sinyal dari field sumber yang tidak masuk title/description
+    # (Mamikos: top_facility, furnished_status, unit_type) supaya source dengan
+    # deskripsi tipis tetap punya vektor amenity yang tidak nol.
+    def _build_amenity_extra(row):
+        parts = []
+        for col in ("top_facility", "furnished_status", "unit_type", "area_label"):
+            val = row.get(col)
+            if isinstance(val, str) and val.strip():
+                parts.append(val)
+            elif isinstance(val, list):
+                parts.extend([str(v) for v in val if v])
+        return " ".join(parts)
+
     amenity_records = [
-        extract_amenity_features(t, d) 
-        for t, d in zip(df_valid["title"], df_valid["short_description"])
+        extract_amenity_features(t, d, _build_amenity_extra(row))
+        for (t, d), (_, row) in zip(
+            zip(df_valid["title"], df_valid["short_description"]),
+            df_valid.iterrows(),
+        )
     ]
     df_amenities = pd.DataFrame(amenity_records)
     for col in df_amenities.columns:

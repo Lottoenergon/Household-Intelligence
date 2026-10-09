@@ -19,32 +19,32 @@
         "median_ape_pct_std": 0.0679
       },
       "ridge": {
-        "r2": 0.6838,
-        "r2_std": 0.001,
-        "r2_log": 0.7627,
-        "r2_log_std": 0.0011,
-        "mae_idr": 3099039.792,
-        "mae_idr_std": 4961.77,
-        "rmse_idr": 6658107.4382,
-        "rmse_idr_std": 10512.0178,
-        "mape_pct": 32.5485,
-        "mape_pct_std": 0.0063,
-        "median_ape_pct": 22.5062,
-        "median_ape_pct_std": 0.09
+        "r2": 0.6821,
+        "r2_std": 0.0012,
+        "r2_log": 0.7643,
+        "r2_log_std": 0.0012,
+        "mae_idr": 3114878.943,
+        "mae_idr_std": 4682.2781,
+        "rmse_idr": 6676235.5158,
+        "rmse_idr_std": 12528.5092,
+        "mape_pct": 32.4931,
+        "mape_pct_std": 0.0069,
+        "median_ape_pct": 22.6991,
+        "median_ape_pct_std": 0.0978
       },
       "gb": {
-        "r2": 0.7683,
-        "r2_std": 0.0013,
-        "r2_log": 0.8169,
-        "r2_log_std": 0.001,
-        "mae_idr": 2520138.2315,
-        "mae_idr_std": 11887.0206,
-        "rmse_idr": 5699297.9292,
-        "rmse_idr_std": 15669.443,
-        "mape_pct": 27.3711,
-        "mape_pct_std": 0.0672,
-        "median_ape_pct": 18.7869,
-        "median_ape_pct_std": 0.1665
+        "r2": 0.7747,
+        "r2_std": 0.0002,
+        "r2_log": 0.8204,
+        "r2_log_std": 0.0008,
+        "mae_idr": 2493400.504,
+        "mae_idr_std": 6795.6048,
+        "rmse_idr": 5619990.0734,
+        "rmse_idr_std": 2103.0468,
+        "mape_pct": 27.1499,
+        "mape_pct_std": 0.0977,
+        "median_ape_pct": 18.6747,
+        "median_ape_pct_std": 0.0361
       }
     },
     "group_kfold_subdistrict": {
@@ -63,83 +63,83 @@
         "median_ape_pct_std": null
       },
       "ridge": {
-        "r2": 0.6689,
+        "r2": 0.6665,
         "r2_std": null,
-        "r2_log": 0.7455,
+        "r2_log": 0.7471,
         "r2_log_std": null,
-        "mae_idr": 3201443.1024,
+        "mae_idr": 3219891.9562,
         "mae_idr_std": null,
-        "rmse_idr": 6812754.8033,
+        "rmse_idr": 6837402.5828,
         "rmse_idr_std": null,
-        "mape_pct": 33.318,
+        "mape_pct": 33.1698,
         "mape_pct_std": null,
-        "median_ape_pct": 24.0753,
+        "median_ape_pct": 23.7667,
         "median_ape_pct_std": null
       },
       "gb": {
-        "r2": 0.6638,
+        "r2": 0.6856,
         "r2_std": null,
-        "r2_log": 0.7535,
+        "r2_log": 0.7669,
         "r2_log_std": null,
-        "mae_idr": 3177738.6393,
+        "mae_idr": 3054465.3701,
         "mae_idr_std": null,
-        "rmse_idr": 6865611.2397,
+        "rmse_idr": 6639419.015,
         "rmse_idr_std": null,
-        "mape_pct": 32.806,
+        "mape_pct": 31.253,
         "mape_pct_std": null,
-        "median_ape_pct": 23.4415,
+        "median_ape_pct": 22.5042,
         "median_ape_pct_std": null
       }
     }
   },
-  "train_in_sample_r2_DIAGNOSTIC_ONLY": 0.8237,
+  "train_in_sample_r2_DIAGNOSTIC_ONLY": 0.8269,
   "feature_importances": [
     {
       "feature": "log_floor_size",
-      "importance": 0.8048
+      "importance": 0.7975
     },
     {
       "feature": "distance_to_cbd_km",
-      "importance": 0.0823
+      "importance": 0.0844
     },
     {
       "feature": "distance_to_transit_km",
-      "importance": 0.0445
+      "importance": 0.0455
     },
     {
       "feature": "city_Jakarta Selatan",
-      "importance": 0.0192
+      "importance": 0.0194
     },
     {
       "feature": "bedrooms",
-      "importance": 0.0122
+      "importance": 0.0103
+    },
+    {
+      "feature": "has_ac",
+      "importance": 0.0082
     },
     {
       "feature": "city_Bogor",
-      "importance": 0.0051
+      "importance": 0.0049
     },
     {
       "feature": "city_Jakarta Barat",
-      "importance": 0.0047
-    },
-    {
-      "feature": "is_full_furnished",
-      "importance": 0.0042
+      "importance": 0.0045
     },
     {
       "feature": "is_semi_furnished",
-      "importance": 0.0042
+      "importance": 0.004
     },
     {
-      "feature": "city_Jakarta Utara",
-      "importance": 0.0024
+      "feature": "is_full_furnished",
+      "importance": 0.0032
     }
   ],
   "prediction_interval": {
     "level": 0.8,
-    "log_lower": -0.3902586030891797,
-    "log_upper": 0.3717636012595712,
-    "lower_factor": 0.6768818081361958,
-    "upper_factor": 1.4502900940142138
+    "log_lower": -0.3923470761563192,
+    "log_upper": 0.3709951989652504,
+    "lower_factor": 0.6754696338675221,
+    "upper_factor": 1.4491761158250525
   }
 }

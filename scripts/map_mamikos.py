@@ -83,6 +83,13 @@ def map_mamikos(raw_records: List[Dict]) -> List[Dict[str, Any]]:
         if not target_city:
             continue
             
+        # --- Extract amenity signals from Mamikos raw fields ---
+        top_fac = r.get('top_facility') or []
+        if isinstance(top_fac, list):
+            top_fac_str = " ".join([str(f).lower() for f in top_fac if f])
+        else:
+            top_fac_str = str(top_fac).lower()
+        
         rec = {
             "title": r.get('room-title', '').strip(),
             "url": r.get('share_url', '').strip(),
@@ -100,7 +107,12 @@ def map_mamikos(raw_records: List[Dict]) -> List[Dict[str, Any]]:
             "latitude": None,
             "longitude": None,
             "image_url": r.get('photo_url', {}).get('large', '') if isinstance(r.get('photo_url'), dict) else '',
-            "source": "mamikos"
+            "source": "mamikos",
+            # New amenity fields forwarded for NLP extraction
+            "top_facility": top_fac_str,
+            "furnished_status": r.get('furnished_status', ''),
+            "unit_type": r.get('unit_type', ''),
+            "area_label": r.get('area_label', ''),
         }
         out.append(rec)
     return out

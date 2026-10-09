@@ -6,7 +6,7 @@
   "furnished_share_pct": 46.7,
   "tier1_vs_tier3_premium_pct": 67.0,
   "furnishing_premium_raw_pct": 5.4,
-  "furnishing_premium_adjusted_pct": 3.7,
+  "furnishing_premium_adjusted_pct": 5.4,
   "deal_thresholds": {
     "scale": "z_residual_log",
     "good_z": -0.75,
@@ -22,13 +22,13 @@
     }
   },
   "deals": {
-    "below_estimate_total": 576,
+    "below_estimate_total": 575,
     "below_estimate_share_pct": 17.1,
-    "deep": 149,
-    "good": 427,
+    "deep": 154,
+    "good": 421,
     "above_estimate_total": 553,
     "above_estimate_share_pct": 16.4,
-    "median_discount_pct_of_flagged": 34.7
+    "median_discount_pct_of_flagged": 34.4
   },
   "geo": {
     "imputed_share_pct": 37.2,
