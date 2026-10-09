@@ -4,9 +4,9 @@
   "median_rent_idr": 5550000.0,
   "median_price_per_m2_idr": 130952.38095238096,
   "furnished_share_pct": 46.7,
-  "tier1_vs_tier3_premium_pct": 67.0,
+  "tier1_vs_tier3_premium_pct": 56.9,
   "furnishing_premium_raw_pct": 5.4,
-  "furnishing_premium_adjusted_pct": 5.4,
+  "furnishing_premium_adjusted_pct": 5.6,
   "deal_thresholds": {
     "scale": "z_residual_log",
     "good_z": -0.75,
@@ -22,27 +22,27 @@
     }
   },
   "deals": {
-    "below_estimate_total": 575,
-    "below_estimate_share_pct": 17.1,
-    "deep": 154,
-    "good": 421,
-    "above_estimate_total": 553,
-    "above_estimate_share_pct": 16.4,
-    "median_discount_pct_of_flagged": 34.4
+    "below_estimate_total": 552,
+    "below_estimate_share_pct": 16.4,
+    "deep": 140,
+    "good": 412,
+    "above_estimate_total": 516,
+    "above_estimate_share_pct": 15.3,
+    "median_discount_pct_of_flagged": 33.4
   },
   "geo": {
-    "imputed_share_pct": 37.2,
+    "imputed_share_pct": 19.0,
     "imputed_share_pct_by_city": {
-      "Bekasi": 45.6,
-      "Bogor": 7.6,
-      "Depok": 46.9,
-      "Jakarta Barat": 14.3,
-      "Jakarta Pusat": 41.6,
-      "Jakarta Selatan": 44.4,
-      "Jakarta Timur": 27.2,
-      "Jakarta Utara": 31.7,
-      "Tangerang": 31.6,
-      "Tangerang Selatan": 64.7
+      "Bekasi": 26.4,
+      "Bogor": 5.1,
+      "Depok": 19.2,
+      "Jakarta Barat": 9.9,
+      "Jakarta Pusat": 23.5,
+      "Jakarta Selatan": 8.4,
+      "Jakarta Timur": 14.8,
+      "Jakarta Utara": 13.0,
+      "Tangerang": 19.5,
+      "Tangerang Selatan": 51.4
     }
   },
   "by_city": [
@@ -121,22 +121,23 @@
     "floor_size_missing_imputed": 4,
     "after_floor_bounds": 3371,
     "geo_source_counts": {
-      "listing": 2118,
-      "subdistrict_centroid": 987,
-      "city_centroid": 266
+      "project_geocoded": 1427,
+      "listing": 1305,
+      "subdistrict_centroid": 594,
+      "city_centroid": 45
     },
     "final_records": 3371,
     "geo_imputed_share_by_city": {
-      "Bekasi": 0.4556,
-      "Bogor": 0.0758,
-      "Depok": 0.4685,
-      "Jakarta Barat": 0.1434,
-      "Jakarta Pusat": 0.4163,
-      "Jakarta Selatan": 0.4444,
-      "Jakarta Timur": 0.2724,
-      "Jakarta Utara": 0.3166,
-      "Tangerang": 0.3162,
-      "Tangerang Selatan": 0.6473
+      "Bekasi": 0.2638,
+      "Bogor": 0.0505,
+      "Depok": 0.1918,
+      "Jakarta Barat": 0.0993,
+      "Jakarta Pusat": 0.2349,
+      "Jakarta Selatan": 0.0844,
+      "Jakarta Timur": 0.1483,
+      "Jakarta Utara": 0.1302,
+      "Tangerang": 0.1946,
+      "Tangerang Selatan": 0.5145
     }
   }
 }

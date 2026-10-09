@@ -12,21 +12,22 @@
   "floor_size_missing_imputed": 4,
   "after_floor_bounds": 3371,
   "geo_source_counts": {
-    "listing": 2118,
-    "subdistrict_centroid": 987,
-    "city_centroid": 266
+    "project_geocoded": 1427,
+    "listing": 1305,
+    "subdistrict_centroid": 594,
+    "city_centroid": 45
   },
   "final_records": 3371,
   "geo_imputed_share_by_city": {
-    "Bekasi": 0.4556,
-    "Bogor": 0.0758,
-    "Depok": 0.4685,
-    "Jakarta Barat": 0.1434,
-    "Jakarta Pusat": 0.4163,
-    "Jakarta Selatan": 0.4444,
-    "Jakarta Timur": 0.2724,
-    "Jakarta Utara": 0.3166,
-    "Tangerang": 0.3162,
-    "Tangerang Selatan": 0.6473
+    "Bekasi": 0.2638,
+    "Bogor": 0.0505,
+    "Depok": 0.1918,
+    "Jakarta Barat": 0.0993,
+    "Jakarta Pusat": 0.2349,
+    "Jakarta Selatan": 0.0844,
+    "Jakarta Timur": 0.1483,
+    "Jakarta Utara": 0.1302,
+    "Tangerang": 0.1946,
+    "Tangerang Selatan": 0.5145
   }
 }

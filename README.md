@@ -10,7 +10,7 @@ An end-to-end analytics project: scrape apartment **rental** listings across Gre
 
 I scraped **4423** rental listings and kept **3371** after cleaning: 0 duplicate URLs, 23 sale ads or invalid prices, and 930 cross-broker duplicates were removed. The final set covers 10 cities and 164 subdistricts of apartments for rent. The median asking rent is Rp 5.5M per month (Rp 131k per m²).
 
-Two patterns stand out. Apartments within 7 km of Sudirman cost about **+67.0%** more per m² than ones 15–28 km out, and fully furnished units ask **+5.4%** more in raw medians. After controlling for size, location and amenities the gap is **+5.4%** — furnishing pays for itself roughly as much as the raw numbers suggest.
+Two patterns stand out. Apartments within 7 km of Sudirman cost about **+56.9%** more per m² than ones 15–28 km out, and fully furnished units ask **+5.4%** more in raw medians. After controlling for size, location and amenities the gap is **+5.6%** — furnishing pays for itself roughly as much as the raw numbers suggest.
 
 ### Model accuracy (out-of-fold, never evaluated on training rows)
 
@@ -18,27 +18,27 @@ Two patterns stand out. Apartments within 7 km of Sudirman cost about **+67.0%**
 |---|---|---|---|---|
 | **Known areas (5-fold CV x3 repeats)** | | | | |
 | Baseline: city median price/m² x size | 0.690 | Rp 3.15M | 34.0% | 22.9% |
-| Ridge regression | 0.682 | Rp 3.11M | 32.5% | 22.7% |
-| Gradient Boosting (final model) | 0.775 | Rp 2.49M | 27.1% | 18.7% |
+| Ridge regression | 0.686 | Rp 3.10M | 32.4% | 22.5% |
+| Gradient Boosting (final model) | 0.778 | Rp 2.41M | 26.6% | 17.8% |
 | **Unseen subdistricts (GroupKFold)** | | | | |
 | Baseline: city median price/m² x size | 0.675 | Rp 3.23M | 34.3% | 24.4% |
-| Ridge regression | 0.666 | Rp 3.22M | 33.2% | 23.8% |
-| Gradient Boosting (final model) | 0.686 | Rp 3.05M | 31.3% | 22.5% |
+| Ridge regression | 0.670 | Rp 3.21M | 33.2% | 23.5% |
+| Gradient Boosting (final model) | 0.748 | Rp 2.77M | 31.6% | 21.3% |
 
-* **Final model, known areas:** R² 0.775, typical error about 18.7% (median), mean error 27.1% (MAPE is inflated by cheap listings).
-* **80% empirical range:** the actual asking rent was within -32% / +45% of the estimate for 80% of listings. This is a plain empirical range from out-of-fold residuals, not a formal prediction interval.
-* The model beats the simple city-median baseline (R² 0.690) but not by a huge margin. On **subdistricts it has never seen**, Gradient Boosting (R² 0.686) is barely ahead of the baseline (0.675): much of its skill comes from recognising the area.
-* In-sample R² is 0.827. It is shown only as an overfitting diagnostic and is **not** a performance claim.
+* **Final model, known areas:** R² 0.778, typical error about 17.8% (median), mean error 26.6% (MAPE is inflated by cheap listings).
+* **80% empirical range:** the actual asking rent was within -31% / +43% of the estimate for 80% of listings. This is a plain empirical range from out-of-fold residuals, not a formal prediction interval.
+* The model beats the simple city-median baseline (R² 0.690) but not by a huge margin. On **subdistricts it has never seen**, Gradient Boosting (R² 0.748) is barely ahead of the baseline (0.675): much of its skill comes from recognising the area.
+* In-sample R² is 0.838. It is shown only as an overfitting diagnostic and is **not** a performance claim.
 
 ### What the model weighs most (Gradient Boosting feature importance)
 
 | # | Feature | Importance |
 |---|---|---|
-| 1 | Floor area (log m²) | 79.8% |
-| 2 | Distance to CBD | 8.4% |
-| 3 | Distance to nearest transit hub | 4.5% |
-| 4 | City: Jakarta Selatan | 1.9% |
-| 5 | Bedrooms | 1.0% |
+| 1 | Floor area (log m²) | 78.6% |
+| 2 | Distance to CBD | 7.2% |
+| 3 | Distance to nearest transit hub | 6.4% |
+| 4 | City: Jakarta Selatan | 2.5% |
+| 5 | Bedrooms | 0.9% |
 | 6 | has_ac | 0.8% |
 
 Feature importance says what the model *uses*, not the price of an attribute. See "Limitations" for what is not yet a true hedonic estimate.
@@ -54,7 +54,7 @@ z <= -1.5 deep below estimate | -1.5 < z <= -0.75 below estimate | |z| < 0.75 in
 
 A log residual is used because pricing errors are proportional, so a Rp 2M miss on a Rp 3M unit matters more than on a Rp 40M unit.
 
-**575 listings (17.1%) are below estimate** (median gap 34.4%), and **553 (16.4%) are above**. Because typical model error is around 18.7%, these are *candidates to verify*, not confirmed bargains. Extreme cases are more likely a data error or a missing variable (building, floor, age, condition) than a real deal.
+**552 listings (16.4%) are below estimate** (median gap 33.4%), and **516 (15.3%) are above**. Because typical model error is around 17.8%, these are *candidates to verify*, not confirmed bargains. Extreme cases are more likely a data error or a missing variable (building, floor, age, condition) than a real deal.
 
 ## 3. Pipeline
 
@@ -76,23 +76,23 @@ SQLite star schema (`sql/schema.sql`): `fact_rental_listings`, `dim_locations`, 
 
 | City | Listings | Median rent per m² | Median rent | Coordinates imputed |
 |---|---|---|---|---|
-| Jakarta Selatan | 450 | Rp 221k | Rp 21.0M | 44% |
-| Jakarta Pusat | 430 | Rp 195k | Rp 12.0M | 42% |
-| Bogor | 198 | Rp 154k | Rp 4.5M | 8% |
-| Tangerang Selatan | 241 | Rp 130k | Rp 6.2M | 65% |
-| Jakarta Barat | 272 | Rp 121k | Rp 6.2M | 14% |
-| Jakarta Timur | 290 | Rp 116k | Rp 4.2M | 27% |
-| Depok | 365 | Rp 116k | Rp 3.1M | 47% |
-| Bekasi | 417 | Rp 112k | Rp 3.6M | 46% |
-| Tangerang | 370 | Rp 107k | Rp 3.8M | 32% |
-| Jakarta Utara | 338 | Rp 104k | Rp 5.0M | 32% |
+| Jakarta Selatan | 450 | Rp 221k | Rp 21.0M | 8% |
+| Jakarta Pusat | 430 | Rp 195k | Rp 12.0M | 24% |
+| Bogor | 198 | Rp 154k | Rp 4.5M | 5% |
+| Tangerang Selatan | 241 | Rp 130k | Rp 6.2M | 51% |
+| Jakarta Barat | 272 | Rp 121k | Rp 6.2M | 10% |
+| Jakarta Timur | 290 | Rp 116k | Rp 4.2M | 15% |
+| Depok | 365 | Rp 116k | Rp 3.1M | 19% |
+| Bekasi | 417 | Rp 112k | Rp 3.6M | 26% |
+| Tangerang | 370 | Rp 107k | Rp 3.8M | 20% |
+| Jakarta Utara | 338 | Rp 104k | Rp 5.0M | 13% |
 
 Scraping is capped by pages per city, so city sizes reflect the scraper, not the market.
 
 ## 4. Limitations (please read)
 
 1. **Asking prices, one source, apartments for rent only.** No sale prices, no landed houses, no transactions.
-2. **Coordinates:** the portal omits or corrupts some. Invalid ones (missing, or longitude copied from latitude) are replaced by the subdistrict, then city, median of valid coordinates. Overall 37.2% of rows are imputed, and **65% of South Tangerang rows**, so distances there are approximate. Each row carries `geo_source`.
+2. **Coordinates:** the portal omits or corrupts some. Invalid ones (missing, or longitude copied from latitude) are replaced by the subdistrict, then city, median of valid coordinates. Overall 19.0% of rows are imputed, and **51% of South Tangerang rows**, so distances there are approximate. Each row carries `geo_source`.
 3. **Missing variables:** building/project name, floor level, building age and condition are not in the model. They drive a lot of apartment rent variation.
 4. **Amenities come from regex on short ad text.** "Not mentioned" is treated as "absent". Furnishing is flagged for only 46.7% of listings.
 5. **Gradient Boosting has no coefficients.** For implicit prices use the OLS layer (`/api/hedonic`); its out-of-fold R2 is lower than GB, so it is for interpretation, not valuation. The "model-adjusted" furnishing premium from GB is the average change in prediction when the flag is switched.

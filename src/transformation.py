@@ -17,7 +17,7 @@ import json
 import logging
 import numpy as np
 import pandas as pd
-from typing import Tuple, Dict, Any, List
+from typing import Tuple, Dict, Any, List, Optional
 
 logging.basicConfig(
     level=logging.INFO,
@@ -47,6 +47,20 @@ KEY_TRANSIT_HUBS = {
 # Bounding box Jabodetabek (WGS84). Koordinat di luar kotak ini dianggap tidak valid.
 JABODETABEK_BBOX = {"lat_min": -6.80, "lat_max": -5.95, "lon_min": 106.35, "lon_max": 107.25}
 MIN_LISTINGS_FOR_SUBDISTRICT_CENTROID = 2
+PROJECT_COORDS_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "project_coordinates.json"
+)
+
+
+def load_project_coordinates(path: str = PROJECT_COORDS_PATH) -> Dict[str, Dict[str, float]]:
+    """Muat koordinat gedung resmi (OSM/Nominatim) per project_id jika artefak tersedia."""
+    if os.path.exists(path):
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception as exc:
+            logger.warning(f"Gagal memuat {path}: {exc}")
+    return {}
 
 
 def is_valid_jabodetabek_coord(lat: float, lon: float) -> bool:
@@ -61,44 +75,85 @@ def is_valid_jabodetabek_coord(lat: float, lon: float) -> bool:
     return (b["lat_min"] <= lat <= b["lat_max"]) and (b["lon_min"] <= lon <= b["lon_max"])
 
 
-def clean_and_impute_coordinates(df: pd.DataFrame) -> pd.DataFrame:
-    """Validasi koordinat lalu imputasi yang hilang/rusak TANPA memakai titik CBD.
+def clean_and_impute_coordinates(df: pd.DataFrame, project_coords: Optional[Dict[str, Any]] = None) -> pd.DataFrame:
+    """Validasi koordinat lalu imputasi/override berbasis ground truth gedung (OSM) & subdistrik.
 
-    Urutan imputasi:
-      1. koordinat listing asli (jika valid)          -> geo_source = "listing"
-      2. median koordinat valid se-subdistrik         -> geo_source = "subdistrict_centroid"
-      3. median koordinat valid se-kota               -> geo_source = "city_centroid"
-    Butuh kolom: latitude, longitude, subdistrict, target_city.
+    Urutan resolusi koordinat (hierarki ground-truth):
+      1. project_geocoded   : koordinat resmi gedung dari OSM (Nominatim) via entity_resolution.
+                              Override pin portal kotor (broker sering menaruh pin hingga puluhan km
+                              dari gedung sebenarnya, misal di kantor agen).
+      2. listing            : pin portal asli (jika valid dan project belum ter-geocode resmi).
+      3. subdistrict_centroid: median koordinat valid se-subdistrik.
+      4. city_centroid      : median koordinat valid se-kota.
+
+    Butuh kolom: latitude, longitude, subdistrict, target_city, serta title/url untuk project resolution.
     """
+    if project_coords is None:
+        project_coords = load_project_coordinates()
+
     out = df.copy()
     out["latitude"] = pd.to_numeric(out["latitude"], errors="coerce")
     out["longitude"] = pd.to_numeric(out["longitude"], errors="coerce")
 
-    valid = pd.Series(
+    # 1. Resolve canonical project entity per baris jika modul tersedia
+    pids = [None] * len(out)
+    canon_names = [None] * len(out)
+    resol_confs = ["unresolved"] * len(out)
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from entity_resolution import resolve
+        for i, (t, u) in enumerate(zip(out.get("title", []), out.get("url", []))):
+            m = resolve(t, u)
+            pids[i] = m.get("project_id")
+            canon_names[i] = m.get("name")
+            resol_confs[i] = m.get("confidence", "unresolved")
+    except Exception as exc:
+        logger.debug(f"Entity resolution dilewati dalam geocoding: {exc}")
+
+    out["canonical_project_id"] = pids
+    out["canonical_apartment"] = canon_names
+    out["resolution_confidence"] = resol_confs
+
+    # 2. Cek validitas koordinat bawaan portal
+    portal_valid = pd.Series(
         [is_valid_jabodetabek_coord(a, b) for a, b in zip(out["latitude"], out["longitude"])],
         index=out.index,
     )
-    out["geo_source"] = np.where(valid, "listing", "missing")
-    out.loc[~valid, ["latitude", "longitude"]] = np.nan
+    out["geo_source"] = np.where(portal_valid, "listing", "missing")
+    out.loc[~portal_valid, ["latitude", "longitude"]] = np.nan
 
-    good = out[valid]
-    sub_stats = good.groupby(["target_city", "subdistrict"])[["latitude", "longitude"]].agg(["median", "count"])
-    city_stats = good.groupby("target_city")[["latitude", "longitude"]].median()
+    # 3. Project override: jika project punya koordinat gedung resmi OSM, pakai titik resmi!
+    if project_coords:
+        for idx in out.index:
+            pid = out.at[idx, "canonical_project_id"]
+            if pid and pid in project_coords:
+                c = project_coords[pid]
+                if is_valid_jabodetabek_coord(c.get("lat"), c.get("lon")):
+                    out.at[idx, "latitude"] = float(c["lat"])
+                    out.at[idx, "longitude"] = float(c["lon"])
+                    out.at[idx, "geo_source"] = "project_geocoded"
 
-    for idx in out.index[~valid]:
-        city, sub = out.at[idx, "target_city"], out.at[idx, "subdistrict"]
-        key = (city, sub)
-        if key in sub_stats.index and sub_stats.loc[key, ("latitude", "count")] >= MIN_LISTINGS_FOR_SUBDISTRICT_CENTROID:
-            out.at[idx, "latitude"] = sub_stats.loc[key, ("latitude", "median")]
-            out.at[idx, "longitude"] = sub_stats.loc[key, ("longitude", "median")]
-            out.at[idx, "geo_source"] = "subdistrict_centroid"
-        elif city in city_stats.index:
-            out.at[idx, "latitude"] = city_stats.at[city, "latitude"]
-            out.at[idx, "longitude"] = city_stats.at[city, "longitude"]
-            out.at[idx, "geo_source"] = "city_centroid"
-        # jika kota pun tidak punya koordinat valid, biarkan NaN (jangan dikarang)
+    # 4. Fallback subdistrik & kota untuk baris yang masih belum punya koordinat valid
+    still_missing = out["geo_source"] == "missing"
+    if still_missing.any():
+        good = out[~still_missing]
+        sub_stats = good.groupby(["target_city", "subdistrict"])[["latitude", "longitude"]].agg(["median", "count"])
+        city_stats = good.groupby("target_city")[["latitude", "longitude"]].median()
 
-    out["geo_is_imputed"] = (out["geo_source"] != "listing").astype(int)
+        for idx in out.index[still_missing]:
+            city, sub = out.at[idx, "target_city"], out.at[idx, "subdistrict"]
+            key = (city, sub)
+            if key in sub_stats.index and sub_stats.loc[key, ("latitude", "count")] >= MIN_LISTINGS_FOR_SUBDISTRICT_CENTROID:
+                out.at[idx, "latitude"] = sub_stats.loc[key, ("latitude", "median")]
+                out.at[idx, "longitude"] = sub_stats.loc[key, ("longitude", "median")]
+                out.at[idx, "geo_source"] = "subdistrict_centroid"
+            elif city in city_stats.index:
+                out.at[idx, "latitude"] = city_stats.at[city, "latitude"]
+                out.at[idx, "longitude"] = city_stats.at[city, "longitude"]
+                out.at[idx, "geo_source"] = "city_centroid"
+
+    # geo_is_imputed: 0 untuk listing asli dan gedung resmi OSM; 1 hanya untuk centroid wilayah kasar
+    out["geo_is_imputed"] = (~out["geo_source"].isin(["listing", "project_geocoded"])).astype(int)
     return out
 
 
@@ -401,7 +456,8 @@ def clean_and_transform_pipeline(raw_json_path: str, output_dir: str = "data/pro
         "is_full_furnished", "is_semi_furnished", "is_unfurnished",
         "has_ac", "has_wifi", "has_water_heater", "has_pool", "has_gym", "near_transit",
         "has_balcony", "has_kitchen", "has_parking",
-        "latitude", "longitude", "geo_source", "geo_is_imputed", "image_url", "short_description"
+        "latitude", "longitude", "geo_source", "geo_is_imputed", "image_url", "short_description",
+        "canonical_apartment", "resolution_confidence"
     ]
     df_final = df_valid[ordered_cols].copy()
 

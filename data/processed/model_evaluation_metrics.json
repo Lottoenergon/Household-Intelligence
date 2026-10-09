@@ -19,32 +19,32 @@
         "median_ape_pct_std": 0.0679
       },
       "ridge": {
-        "r2": 0.6821,
-        "r2_std": 0.0012,
-        "r2_log": 0.7643,
-        "r2_log_std": 0.0012,
-        "mae_idr": 3114878.943,
-        "mae_idr_std": 4682.2781,
-        "rmse_idr": 6676235.5158,
-        "rmse_idr_std": 12528.5092,
-        "mape_pct": 32.4931,
-        "mape_pct_std": 0.0069,
-        "median_ape_pct": 22.6991,
-        "median_ape_pct_std": 0.0978
+        "r2": 0.6856,
+        "r2_std": 0.0011,
+        "r2_log": 0.766,
+        "r2_log_std": 0.001,
+        "mae_idr": 3099802.4514,
+        "mae_idr_std": 3214.0456,
+        "rmse_idr": 6639514.2675,
+        "rmse_idr_std": 11632.6331,
+        "mape_pct": 32.3649,
+        "mape_pct_std": 0.0311,
+        "median_ape_pct": 22.512,
+        "median_ape_pct_std": 0.0344
       },
       "gb": {
-        "r2": 0.7747,
-        "r2_std": 0.0002,
-        "r2_log": 0.8204,
-        "r2_log_std": 0.0008,
-        "mae_idr": 2493400.504,
-        "mae_idr_std": 6795.6048,
-        "rmse_idr": 5619990.0734,
-        "rmse_idr_std": 2103.0468,
-        "mape_pct": 27.1499,
-        "mape_pct_std": 0.0977,
-        "median_ape_pct": 18.6747,
-        "median_ape_pct_std": 0.0361
+        "r2": 0.778,
+        "r2_std": 0.0023,
+        "r2_log": 0.8239,
+        "r2_log_std": 0.0004,
+        "mae_idr": 2410128.2722,
+        "mae_idr_std": 8725.882,
+        "rmse_idr": 5578472.4745,
+        "rmse_idr_std": 28310.1704,
+        "mape_pct": 26.614,
+        "mape_pct_std": 0.0586,
+        "median_ape_pct": 17.7548,
+        "median_ape_pct_std": 0.2017
       }
     },
     "group_kfold_subdistrict": {
@@ -63,83 +63,83 @@
         "median_ape_pct_std": null
       },
       "ridge": {
-        "r2": 0.6665,
+        "r2": 0.6698,
         "r2_std": null,
-        "r2_log": 0.7471,
+        "r2_log": 0.7478,
         "r2_log_std": null,
-        "mae_idr": 3219891.9562,
+        "mae_idr": 3212807.4826,
         "mae_idr_std": null,
-        "rmse_idr": 6837402.5828,
+        "rmse_idr": 6804099.2166,
         "rmse_idr_std": null,
-        "mape_pct": 33.1698,
+        "mape_pct": 33.1909,
         "mape_pct_std": null,
-        "median_ape_pct": 23.7667,
+        "median_ape_pct": 23.5446,
         "median_ape_pct_std": null
       },
       "gb": {
-        "r2": 0.6856,
+        "r2": 0.7481,
         "r2_std": null,
-        "r2_log": 0.7669,
+        "r2_log": 0.7851,
         "r2_log_std": null,
-        "mae_idr": 3054465.3701,
+        "mae_idr": 2772954.4599,
         "mae_idr_std": null,
-        "rmse_idr": 6639419.015,
+        "rmse_idr": 5942261.1323,
         "rmse_idr_std": null,
-        "mape_pct": 31.253,
+        "mape_pct": 31.5877,
         "mape_pct_std": null,
-        "median_ape_pct": 22.5042,
+        "median_ape_pct": 21.2974,
         "median_ape_pct_std": null
       }
     }
   },
-  "train_in_sample_r2_DIAGNOSTIC_ONLY": 0.8269,
+  "train_in_sample_r2_DIAGNOSTIC_ONLY": 0.8378,
   "feature_importances": [
     {
       "feature": "log_floor_size",
-      "importance": 0.7975
+      "importance": 0.7861
     },
     {
       "feature": "distance_to_cbd_km",
-      "importance": 0.0844
+      "importance": 0.0721
     },
     {
       "feature": "distance_to_transit_km",
-      "importance": 0.0455
+      "importance": 0.0641
     },
     {
       "feature": "city_Jakarta Selatan",
-      "importance": 0.0194
+      "importance": 0.0252
     },
     {
       "feature": "bedrooms",
-      "importance": 0.0103
+      "importance": 0.0094
     },
     {
       "feature": "has_ac",
-      "importance": 0.0082
+      "importance": 0.0075
     },
     {
-      "feature": "city_Bogor",
-      "importance": 0.0049
-    },
-    {
-      "feature": "city_Jakarta Barat",
-      "importance": 0.0045
+      "feature": "city_Tangerang",
+      "importance": 0.007
     },
     {
       "feature": "is_semi_furnished",
-      "importance": 0.004
+      "importance": 0.0038
     },
     {
       "feature": "is_full_furnished",
-      "importance": 0.0032
+      "importance": 0.0035
+    },
+    {
+      "feature": "city_Bogor",
+      "importance": 0.0034
     }
   ],
   "prediction_interval": {
     "level": 0.8,
-    "log_lower": -0.3923470761563192,
-    "log_upper": 0.3709951989652504,
-    "lower_factor": 0.6754696338675221,
-    "upper_factor": 1.4491761158250525
+    "log_lower": -0.37267788601789076,
+    "log_upper": 0.35522797843419845,
+    "lower_factor": 0.6888870972753468,
+    "upper_factor": 1.4265058297790192
   }
 }

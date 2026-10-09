@@ -1,0 +1,937 @@
+{
+  "district-8-scbd": {
+    "lat": -6.2259245,
+    "lon": 106.8076081,
+    "name": "District 8 SCBD",
+    "display_name": "Sudirman Central Business District Eastway, SCBD, Senayan, Kebayoran Baru, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, 12190, Indonesia",
+    "query": "District 8 SCBD, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "residence-8-senopati": {
+    "lat": -6.2286381,
+    "lon": 106.8060892,
+    "name": "Residence 8 Senopati",
+    "display_name": "Residence 8 @ Senopati Tower A, Jalan Senopati Dalam II, SCBD, Senayan, Kebayoran Baru, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, 12190, Indonesia",
+    "query": "Residence 8 Senopati, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "essence-darmawangsa": {
+    "lat": -6.2586842,
+    "lon": 106.8047786,
+    "name": "Essence Darmawangsa",
+    "display_name": "Essence Darmawangsa, Cipete Utara, Kebayoran Baru, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "Essence Darmawangsa, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "kemang-village": {
+    "lat": -6.2601974,
+    "lon": 106.811998,
+    "name": "Kemang Village",
+    "display_name": "Kemang Village, Bangka, Mampang Prapatan, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "Kemang Village, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "south-hills": {
+    "lat": -6.2230495,
+    "lon": 106.8307133,
+    "name": "South Hills",
+    "display_name": "South Hills, Karet Kuningan, Setiabudi, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "South Hills, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "capital-residence": {
+    "lat": -6.2252511,
+    "lon": 106.8112555,
+    "name": "Capital Residence",
+    "display_name": "The Capital Residence, Senayan, Kebayoran Baru, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, 12190, Indonesia",
+    "query": "Capital Residence, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "permata-hijau-suites": {
+    "lat": -6.2124034,
+    "lon": 106.7837805,
+    "name": "Permata Hijau Suites",
+    "display_name": "Permata Hijau Suites, RW 11, Grogol Utara, Kebayoran Lama, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, 12210, Indonesia",
+    "query": "Permata Hijau Suites, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "permata-hijau-residence": {
+    "lat": -6.2245635,
+    "lon": 106.7874153,
+    "name": "Permata Hijau Residence",
+    "display_name": "Permata Hijau Residence, Jalan Letnan Jenderal Soepeno, RW 09, Grogol Utara, Kebayoran Lama, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, 12210, Indonesia",
+    "query": "Permata Hijau Residence, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "gandaria-heights": {
+    "lat": -6.2438223,
+    "lon": 106.7845429,
+    "name": "Gandaria Heights",
+    "display_name": "Gandaria Heights B, Jalan Kampung Duku, Gandaria City, Kebayoran Lama Utara, Kebayoran Lama, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, 12120, Indonesia",
+    "query": "Gandaria Heights, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "branz-simatupang": {
+    "lat": -6.2932454,
+    "lon": 106.7864646,
+    "name": "Branz Simatupang",
+    "display_name": "Branz Simatupang, Cilandak Barat, Cilandak, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "Branz Simatupang, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "branz-mega-kuningan": {
+    "lat": -6.2283441,
+    "lon": 106.821961,
+    "name": "Branz Mega Kuningan",
+    "display_name": "Branz Mega Kuningan, Kuningan Timur, Setiabudi, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "Branz Mega Kuningan, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "the-newton-1": {
+    "lat": -6.2210964,
+    "lon": 106.8186087,
+    "name": "The Newton 1",
+    "display_name": "The Newton 1, Jalan Karet Sawah II, Ciputra World II, Karet Semanggi, Setiabudi, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, 12930, Indonesia",
+    "query": "The Newton 1, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "the-newton-2": {
+    "lat": -6.2207756,
+    "lon": 106.8173129,
+    "name": "The Newton 2",
+    "display_name": "The Newton 2, Jalan Karet Sawah, Ciputra World II, Karet Semanggi, Setiabudi, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, 12930, Indonesia",
+    "query": "The Newton 2, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "the-newton": {
+    "lat": -6.2210964,
+    "lon": 106.8186087,
+    "name": "The Newton",
+    "display_name": "The Newton 1, Jalan Karet Sawah II, Ciputra World II, Karet Semanggi, Setiabudi, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, 12930, Indonesia",
+    "query": "The Newton, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "savyavasa": {
+    "lat": -6.2525637,
+    "lon": 106.8029041,
+    "name": "Savyavasa",
+    "display_name": "Savyavasa, Pulo, Kebayoran Baru, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "Savyavasa, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "l-avenue": {
+    "lat": -6.2487623,
+    "lon": 106.8431784,
+    "name": "L'Avenue",
+    "display_name": "L'Avenue Office & Apartment, RW 02, Pancoran, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, 12780, Indonesia",
+    "query": "L'Avenue, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "senopati-suites": {
+    "lat": -6.2288355,
+    "lon": 106.8027967,
+    "name": "Senopati Suites",
+    "display_name": "Senopati Suites, Jalan Senopati, RW 02, Senayan, Kebayoran Baru, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, 12110, Indonesia",
+    "query": "Senopati Suites, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "tamansari-semanggi": {
+    "lat": -6.2266116,
+    "lon": 106.8192137,
+    "name": "Tamansari Semanggi",
+    "display_name": "Apartemen Tamansari Semanggi, Karet Semanggi, Setiabudi, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "Tamansari Semanggi, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "kalibata-city": {
+    "lat": -6.2573724,
+    "lon": 106.851625,
+    "name": "Kalibata City",
+    "display_name": "Kalibata City, RW 04, Rawajati, Pancoran, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "Kalibata City, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "woodland-park": {
+    "lat": -6.2553596,
+    "lon": 106.8564295,
+    "name": "Woodland Park",
+    "display_name": "Woodland Park Residence, Rawajati, Pancoran, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "Woodland Park, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "nifarro-park": {
+    "lat": -6.2634838,
+    "lon": 106.8441253,
+    "name": "Nifarro Park",
+    "display_name": "Nifarro Park, Pejaten Timur, Pasar Minggu, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "Nifarro Park, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "signature-park-grande": {
+    "lat": -6.2454515,
+    "lon": 106.8663072,
+    "name": "Signature Park Grande",
+    "display_name": "Signature Park Grande, Jalan Letnan Jenderal MT Haryono, RW 01, Cawang, Kramat Jati, Jakarta Timur, Daerah Khusus Ibukota Jakarta, 13340, Indonesia",
+    "query": "Signature Park Grande, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "taman-rasuna": {
+    "lat": -6.218241,
+    "lon": 106.8369639,
+    "name": "Taman Rasuna",
+    "display_name": "Apartemen Taman Rasuna, Menteng Atas, Setiabudi, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, 12960, Indonesia",
+    "query": "Taman Rasuna, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "the-bellezza": {
+    "lat": -6.2216753,
+    "lon": 106.7824711,
+    "name": "The Bellezza",
+    "display_name": "The Bellezza, Jalan Letnan Jenderal Soepeno, RW 02, Grogol Utara, Kebayoran Lama, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, 12210, Indonesia",
+    "query": "The Bellezza, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "botanica": {
+    "lat": -6.2332413,
+    "lon": 106.7885298,
+    "name": "Botanica",
+    "display_name": "Botanica, Grogol Selatan, Kebayoran Lama, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "Botanica, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "kuningan-city": {
+    "lat": -6.2245878,
+    "lon": 106.8297643,
+    "name": "Kuningan City",
+    "display_name": "Kuningan City, Kav. 18, Jalan Profesor Doktor Satrio, RW 04, Karet Kuningan, Setiabudi, Jakarta Selatan, Daerah Khusus Ibukota Jakarta, 12940, Indonesia",
+    "query": "Kuningan City, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "menteng-park": {
+    "lat": -6.1906246,
+    "lon": 106.840296,
+    "name": "Menteng Park",
+    "display_name": "Menteng Park, Jalan Inspeksi Raya, RW 02, Cikini, Menteng, Jakarta Pusat, Daerah Khusus Ibukota Jakarta, 10330, Indonesia",
+    "query": "Menteng Park, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "57-promenade": {
+    "lat": -6.1973364,
+    "lon": 106.8188857,
+    "name": "57 Promenade",
+    "display_name": "57 Promenade, Kebon Melati, Tanah Abang, Jakarta Pusat, Daerah Khusus Ibukota Jakarta, 10230, Indonesia",
+    "query": "57 Promenade, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "sahid-sudirman-residence": {
+    "lat": -6.209985,
+    "lon": 106.8197333,
+    "name": "Sahid Sudirman Residence",
+    "display_name": "Misticanza @ Sahid Sudirman Residence, Jalan Jenderal Sudirman, RW 11, Karet Tengsin, Tanah Abang, Jakarta Pusat, Daerah Khusus Ibukota Jakarta, 10220, Indonesia",
+    "query": "Sahid Sudirman Residence, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "sudirman-hill": {
+    "lat": -6.2110748,
+    "lon": 106.8133607,
+    "name": "Sudirman Hill",
+    "display_name": "Sudirman Hill, Karet Tengsin, Tanah Abang, Jakarta Pusat, Daerah Khusus Ibukota Jakarta, 10240, Indonesia",
+    "query": "Sudirman Hill, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "sudirman-park": {
+    "lat": -6.2056505,
+    "lon": 106.8179371,
+    "name": "Sudirman Park",
+    "display_name": "Sudirman Park, Karet Tengsin, Tanah Abang, Jakarta Pusat, Daerah Khusus Ibukota Jakarta, 10220, Indonesia",
+    "query": "Sudirman Park, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "citylofts-sudirman": {
+    "lat": -6.2091014,
+    "lon": 106.8183845,
+    "name": "Citylofts Sudirman",
+    "display_name": "CityLofts Sudirman, 121, Jalan Kyai Haji Mas Mansyur, RW 11, Karet Tengsin, Tanah Abang, Jakarta Pusat, Daerah Khusus Ibukota Jakarta, 10220, Indonesia",
+    "query": "Citylofts Sudirman, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "royale-springhill": {
+    "lat": -6.1465978,
+    "lon": 106.8516046,
+    "name": "Royale Springhill",
+    "display_name": "The Royale Springhill Residences, Pademangan Timur, Pademangan, Jakarta Utara, Daerah Khusus Ibukota Jakarta, 14410, Indonesia",
+    "query": "Royale Springhill, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "the-mansion-kemayoran": {
+    "lat": -6.145938,
+    "lon": 106.8542907,
+    "name": "The Mansion Kemayoran",
+    "display_name": "The Mansion Jasmine Access Road, PPK Kemayoran, Pademangan Timur, Pademangan, Jakarta Utara, Daerah Khusus Ibukota Jakarta, 14410, Indonesia",
+    "query": "The Mansion Kemayoran, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "menara-jakarta": {
+    "lat": -6.1501829,
+    "lon": 106.8464403,
+    "name": "Menara Jakarta",
+    "display_name": "Menara Jakarta, Pademangan Timur, Pademangan, Jakarta Utara, Daerah Khusus Ibukota Jakarta, 14410, Indonesia",
+    "query": "Menara Jakarta, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "salemba-residence": {
+    "lat": -6.1953416,
+    "lon": 106.8557612,
+    "name": "Salemba Residence",
+    "display_name": "Apartment Salemba Residence, Jalan Salemba Tengah VI, RW 08, Paseban, Senen, Jakarta Pusat, Daerah Khusus Ibukota Jakarta, 10440, Indonesia",
+    "query": "Salemba Residence, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "mediterania-boulevard": {
+    "lat": -6.1160187,
+    "lon": 106.7649677,
+    "name": "Mediterania Boulevard",
+    "display_name": "Mediterania Boulevard, Jalan Pantai Indah Utara 2, Pantai Indah Kapuk, Kapuk Muara, Penjaringan, Jakarta Utara, Daerah Khusus Ibukota Jakarta, 14460, Indonesia",
+    "query": "Mediterania Boulevard, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "mediterania-marina": {
+    "lat": -6.129317,
+    "lon": 106.8293865,
+    "name": "Mediterania Marina",
+    "display_name": "Mediterania Marina Residences, Ancol, Pademangan, Jakarta Utara, Daerah Khusus Ibukota Jakarta, 14430, Indonesia",
+    "query": "Mediterania Marina, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "green-pramuka-city": {
+    "lat": -6.1891433,
+    "lon": 106.8735619,
+    "name": "Green Pramuka City",
+    "display_name": "Green Pramuka City, Rawasari, Cempaka Putih, Jakarta Pusat, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "Green Pramuka City, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "thamrin-residences": {
+    "lat": -6.1972569,
+    "lon": 106.8168823,
+    "name": "Thamrin Residences",
+    "display_name": "Thamrin Residences, Jalan KB Melati, Kebon Melati, Tanah Abang, Jakarta Pusat, Daerah Khusus Ibukota Jakarta, 10230, Indonesia",
+    "query": "Thamrin Residences, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "thamrin-executive": {
+    "lat": -6.1961813,
+    "lon": 106.8164502,
+    "name": "Thamrin Executive",
+    "display_name": "Thamrin Executive Residence, Jalan Avenue I, RW 09, Kebon Melati, Tanah Abang, Jakarta Pusat, Daerah Khusus Ibukota Jakarta, 10230, Indonesia",
+    "query": "Thamrin Executive, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "cosmo-terrace": {
+    "lat": -6.1942592,
+    "lon": 106.8161949,
+    "name": "Cosmo Terrace",
+    "display_name": "Cosmo Terrace, Jalan Haji Mohammad Saleh Ishak, Kebon Melati, Tanah Abang, Jakarta Pusat, Daerah Khusus Ibukota Jakarta, 10230, Indonesia",
+    "query": "Cosmo Terrace, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "puri-mansion": {
+    "lat": -6.1821916,
+    "lon": 106.7258782,
+    "name": "Puri Mansion",
+    "display_name": "Puri Mansion, Kembangan Selatan, Kembangan, Jakarta Barat, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "Puri Mansion, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "puri-orchard": {
+    "lat": -6.1660196,
+    "lon": 106.7292438,
+    "name": "Puri Orchard",
+    "display_name": "Puri Orchard Apartment, Rawa Buaya, Cengkareng, Jakarta Barat, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "Puri Orchard, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "puri-park-view": {
+    "lat": -6.192172,
+    "lon": 106.7557468,
+    "name": "Puri Park View",
+    "display_name": "Puri Park View, Jalan Apartment Puri Park View, RW 05, Meruya Utara, Kembangan, Jakarta Barat, Daerah Khusus Ibukota Jakarta, 11630, Indonesia",
+    "query": "Puri Park View, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "st-moritz-residences": {
+    "lat": -6.1898086,
+    "lon": 106.738648,
+    "name": "St. Moritz Residences",
+    "display_name": "St. Moritz Penthouse and Residences - New Ambassador Tower, Jalan Puri Elok 1, Puri Indah, Kembangan Selatan, Kembangan, Jakarta Barat, Daerah Khusus Ibukota Jakarta, 11610, Indonesia",
+    "query": "St. Moritz Residences, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "mediterania-garden-residences-2": {
+    "lat": -6.1766472,
+    "lon": 106.788243,
+    "name": "Mediterania Garden Residences 2",
+    "display_name": "Mediterania Garden Residences 2, Tanjung Duren Selatan, Grogol Petamburan, Jakarta Barat, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "Mediterania Garden Residences 2, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "mediterania-garden-residences-1": {
+    "lat": -6.1746487,
+    "lon": 106.788317,
+    "name": "Mediterania Garden Residences 1",
+    "display_name": "Mediterania Garden Residences 1, Tanjung Duren Selatan, Grogol Petamburan, Jakarta Barat, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "Mediterania Garden Residences 1, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "royal-mediterania-garden": {
+    "lat": -6.1758941,
+    "lon": 106.7889898,
+    "name": "Royal Mediterania Garden",
+    "display_name": "Tower M (Marigold) Royal Mediterania Garden Residences, Jalan Mediterania Garden, RW 05, Tanjung Duren Selatan, Grogol Petamburan, Jakarta Barat, Daerah Khusus Ibukota Jakarta, 11430, Indonesia",
+    "query": "Royal Mediterania Garden, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "madison-park": {
+    "lat": -6.1794022,
+    "lon": 106.7891332,
+    "name": "Madison Park",
+    "display_name": "Madison Park Apartment Access, RW 06, Tanjung Duren Selatan, Grogol Petamburan, Jakarta Barat, Daerah Khusus Ibukota Jakarta, 11430, Indonesia",
+    "query": "Madison Park, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "grand-madison": {
+    "lat": -6.1770293,
+    "lon": 106.7873621,
+    "name": "Grand Madison",
+    "display_name": "Grand Madison, 35, Jalan Tanjung Duren Timur, RW 05, Tanjung Duren Selatan, Grogol Petamburan, Jakarta Barat, Daerah Khusus Ibukota Jakarta, 11470, Indonesia",
+    "query": "Grand Madison, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "neo-soho": {
+    "lat": -6.1749643,
+    "lon": 106.790419,
+    "name": "Neo Soho",
+    "display_name": "Khao Khao Urban Thai - Neo Soho, 28, Jalan Podomoro Avenue, RW 05, Tanjung Duren Selatan, Grogol Petamburan, Jakarta Barat, Daerah Khusus Ibukota Jakarta, 11430, Indonesia",
+    "query": "Neo Soho, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "green-sedayu": {
+    "lat": -6.1549727,
+    "lon": 106.6923484,
+    "name": "Green Sedayu",
+    "display_name": "Green Sedayu Biz Park, Kalideres, Jakarta Barat, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "Green Sedayu, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "ciputra-international": {
+    "lat": -6.173339,
+    "lon": 106.7301525,
+    "name": "Ciputra International",
+    "display_name": "Ciputra International, Rawa Buaya, Cengkareng, Jakarta Barat, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "Ciputra International, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "grand-tropic": {
+    "lat": -6.1715105,
+    "lon": 106.7877363,
+    "name": "Grand Tropic",
+    "display_name": "Grand Tropic Hotel & Apartment, 3, Jalan Tanjung Duren Utara I, RW 02, Tanjung Duren Utara, Grogol Petamburan, Jakarta Barat, Daerah Khusus Ibukota Jakarta, 11470, Indonesia",
+    "query": "Grand Tropic, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "westmark": {
+    "lat": -6.1805009,
+    "lon": 106.7936869,
+    "name": "Westmark",
+    "display_name": "Westmark, Tanjung Duren Selatan, Grogol Petamburan, Jakarta Barat, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "Westmark, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "gp-plaza": {
+    "lat": -6.2027499,
+    "lon": 106.7994779,
+    "name": "GP Plaza",
+    "display_name": "GP Plaza, Jalan Jenderal Gatot Subroto, RW 01, Gelora, Tanah Abang, Jakarta Pusat, Daerah Khusus Ibukota Jakarta, 10270, Indonesia",
+    "query": "GP Plaza, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "kedoya-elok": {
+    "lat": -6.1883235,
+    "lon": 106.7679297,
+    "name": "Kedoya Elok",
+    "display_name": "Apartemen Kedoya Elok, Jalan Kedoya Angsana Raya, RW 04, Kedoya Selatan, Kebon Jeruk, Jakarta Barat, Daerah Khusus Ibukota Jakarta, 11530, Indonesia",
+    "query": "Kedoya Elok, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "gold-coast-pik": {
+    "lat": -6.1027313,
+    "lon": 106.7405599,
+    "name": "Gold Coast PIK",
+    "display_name": "Gold Coast, Jalan Pantai Indah Kapuk, RW 03, Kamal Muara, Penjaringan, Jakarta Utara, Daerah Khusus Ibukota Jakarta, 14470, Indonesia",
+    "query": "Gold Coast PIK, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "green-bay-pluit": {
+    "lat": -6.1085216,
+    "lon": 106.7782591,
+    "name": "Green Bay Pluit",
+    "display_name": "Green Bay Pluit, RW 10, Pluit, Penjaringan, Jakarta Utara, Daerah Khusus Ibukota Jakarta, 14440, Indonesia",
+    "query": "Green Bay Pluit, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "pluit-sea-view": {
+    "lat": -6.1195975,
+    "lon": 106.8075994,
+    "name": "Pluit Sea View",
+    "display_name": "Pluit Sea View, Penjaringan, Jakarta Utara, Daerah Khusus Ibukota Jakarta, 14430, Indonesia",
+    "query": "Pluit Sea View, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "regatta": {
+    "lat": -6.0935654,
+    "lon": 106.7932395,
+    "name": "Regatta",
+    "display_name": "Regatta Shanghai Tower, Jalan Dermaga Raya, Pelabuhan Ikan Nizam Zachman, Penjaringan, Jakarta Utara, Daerah Khusus Ibukota Jakarta, 14430, Indonesia",
+    "query": "Regatta, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "gading-resort-residences": {
+    "lat": -6.1523011,
+    "lon": 106.8935549,
+    "name": "Gading Resort Residences",
+    "display_name": "Gading Resort Residences, Kelapa Gading Barat, Kelapa Gading, Jakarta Utara, Daerah Khusus Ibukota Jakarta, 14240, Indonesia",
+    "query": "Gading Resort Residences, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "menara-kelapa-gading": {
+    "lat": -6.17099,
+    "lon": 106.9163558,
+    "name": "Menara Kelapa Gading",
+    "display_name": "Kondominium Menara Kelapa Gading, Pegangsaan Dua, Kelapa Gading, Jakarta Utara, Daerah Khusus Ibukota Jakarta, 14250, Indonesia",
+    "query": "Menara Kelapa Gading, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "sherwood-kelapa-gading": {
+    "lat": -6.152796,
+    "lon": 106.9078561,
+    "name": "Sherwood Kelapa Gading",
+    "display_name": "Sherwood Residence, Jalan Raya Kelapa Nias, RW 06, Kelapa Gading Barat, Kelapa Gading, Jakarta Utara, Daerah Khusus Ibukota Jakarta, 14240, Indonesia",
+    "query": "Sherwood Kelapa Gading, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "the-kensington": {
+    "lat": -6.1723741,
+    "lon": 106.8955891,
+    "name": "The Kensington",
+    "display_name": "The Kensington Royal Suites, Kelapa Gading Timur, Kelapa Gading, Jakarta Utara, Daerah Khusus Ibukota Jakarta, 14240, Indonesia",
+    "query": "The Kensington, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "gading-nias": {
+    "lat": -6.1543758,
+    "lon": 106.9112221,
+    "name": "Gading Nias",
+    "display_name": "Gereja Kristen Indonesia, Jalan Kelapa Nias I, Summarecon Kelapa Gading, Pegangsaan Dua, Kelapa Gading, Jakarta Utara, Daerah Khusus Ibukota Jakarta, 14250, Indonesia",
+    "query": "Gading Nias, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "sunter-park-view": {
+    "lat": -6.1570781,
+    "lon": 106.8829931,
+    "name": "Sunter Park View",
+    "display_name": "Sunter Park View, Sunter Jaya, Tanjung Priok, Jakarta Utara, Daerah Khusus Ibukota Jakarta, 14350, Indonesia",
+    "query": "Sunter Park View, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "green-lake-sunter": {
+    "lat": -6.1435819,
+    "lon": 106.8769073,
+    "name": "Green Lake Sunter",
+    "display_name": "Apartemen Green Lake Northern Park, Jalan Agung Timur 1, RW 16, Sunter Agung, Tanjung Priok, Jakarta Utara, Daerah Khusus Ibukota Jakarta, 14350, Indonesia",
+    "query": "Green Lake Sunter, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "northland-ancol-residence": {
+    "lat": -6.1298714,
+    "lon": 106.8396092,
+    "name": "Northland Ancol Residence",
+    "display_name": "Northland Ancol Residence, Pademangan Barat, Pademangan, Jakarta Utara, Daerah Khusus Ibukota Jakarta, 14420, Indonesia",
+    "query": "Northland Ancol Residence, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "ancol-mansion": {
+    "lat": -6.1217838,
+    "lon": 106.8455969,
+    "name": "Ancol Mansion",
+    "display_name": "Ancol Mansion, Ancol, Pademangan, Jakarta Utara, Daerah Khusus Ibukota Jakarta, 14430, Indonesia",
+    "query": "Ancol Mansion, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "bassura-city": {
+    "lat": -6.2232637,
+    "lon": 106.8805952,
+    "name": "Bassura City",
+    "display_name": "Bassura City, Cipinang Besar Selatan, Jatinegara, Jakarta Timur, Daerah Khusus Ibukota Jakarta, 13240, Indonesia",
+    "query": "Bassura City, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "the-oak-tower": {
+    "lat": -6.1809976,
+    "lon": 106.9051403,
+    "name": "The Oak Tower",
+    "display_name": "The Oak Tower Apartment, Jalan Perintis Kemerdekaan, RW 02, Pulo Gadung, Jakarta Timur, Daerah Khusus Ibukota Jakarta, 13224, Indonesia",
+    "query": "The Oak Tower, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "callia-apartment": {
+    "lat": -6.1759199,
+    "lon": 106.8933312,
+    "name": "Callia Apartment",
+    "display_name": "Callia Apartment, Jalan Perintis Kemerdekaan, RW 16, Kayu Putih, Pulo Gadung, Jakarta Timur, Daerah Khusus Ibukota Jakarta, 13210, Indonesia",
+    "query": "Callia Apartment, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "tifolia-apartment": {
+    "lat": -6.1753466,
+    "lon": 106.8927069,
+    "name": "Tifolia Apartment",
+    "display_name": "Tifolia Apartment, 23, Jalan Perintis Kemerdekaan, RW 16, Kayu Putih, Pulo Gadung, Jakarta Timur, Daerah Khusus Ibukota Jakarta, 13210, Indonesia",
+    "query": "Tifolia Apartment, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "sedayu-city-suites": {
+    "lat": -6.169251,
+    "lon": 106.9212116,
+    "name": "Sedayu City Suites",
+    "display_name": "Sedayu City Suites, Rawa Terate, Cakung, Jakarta Timur, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "Sedayu City Suites, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "mth-square": {
+    "lat": -6.2436855,
+    "lon": 106.8693892,
+    "name": "MTH Square",
+    "display_name": "MT Haryono Square (MTH Square), Jalan Inspeksi Saluran, RW 10, Cipinang Cempedak, Jatinegara, Jakarta Timur, Daerah Khusus Ibukota Jakarta, 13340, Indonesia",
+    "query": "MTH Square, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "sakura-garden-city": {
+    "lat": -6.3240686,
+    "lon": 106.8898423,
+    "name": "Sakura Garden City",
+    "display_name": "Sakura Garden City, Cipayung, Jakarta Timur, Daerah Khusus Ibukota Jakarta, Indonesia",
+    "query": "Sakura Garden City, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "menteng-square": {
+    "lat": -6.2004483,
+    "lon": 106.8518337,
+    "name": "Menteng Square",
+    "display_name": "Menteng Square, Kenari, Senen, Jakarta Pusat, Daerah Khusus Ibukota Jakarta, 10430, Indonesia",
+    "query": "Menteng Square, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "sentra-timur-residence": {
+    "lat": -6.205011,
+    "lon": 106.9476617,
+    "name": "Sentra Timur Residence",
+    "display_name": "Sentra Timur Residence, RW.6, Jalan Pangeran Komarudin, RW 06, Pulo Gebang, Cakung, Jakarta Timur, Daerah Khusus Ibukota Jakarta, 13940, Indonesia",
+    "query": "Sentra Timur Residence, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "tamansari-hive": {
+    "lat": -6.2448276,
+    "lon": 106.8753762,
+    "name": "Tamansari Hive",
+    "display_name": "The Hive Tamansari, Jalan Biru Laut, RW 11, Cipinang Cempedak, Jatinegara, Jakarta Timur, Daerah Khusus Ibukota Jakarta, 13340, Indonesia",
+    "query": "Tamansari Hive, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "transpark-cibubur": {
+    "lat": -6.3736905,
+    "lon": 106.9029114,
+    "name": "Transpark Cibubur",
+    "display_name": "Tower Crystalline - Transpark Cibubur, Jalan Jambore, RW 05, Pondok Ranggon, Cipayung, Jakarta Timur, Daerah Khusus Ibukota Jakarta, Jawa Barat, 16454, Indonesia",
+    "query": "Transpark Cibubur, Jakarta, Indonesia",
+    "source": "nominatim"
+  },
+  "tokyo-riverside-pik-2": {
+    "lat": -6.0420801,
+    "lon": 106.6933206,
+    "name": "Tokyo Riverside PIK 2",
+    "city": "Jakarta Utara",
+    "display_name": "Tokyo Riverside (T31), Jalan Otto Iskandar Dinata, Muara, Pantai Indah Kapuk 2, Muara, Teluknaga, Kabupaten Tangerang, Banten, 15214, Indonesia",
+    "query": "Tokyo Riverside PIK 2, Indonesia",
+    "source": "nominatim"
+  },
+  "osaka-riverview-pik-2": {
+    "lat": -6.0572511,
+    "lon": 106.6788116,
+    "name": "Osaka Riverview PIK 2",
+    "city": "Jakarta Utara",
+    "display_name": "Osaka Riverview Apartment, Pantai Indah Kapuk 2, Salembaran, Kosambi, Kabupaten Tangerang, Banten, Indonesia",
+    "query": "Osaka Riverview PIK 2, Indonesia",
+    "source": "nominatim"
+  },
+  "sky-house-bsd": {
+    "lat": -6.3042894,
+    "lon": 106.6470098,
+    "name": "Sky House BSD",
+    "city": "Tangerang Selatan",
+    "display_name": "BSD Sky House, BSD City, Sampora, Cisauk, Kabupaten Tangerang, Banten, Indonesia",
+    "query": "Sky House BSD, Indonesia",
+    "source": "nominatim"
+  },
+  "sky-house-alam-sutera": {
+    "lat": -6.2195732,
+    "lon": 106.6615213,
+    "name": "Sky House Alam Sutera",
+    "city": "Tangerang",
+    "display_name": "Sky House Alam Sutera+, Gempol, Alam Sutera, Pinang, Tangerang, Banten, Indonesia",
+    "query": "Sky House Alam Sutera, Tangerang, Indonesia",
+    "source": "nominatim"
+  },
+  "saumata": {
+    "lat": -6.229885,
+    "lon": 106.6548281,
+    "name": "Saumata",
+    "city": "Tangerang",
+    "display_name": "Saumata, Jalan Sutera Tiara III, Alam Sutera, Pinang, Tangerang, Banten, 15143, Indonesia",
+    "query": "Saumata, Tangerang, Indonesia",
+    "source": "nominatim"
+  },
+  "treepark-bsd": {
+    "lat": -6.2984156,
+    "lon": 106.6645992,
+    "name": "Treepark BSD",
+    "city": "Tangerang",
+    "display_name": "Treepark Apartment, Jalan Raya Serpong, BSD Sunburst CBD, Babakan, BSD City, Serpong, Tangerang Selatan, Banten, 15311, Indonesia",
+    "query": "Treepark BSD, Tangerang, Indonesia",
+    "source": "nominatim"
+  },
+  "b-residence-bsd": {
+    "lat": -6.303449,
+    "lon": 106.6385056,
+    "name": "B-Residence BSD",
+    "city": "Tangerang Selatan",
+    "display_name": "B Residence, Jalan Eka Tjipta Widjaja Boulevard, BSD City, Pagedangan, Kabupaten Tangerang, Banten, 15339, Indonesia",
+    "query": "B-Residence BSD, Indonesia",
+    "source": "nominatim"
+  },
+  "sky-view-bsd": {
+    "lat": -6.2951355,
+    "lon": 106.6836171,
+    "name": "Sky View BSD",
+    "city": "Tangerang Selatan",
+    "display_name": "Apartemen Sky View, Jalan Lengkong Gudang Timur Raya, Lengkong Gudang Timur, Serpong, Tangerang Selatan, Banten, 15310, Indonesia",
+    "query": "Sky View BSD, Tangerang Selatan, Indonesia",
+    "source": "nominatim"
+  },
+  "paddington-heights": {
+    "lat": -6.2253848,
+    "lon": 106.6497777,
+    "name": "Paddington Heights",
+    "city": "Tangerang",
+    "display_name": "Paddington Heights, Alam Sutera, Pinang, Tangerang, Banten, Indonesia",
+    "query": "Paddington Heights, Tangerang, Indonesia",
+    "source": "nominatim"
+  },
+  "scientia-residences": {
+    "lat": -6.2561045,
+    "lon": 106.6153178,
+    "name": "Scientia Residences",
+    "city": "Tangerang",
+    "display_name": "Scientia Residences, Summarecon Serpong, Tangerang, Kelapa Dua, Kabupaten Tangerang, Banten, 15810, Indonesia",
+    "query": "Scientia Residences, Tangerang, Indonesia",
+    "source": "nominatim"
+  },
+  "brooklyn-alam-sutera": {
+    "lat": -6.2386819,
+    "lon": 106.6575324,
+    "name": "Brooklyn Alam Sutera",
+    "city": "Tangerang",
+    "display_name": "Brooklyn Alam Sutera, Pakualam, Serpong Utara, Tangerang Selatan, Banten, Indonesia",
+    "query": "Brooklyn Alam Sutera, Tangerang, Indonesia",
+    "source": "nominatim"
+  },
+  "elevee-alam-sutera": {
+    "lat": -6.2243565,
+    "lon": 106.6574708,
+    "name": "Elevee Alam Sutera",
+    "city": "Tangerang",
+    "display_name": "Elevee Penthouses & Residences, Alam Sutera, Pinang, Tangerang, Banten, Indonesia",
+    "query": "Elevee Alam Sutera, Tangerang, Indonesia",
+    "source": "nominatim"
+  },
+  "silkwood-residences": {
+    "lat": -6.2250369,
+    "lon": 106.6508472,
+    "name": "Silkwood Residences",
+    "city": "Tangerang",
+    "display_name": "Silkwood Residences, Alam Sutera, Pinang, Tangerang, Banten, Indonesia",
+    "query": "Silkwood Residences, Tangerang, Indonesia",
+    "source": "nominatim"
+  },
+  "yukata-suites": {
+    "lat": -6.2383087,
+    "lon": 106.6580632,
+    "name": "Yukata Suites",
+    "city": "Tangerang",
+    "display_name": "Yukata Suites, Pakualam, Serpong Utara, Tangerang Selatan, Banten, Indonesia",
+    "query": "Yukata Suites, Tangerang, Indonesia",
+    "source": "nominatim"
+  },
+  "springwood-residence": {
+    "lat": -6.2249109,
+    "lon": 106.6383137,
+    "name": "Springwood Residence",
+    "city": "Tangerang",
+    "display_name": "Springwood Residence, Panunggangan, Pinang, Tangerang, Banten, Indonesia",
+    "query": "Springwood Residence, Tangerang, Indonesia",
+    "source": "nominatim"
+  },
+  "embarcadero-bintaro": {
+    "lat": -6.28171,
+    "lon": 106.7037629,
+    "name": "Embarcadero Bintaro",
+    "city": "Tangerang Selatan",
+    "display_name": "Embarcadero Bintaro, Rawa Barat, Pondok Pucung, Pondok Aren, Tangerang Selatan, Banten, Indonesia",
+    "query": "Embarcadero Bintaro, Tangerang Selatan, Indonesia",
+    "source": "nominatim"
+  },
+  "bintaro-plaza-residences": {
+    "lat": -6.2741215,
+    "lon": 106.7421656,
+    "name": "Bintaro Plaza Residences",
+    "city": "Tangerang Selatan",
+    "display_name": "Bintaro Plaza Residences, Bonjol, Bintaro Jaya, Pondok Aren, Tangerang Selatan, Banten, Indonesia",
+    "query": "Bintaro Plaza Residences, Tangerang Selatan, Indonesia",
+    "source": "nominatim"
+  },
+  "u-residence-karawaci": {
+    "lat": -6.1768106,
+    "lon": 106.6060925,
+    "name": "U Residence Karawaci",
+    "city": "Tangerang",
+    "display_name": "Jalan Residence VII, Bugel, Karawaci, Tangerang, Banten, 15118, Indonesia",
+    "query": "U Residence Karawaci, Tangerang, Indonesia",
+    "source": "nominatim"
+  },
+  "evenciio-margonda": {
+    "lat": -6.3602607,
+    "lon": 106.8335126,
+    "name": "Evenciio Margonda",
+    "city": "Depok",
+    "display_name": "Evenciio Apartement Margonda, Jalan Raya Margonda, Pondok Cina, Beji, Depok, Jawa Barat, 16424, Indonesia",
+    "query": "Evenciio Margonda, Depok, Indonesia",
+    "source": "nominatim"
+  },
+  "taman-melati-margonda": {
+    "lat": -6.3604973,
+    "lon": 106.8324796,
+    "name": "Taman Melati Margonda",
+    "city": "Depok",
+    "display_name": "Apartemen Grand Taman Melati Margonda 2 Depok, Jalan Raya Margonda, Pondok Cina, Beji, Depok, Jawa Barat, 16424, Indonesia",
+    "query": "Taman Melati Margonda, Depok, Indonesia",
+    "source": "nominatim"
+  },
+  "margonda-residence": {
+    "lat": -6.3639556,
+    "lon": 106.8347743,
+    "name": "Margonda Residence",
+    "city": "Depok",
+    "display_name": "Margonda Residence, Jalan Madrasah, Pondok Cina, Beji, Depok, Jawa Barat, 16424, Indonesia",
+    "query": "Margonda Residence, Depok, Indonesia",
+    "source": "nominatim"
+  },
+  "cinere-resort": {
+    "lat": -6.3357109,
+    "lon": 106.7937155,
+    "name": "Cinere Resort",
+    "city": "Depok",
+    "display_name": "Aprtemen Cinere Resort 2, Jalan Pangkalan Jati, Gandul, Cinere, Depok, Jawa Barat, 16512, Indonesia",
+    "query": "Cinere Resort, Depok, Indonesia",
+    "source": "nominatim"
+  },
+  "cinere-bellevue": {
+    "lat": -6.3174576,
+    "lon": 106.782449,
+    "name": "Cinere Bellevue",
+    "city": "Depok",
+    "display_name": "Cinere Bellevue Mall, Jalan Telaga Warna, Pangkalanjati, Cinere, Depok, Jawa Barat, 16514, Indonesia",
+    "query": "Cinere Bellevue, Depok, Indonesia",
+    "source": "nominatim"
+  },
+  "podomoro-golf-view": {
+    "lat": -6.4327235,
+    "lon": 106.8921944,
+    "name": "Podomoro Golf View",
+    "city": "Bogor",
+    "display_name": "Podomoro Golf View, Bojong Nangka, Gunung Putri, Kab Bogor, Jawa Barat, 16963, Indonesia",
+    "query": "Podomoro Golf View, Bogor, Indonesia",
+    "source": "nominatim"
+  },
+  "grand-dhika-city": {
+    "lat": -6.2627877,
+    "lon": 107.0196709,
+    "name": "Grand Dhika City",
+    "city": "Bekasi",
+    "display_name": "Grand Dhika City, Rawasemut, Margahayu, Bekasi, Jawa Barat, Indonesia",
+    "query": "Grand Dhika City, Bekasi, Indonesia",
+    "source": "nominatim"
+  },
+  "grand-kamala-lagoon": {
+    "lat": -6.2536062,
+    "lon": 106.9804425,
+    "name": "Grand Kamala Lagoon",
+    "city": "Bekasi",
+    "display_name": "Grand Kamala Lagoon, Lagoon, Kayuringinjaya, Bekasi, Jawa Barat, 17148, Indonesia",
+    "query": "Grand Kamala Lagoon, Bekasi, Indonesia",
+    "source": "nominatim"
+  },
+  "grand-icon-caman": {
+    "lat": -6.2527992,
+    "lon": 106.9527054,
+    "name": "Grand Icon Caman",
+    "city": "Bekasi",
+    "display_name": "Grand Icon Caman, 21, Jalan Caman Raya, Bintarajaya, Bekasi, Jawa Barat, 17412, Indonesia",
+    "query": "Grand Icon Caman, Bekasi, Indonesia",
+    "source": "nominatim"
+  },
+  "sayana-harapan-indah": {
+    "lat": -6.1582437,
+    "lon": 106.9738537,
+    "name": "Sayana Harapan Indah",
+    "city": "Bekasi",
+    "display_name": "Sayana Apartement Cha Tower, Jalan Harapan Indah Bulevar, Kota Harapan Indah, Pusakarakyat, Kab Bekasi, Jawa Barat, 17214, Indonesia",
+    "query": "Sayana Harapan Indah, Bekasi, Indonesia",
+    "source": "nominatim"
+  },
+  "meikarta-cikarang": {
+    "lat": -6.338324,
+    "lon": 107.1545663,
+    "name": "Meikarta Cikarang",
+    "city": "Bekasi",
+    "display_name": "CBN Indonesia, 5-7, Jalan Sriwijaya, Lippo Cikarang, Cibatu, Kab Bekasi, Jawa Barat, 17550, Indonesia",
+    "query": "Meikarta Cikarang, Bekasi, Indonesia",
+    "source": "nominatim"
+  },
+  "mutiara-bekasi": {
+    "lat": -6.4150454,
+    "lon": 107.0971629,
+    "name": "Mutiara Bekasi",
+    "city": "Bekasi",
+    "display_name": "Mutiara Bekasi Jaya, Wibawamulya, Kab Bekasi, Jawa Barat, Indonesia",
+    "query": "Mutiara Bekasi, Bekasi, Indonesia",
+    "source": "nominatim"
+  },
+  "bogor-icon": {
+    "lat": -6.5561334,
+    "lon": 106.7827129,
+    "name": "Bogor Icon",
+    "city": "Bogor",
+    "display_name": "Bogor Icon Hotel And Convention, Jalan Bukit Cimanggu City Raya, Cibadak, Tanah Sareal, Bogor, Jawa Barat, 16166, Indonesia",
+    "query": "Bogor Icon, Bogor, Indonesia",
+    "source": "nominatim"
+  }
+}

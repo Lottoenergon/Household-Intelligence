@@ -1,0 +1,83 @@
+[
+  {
+    "variant": "A: baseline",
+    "n": 3371,
+    "kfold_r2": 0.7747,
+    "kfold_mae": 2493401.0,
+    "kfold_mape": 27.15,
+    "kfold_medape": 18.67,
+    "group_r2": 0.6856,
+    "group_mape": 31.25,
+    "geo_counts": {
+      "listing": 2118,
+      "subdistrict_centroid": 987,
+      "city_centroid": 266
+    }
+  },
+  {
+    "variant": "B: project_fill (nominatim anchor)",
+    "n": 3371,
+    "kfold_r2": 0.7635,
+    "kfold_mae": 2518008.0,
+    "kfold_mape": 27.59,
+    "kfold_medape": 18.29,
+    "group_r2": 0.6938,
+    "group_mape": 31.73,
+    "geo_counts": {
+      "listing": 2118,
+      "project_geocoded": 839,
+      "subdistrict_centroid": 290,
+      "city_centroid": 124
+    }
+  },
+  {
+    "variant": "C: project_override (nominatim anchor)",
+    "n": 3371,
+    "kfold_r2": 0.7744,
+    "kfold_mae": 2422774.0,
+    "kfold_mape": 26.56,
+    "kfold_medape": 17.71,
+    "group_r2": 0.734,
+    "group_mape": 30.16,
+    "geo_counts": {
+      "project_geocoded": 2171,
+      "listing": 786,
+      "subdistrict_centroid": 290,
+      "city_centroid": 124
+    }
+  },
+  {
+    "variant": "D: hybrid >5km",
+    "n": 3371,
+    "kfold_r2": 0.7722,
+    "kfold_mae": 2474148.0,
+    "kfold_mape": 27.02,
+    "kfold_medape": 18.12,
+    "group_r2": 0.6993,
+    "group_mape": 31.84,
+    "geo_counts": {
+      "listing": 1957,
+      "project_geocoded": 839,
+      "subdistrict_centroid": 290,
+      "project_geocentered": 161,
+      "city_centroid": 124
+    }
+  },
+  {
+    "variant": "D2: hybrid >3km",
+    "n": 3371,
+    "kfold_r2": 0.7702,
+    "kfold_mae": 2464459.0,
+    "kfold_mape": 26.98,
+    "kfold_medape": 17.99,
+    "group_r2": 0.7122,
+    "group_mape": 31.36,
+    "geo_counts": {
+      "listing": 1862,
+      "project_geocoded": 839,
+      "subdistrict_centroid": 290,
+      "project_geocentered": 256,
+      "city_centroid": 124
+    }
+  }
+]

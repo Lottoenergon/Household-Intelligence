@@ -5,9 +5,19 @@ All notable changes to this project. The v0.3 work was a self-audit: I re-checke
 ## [Unreleased]
 
 ### Added
+- `data/project_coordinates.json`: 113 canonical apartment buildings geocoded via OpenStreetMap (Nominatim) with exact building coordinates.
+- `scripts/geocode_projects.py`: resumable, rate-limited Nominatim geocoder with per-project dominant city resolution.
+- `scripts/compare_geocode_strategies.py`: empirical benchmarking harness evaluating 5 imputation/override variants under honest 5x3 out-of-fold CV.
+- `data/processed/geocode_strategy_comparison.json`: empirical metrics artifact showing Project Override dominates on MAE, MAPE, MedAPE, and unseen-subdistrict generalisation.
 - `data/property_registry.json`: 173 building projects with curated aliases, exported from the previously hardcoded registry in `scripts/clean_listing_titles.py`.
-- `src/entity_resolution.py`: conservative `resolve()` — matches only on the listing title/URL (descriptions mention nearby landmarks and caused false merges); anything ambiguous returns `Unresolved` with confidence 0. Not yet wired into the CSV/API.
-- `tests/test_entity_resolution.py`: 8 tests, each encoding a real false-merge hit during development (47 tests total, all green).
+- `src/entity_resolution.py`: conservative `resolve()` — matches only on the listing title/URL (descriptions mention nearby landmarks and caused false merges); wired into `src/transformation.py` so `canonical_apartment` and `resolution_confidence` are populated upstream.
+- `tests/test_entity_resolution.py`: 8 tests, each encoding a real false-merge hit during development (60 tests total, all green).
+
+### Changed
+- `src/transformation.py`: implemented **Project Override** geospatial strategy. Validated OSM coordinates override broker portal pins (which often drift >5km to broker offices) and impute missing coords directly at the building level. 1,427 listings (42.3%) now carry exact project-level coordinates; gross centroid imputation dropped from 37.2% to 18.9%.
+- Out-of-fold model performance updated:
+  - Overall KFold 5x3: R² 0.778 (+0.003), MAE Rp 2,410,128 (-Rp 83k), MAPE 26.61% (-0.54 pp), Median APE 17.75% (-0.92 pp).
+  - Unseen Subdistricts (GroupKFold): R² 0.7481 (+0.0625 / +9.1%), MAE Rp 2,772,954, Median APE 21.30%.
 
 ### Fixed
 - `requirements.txt`: added `requests` and `beautifulsoup4` (imported by `src/ingestion.py` but missing); dropped the direct `scipy` pin (comes in transitively via scikit-learn).
